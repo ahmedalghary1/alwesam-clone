@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}
+<title>متجر الأدوات الكهربائية - الرئيسية</title>
+{% endblock title %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock style %}
+
+
+
+{% block content %}
+
+
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content">
+                <h1 class="hero-title">أدوات كهربائية <span class="highlight">احترافية</span></h1>
+                <p class="hero-subtitle">نوفر لك أفضل الأدوات الكهربائية بجودة عالية وأسعار منافسة لتلبية جميع احتياجاتك
+                </p>
+                <a href="{% url 'products:product_list' %}" class="btn btn-primary-custom">
+                    تصفح المنتجات <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-tools" style="font-size: 250px; color: var(--primary-yellow); opacity: 0.2;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="text-center">
+                    <img src="{% static 'images/about.jpg' %}" alt="About Us" class="about-image img-fluid">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h2 class="section-title">من نحن</h2>
+                <p class="about-text mt-4">
+                    نحن شركة رائدة في مجال توريد الأدوات الكهربائية الصناعية والمنزلية. نقدم مجموعة واسعة من المنتجات
+                    عالية الجودة من أفضل العلامات التجارية العالمية. نلتزم بتوفير أفضل الحلول لعملائنا مع خدمة عملاء
+                    متميزة وأسعار تنافسية.
+                </p>
+                <p class="about-text">
+                    خبرتنا الطويلة في هذا المجال تجعلنا الخيار الأمثل لكل من يبحث عن الجودة والموثوقية. نحن نفخر بثقة
+                    عملائنا ونسعى دائماً لتحقيق رضاهم التام.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">لماذا نحن؟</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3 class="feature-title">جودة عالية</h3>
+                    <p class="feature-text">نوفر منتجات أصلية من أفضل العلامات التجارية العالمية بأعلى معايير الجودة</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3 class="feature-title">شحن سريع</h3>
+                    <p class="feature-text">خدمة توصيل سريعة لجميع المحافظات مع إمكانية تتبع شحنتك أونلاين</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h3 class="feature-title">الدفع عند الاستلام</h3>
+                    <p class="feature-text">لا تدفع إلا بعد استلام منتجك والتأكد من جودته ومطابقته للمواصفات</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title">دعم فني 24/7</h3>
+                    <p class="feature-text">فريق دعم فني متاح على مدار الساعة للإجابة على استفساراتك</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">ضمان شامل</h3>
+                    <p class="feature-text">جميع منتجاتنا مشمولة بضمان رسمي يغطي أي عيوب صناعية</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3 class="feature-title">أسعار منافسة</h3>
+                    <p class="feature-text">نقدم أفضل الأسعار في السوق مع عروض وخصومات مستمرة</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}

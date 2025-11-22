@@ -1,0 +1,54 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-users"></i> إدارة المستخدمين</h1>
+</div>
+
+<div class="content-card">
+    <form method="GET" class="row mb-4">
+        <div class="col-md-10">
+            <input type="text" name="search" class="form-control" placeholder="بحث بالبريد الإلكتروني أو الاسم"
+                value="{{ search }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn-admin-primary w-100">بحث</button>
+        </div>
+    </form>
+
+    {% if users %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>البريد الإلكتروني</th>
+                <th>الهاتف</th>
+                <th>تاريخ التسجيل</th>
+                <th>الصلاحيات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone_number|default:"-" }}</td>
+                <td>{{ user.date_joined|date:"d/m/Y" }}</td>
+                <td>
+                    {% if user.is_superuser %}
+                    <span class="badge bg-danger">مدير رئيسي</span>
+                    {% elif user.is_staff %}
+                    <span class="badge bg-warning">موظف</span>
+                    {% else %}
+                    <span class="badge bg-secondary">مستخدم عادي</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-center text-muted">لا يوجد مستخدمين</p>
+    {% endif %}
+</div>
+{% endblock %}

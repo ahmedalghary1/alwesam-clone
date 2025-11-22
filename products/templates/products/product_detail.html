@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>{{ object.name }} - متجر الوسام</title>
+{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+<style>
+    /* رسالة النجاح */
+    .cart-success-toast {
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        display: none;
+        font-size: 16px;
+        font-weight: 600;
+        animation: slideDown 0.3s ease;
+    }
+
+    /* رسالة التحديث */
+    .cart-update-toast {
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        display: none;
+        font-size: 16px;
+        font-weight: 600;
+        animation: slideDown 0.3s ease;
+    }
+
+    /* رسالة التحذير */
+    .cart-warning-toast {
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        display: none;
+        font-size: 16px;
+        font-weight: 600;
+        animation: slideDown 0.3s ease;
+    }
+
+    /* رسالة الخطأ */
+    .cart-error-toast {
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        display: none;
+        font-size: 16px;
+        font-weight: 600;
+        animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home"></i> الرئيسية</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products:product_list' %}">المنتجات</a></li>
+            <li class="breadcrumb-item active">{{ object.name }}</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Product Detail Section -->
+<section class="product-detail-section">
+    <div class="container">
+        <div class="product-detail-card">
+            <div class="row g-0">
+
+                <!-- Product Gallery -->
+                <div class="col-lg-6">
+                    <div class="product-gallery">
+                        {% if object.quantity > 0 %}
+                        <span class="product-badge">متوفر</span>
+                        {% else %}
+                        <span class="product-badge" style="background: #dc3545;">غير متوفر</span>
+                        {% endif %}
+                        <img src="{{ object.image.url }}" alt="{{ object.name }}" class="product-main-image"
+                            id="mainImage">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <div class="thumbnail active" onclick="changeImage('{{ object.image.url }}', this)">
+                            <img src="{{ object.image.url }}" alt="{{ object.name }}">
+                        </div>
+                        {% for image in images %}
+                        <div class="thumbnail" onclick="changeImage('{{ image.image.url }}', this)">
+                            <img src="{{ image.image.url }}" alt="{{ object.name }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="col-lg-6">
+                    <div class="product-info">
+                        <div class="product-category">
+                            <i class="fas fa-tag"></i> {{ object.category.name }}
+                        </div>
+
+                        <h1 class="product-title">{{ object.name }}</h1>
+
+                        {% if object.subtitle %}
+                        <p class="text-muted mb-3">{{ object.subtitle }}</p>
+                        {% endif %}
+
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="product-price">
+                                {{ object.price }} <span class="currency">جنيه</span>
+                            </div>
+                        </div>
+
+                        <div class="product-description">
+                            <strong>وصف المنتج:</strong><br>
+                            {{ object.description|linebreaks }}
+                        </div>
+
+                        <div class="quantity-section">
+                            <div class="quantity-label">
+                                <i class="fas fa-sort-numeric-up"></i> الكمية:
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1"
+                                    max="{{ object.quantity }}" id="productQuantity">
+                                <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                                <span
+                                    class="stock-status {% if object.quantity > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                                    <i
+                                        class="fas {% if object.quantity > 0 %}fa-check{% else %}fa-times{% endif %}"></i>
+                                    {% if object.quantity > 0 %}
+                                    متوفر في المخزون ({{ object.quantity }} قطعة)
+                                    {% else %}
+                                    غير متوفر حالياً
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            {% if object.quantity > 0 %}
+                            <button class="btn-add-to-cart" onclick="addToCart()">
+                                <i class="fas fa-shopping-cart"></i> أضف إلى السلة
+                            </button>
+                            {% else %}
+                            <button class="btn-add-to-cart" disabled style="opacity: 0.5; cursor: not-allowed;">
+                                <i class="fas fa-ban"></i> غير متوفر
+                            </button>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">رقم المنتج:</span>
+                                <span class="meta-value">{{ object.id }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">الفئة:</span>
+                                <span class="meta-value">{{ object.category.name }}</span>
+                            </div>
+                            {% if object.brand %}
+                            <div class="meta-item">
+                                <span class="meta-label">العلامة التجارية:</span>
+                                <span class="meta-value">{{ object.brand }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Product Tabs -->
+        <div class="product-tabs">
+            <ul class="nav nav-tabs" id="productTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
+                        data-bs-target="#description" type="button">
+                        <i class="fas fa-info-circle"></i> الوصف الكامل
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping"
+                        type="button">
+                        <i class="fas fa-truck"></i> الشحن والإرجاع
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="productTabContent">
+                <!-- Description Tab -->
+                <div class="tab-pane fade show active" id="description">
+                    <div class="p-4">
+                        {{ object.description|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- Shipping -->
+                <div class="tab-pane fade" id="shipping">
+                    <h4 class="mb-4"><i class="fas fa-truck"></i> سياسة الشحن</h4>
+                    <ul class="product-features">
+                        <li>
+                            <i class="fas fa-shipping-fast"></i>
+                            شحن مجاني للطلبات فوق 500 جنيه داخل القاهرة
+                        </li>
+                        <li>
+                            <i class="fas fa-clock"></i>
+                            التوصيل خلال 2-4 أيام عمل داخل القاهرة والجيزة
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marked-alt"></i>
+                            التوصيل خلال 5-7 أيام عمل للمحافظات الأخرى
+                        </li>
+                        <li>
+                            <i class="fas fa-box"></i>
+                            تغليف آمن ومحترف لحماية المنتج أثناء الشحن
+                        </li>
+                    </ul>
+
+                    <h4 class="mb-4 mt-5"><i class="fas fa-undo-alt"></i> سياسة الإرجاع والاستبدال</h4>
+                    <ul class="product-features">
+                        <li>
+                            <i class="fas fa-calendar-check"></i>
+                            إمكانية الإرجاع خلال 14 يوم من تاريخ الاستلام
+                        </li>
+                        <li>
+                            <i class="fas fa-shield-alt"></i>
+                            ضمان استرجاع المال كاملاً في حالة وجود عيب في المنتج
+                        </li>
+                        <li>
+                            <i class="fas fa-exchange-alt"></i>
+                            استبدال مجاني في حالة وجود عيب صناعي
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            يجب أن يكون المنتج في حالته الأصلية مع التغليف
+                        </li>
+                        <li>
+                            <i class="fas fa-headset"></i>
+                            فريق خدمة العملاء متاح للمساعدة على مدار الساعة
+                        </li>
+                    </ul>
+
+                    <div class="alert alert-info mt-4">
+                        <strong><i class="fas fa-info-circle"></i> ملاحظة:</strong>
+                        للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو عبر البريد
+                        الإلكتروني info@elwsam.com
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Products -->
+{% if products %}
+<section class="related-products">
+    <div class="container">
+        <h2 class="section-title">
+            <i class="fas fa-layer-group"></i> منتجات ذات صلة
+        </h2>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="related-product-card">
+                    <a href="{% url 'products:product_detail' product.slug %}">
+                        <div class="related-product-image">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </div>
+                        <div class="related-product-body">
+                            <h5 class="related-product-title">{{ product.name }}</h5>
+                            <div class="related-product-price">{{ product.price }} جنيه</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Quantity Controls
+    function increaseQuantity() {
+        var input = document.getElementById('productQuantity');
+        var max = parseInt(input.max);
+        var current = parseInt(input.value);
+        if (current < max) {
+            input.value = current + 1;
+        }
+    }
+
+    function decreaseQuantity() {
+        var input = document.getElementById('productQuantity');
+        var min = parseInt(input.min);
+        var current = parseInt(input.value);
+        if (current > min) {
+            input.value = current - 1;
+        }
+    }
+
+    // Change Main Image
+    function changeImage(imageUrl, element) {
+        document.getElementById('mainImage').src = imageUrl;
+
+        // Remove active class from all thumbnails
+        var thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach(function (thumb) {
+            thumb.classList.remove('active');
+        });
+
+        // Add active class to clicked thumbnail
+        element.classList.add('active');
+    }
+
+    // Add to Cart Function
+    function addToCart() {
+        var quantity = parseInt(document.getElementById('productQuantity').value);
+        var productId = {{ object.id }};
+
+    $.ajax({
+        type: 'POST',
+        url: '/orders/add-to-cart',
+        data: {
+            'product_id': productId,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+            'quantity': quantity
+        },
+        success: function (response) {
+            if (response.success) {
+                // تحديث عداد السلة
+                $('#cart-count').text(response.cart_count);
+
+                // تحديد نوع الرسالة (نجاح أو تحديث)
+                var messageClass = response.already_exists ?
+                    'cart-update-toast' : 'cart-success-toast';
+
+                // عرض رسالة
+                showToast(response.message, messageClass);
+            } else if (response.out_of_stock) {
+                showToast(response.message, 'cart-error-toast');
+            } else if (response.insufficient) {
+                showToast(response.message, 'cart-warning-toast');
+            } else {
+                showToast(response.message || 'حدث خطأ غير متوقع', 'cart-error-toast');
+            }
+        },
+        error: function (xhr) {
+            // التحقق إذا كان المستخدم غير مسجل دخول (401)
+            if (xhr.status === 401) {
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.login_required && response.login_url) {
+                        // إعادة توجيه المستخدم لصفحة تسجيل الدخول
+                        window.location.href = response.login_url;
+                        return;
+                    }
+                } catch (e) {
+                    // في حالة عدم القدرة على parse الاستجابة
+                    window.location.href = '/accounts/login/?next=' + window.location.pathname;
+                    return;
+                }
+            }
+
+            // في حال أي خطأ آخر
+            showToast('حدث خطأ أثناء إضافة المنتج للسلة ❌', 'cart-error-toast');
+        }
+    });
+    }
+
+    function showToast(message, className) {
+        // إزالة أي رسائل سابقة من نفس النوع
+        var existingToast = $('.' + className);
+        if (existingToast.length) {
+            existingToast.remove();
+        }
+
+        var messageDiv = $('<div class="' + className + '"></div>').text(message);
+        $('body').append(messageDiv);
+        messageDiv.fadeIn(200).delay(3000).fadeOut(500, function () {
+            $(this).remove();
+        });
+    }
+</script>
+
+{% endblock content %}

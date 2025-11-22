@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر الأدوات الكهربائية - تسجيل الدخول</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-black: #000000;
+            --primary-yellow: #FFD700;
+            --secondary-white: #FFFFFF;
+            --dark-gray: #1a1a1a;
+            --light-gray: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--dark-gray) 100%);
+            direction: rtl;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-logo h1 {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--secondary-white);
+            margin-bottom: 10px;
+        }
+
+        .brand-logo .highlight {
+            color: var(--primary-yellow);
+        }
+
+        .brand-logo p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .brand-logo-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--primary-yellow);
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .login-card {
+            background: var(--secondary-white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary-black);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-label {
+            font-weight: 700;
+            color: var(--primary-black);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-control {
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-yellow);
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 18px;
+            z-index: 10;
+        }
+
+        .input-group .form-control {
+            padding-left: 45px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-yellow);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .form-check-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .forgot-password {
+            color: var(--primary-yellow);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-black);
+        }
+
+        .btn-login {
+            background-color: var(--primary-yellow);
+            color: var(--primary-black);
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 900;
+            border-radius: 10px;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background-color: var(--primary-black);
+            color: var(--primary-yellow);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--light-gray);
+        }
+
+        .divider span {
+            background: var(--secondary-white);
+            padding: 0 15px;
+            color: #999;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            background: var(--secondary-white);
+            color: #666;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary-yellow);
+            transform: translateY(-2px);
+        }
+
+        .social-btn i {
+            margin-left: 5px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid var(--light-gray);
+            color: #666;
+            font-size: 14px;
+        }
+
+        .signup-link a {
+            color: var(--primary-yellow);
+            text-decoration: none;
+            font-weight: 900;
+        }
+
+        .signup-link a:hover {
+            color: var(--primary-black);
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-home a {
+            color: var(--secondary-white);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .back-home a:hover {
+            color: var(--primary-yellow);
+        }
+
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* إشعارات مخصصة */
+        .custom-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            z-index: 1050;
+            animation: fadeInDown 0.5s, fadeOutUp 0.5s 2.5s forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+
+            .brand-logo h1 {
+                font-size: 28px;
+            }
+
+            .social-login {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <!-- Brand Logo -->
+        <div class="brand-logo">
+            {% load static %}
+            <img src="{% static 'images/ELWSAM.png' %}" alt="Logo" class="brand-logo-img">
+            <h1>
+                الأدوات <span class="highlight">الكهربائية</span>
+            </h1>
+            <p>متجرك الموثوق للأدوات الاحترافية</p>
+        </div>
+
+        <!-- منطقة الإشعارات -->
+        <div id="notificationArea"></div>
+
+        <!-- Login Card -->
+        <div class="login-card">
+            <h2 class="login-title">
+                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+            </h2>
+            <p class="login-subtitle">سجل دخولك للوصول إلى حسابك</p>
+
+            <!-- نموذج تسجيل الدخول -->
+            <form method="POST" action="{% url 'accounts:login' %}" class="login-form">
+                {% csrf_token %}
+
+                {% if messages %}
+                {% for message in messages %}
+                <div style="color:red;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+
+                <!-- Email/Phone -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i> البريد الإلكتروني أو رقم الهاتف
+                    </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="email" id="emailPhone"
+                            placeholder="أدخل بريدك الإلكتروني أو رقم هاتفك" required>
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i> كلمة المرور
+                    </label>
+                    <div class="input-group">
+                        <input type="password" name="password" class="form-control" id="password"
+                            placeholder="أدخل كلمة المرور" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember & Forgot -->
+                <div class="remember-forgot">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">
+                            تذكرني
+                        </label>
+                    </div>
+                    <a href="{% url 'accounts:forgot-password' %}" class="forgot-password">نسيت كلمة المرور؟</a>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                </button>
+
+            </form>
+
+            <!-- Divider -->
+            <!-- <div class="divider">
+                <span>أو سجل دخولك باستخدام</span>
+            </div> -->
+
+            <!-- Social Login -->
+
+
+            <!-- <div class="social-login">
+                <button class="social-btn" onclick="loginWithGoogle()">
+                    <i class="fab fa-google" style="color: #DB4437;"></i> Google
+                </button>
+                <button class="social-btn" onclick="loginWithFacebook()">
+                    <i class="fab fa-facebook-f" style="color: #4267B2;"></i> Facebook
+                </button>
+            </div> -->
+
+            <!-- Signup Link -->
+            <div class="signup-link">
+                ليس لديك حساب؟ <a href="{% url 'accounts:register' %}">إنشاء حساب جديد</a>
+            </div>
+
+        </div>
+
+        <!-- Back to Home -->
+        <div class="back-home">
+            <a href="{% url 'products:product_list' %}">
+                <i class="fas fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+            </a>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Toggle Password Visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Show Notification Function
+        function showNotification(message, type) {
+            const notificationArea = document.getElementById('notificationArea');
+
+            // إنشاء عنصر الإشعار
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} custom-notification`;
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'danger' ? 'fa-exclamation-circle' : 'fa-info-circle'} me-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            // إضافة الإشعار إلى منطقة الإشعارات
+            notificationArea.appendChild(notification);
+
+            // إزالة الإشعار بعد 3 ثوانٍ
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+
+
+        // Social Login Functions
+        function loginWithGoogle() {
+            showNotification('جاري تسجيل الدخول عبر Google...', 'info');
+
+            // Simulate Google login process
+            setTimeout(() => {
+                showNotification('تم تسجيل الدخول بنجاح عبر Google!', 'success');
+
+                // Redirect after successful login
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }, 2000);
+        }
+
+        function loginWithFacebook() {
+            showNotification('جاري تسجيل الدخول عبر Facebook...', 'info');
+
+            // Simulate Facebook login process
+            setTimeout(() => {
+                showNotification('تم تسجيل الدخول بنجاح عبر Facebook!', 'success');
+
+                // Redirect after successful login
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

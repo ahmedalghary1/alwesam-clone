@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+<title>متجر الأدوات الكهربائية - السلة</title>
+
+{% endblock title %}
+
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'css/chekout.css' %}">
+{% endblock style %}
+
+
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container text-center">
+        <h1 class="page-title"><i class="fas fa-shopping-cart"></i> سلة التسوق</h1>
+        <p class="lead">راجع طلبك قبل التأكيد</p>
+    </div>
+</div>
+
+<!-- Cart Section -->
+<section class="cart-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+                {% for item in cart_detail_data %}
+                <!-- Cart Item 1 -->
+                <div class="cart-item">
+                    <div class="row align-items-center">
+                        <!-- صورة المنتج -->
+                        <div class="col-md-2">
+                            <div class="cart-item-image">
+                                <img src="{{item.product.image.url}}" alt="">
+                            </div>
+                        </div>
+
+                        <!-- اسم المنتج و الوصف -->
+                        <div class="col-md-3">
+                            <h4 class="cart-item-title">{{item.product.name}}</h4>
+                            <p class="text-muted mb-0">{{item.product.subtitle}}</p>
+                        </div>
+
+                        <!-- السعر -->
+                        <div class="col-md-2">
+                            <div class="cart-item-price" data-id="{{ item.id }}">{{item.product.price}} ج</div>
+                        </div>
+
+                        <!-- أزرار التحكم بالكمية -->
+                        <div class="col-md-3">
+                            <div class="quantity-control d-flex align-items-center">
+                                <button class="quantity-btn" data-action="decrease" data-id="{{ item.id }}">-</button>
+                                <input type="number" class="form-control quantity-input mx-2"
+                                    value="{{ item.quantity }}" min="1" data-id="{{ item.id }}">
+                                <button class="quantity-btn" data-action="increase" data-id="{{ item.id }}">+</button>
+                            </div>
+                        </div>
+
+                        <!-- زر الحذف -->
+                        <div class="col-md-2 text-center">
+                            <button class="btn-remove" data-id="{{ item.id }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                {% endfor %}
+                <!-- Checkout Form -->
+                <div class="checkout-form">
+                    <h3 class="summary-title">
+                        <i class="fas fa-clipboard-list"></i> بيانات الطلب
+                    </h3>
+
+                    <div class="payment-notice">
+                        <i class="fas fa-hand-holding-usd d-block"></i>
+                        <strong>الدفع عند الاستلام فقط</strong>
+                        <div class="mt-2" style="font-size: 14px; font-weight: 400;">
+                            لا تدفع أي مبلغ إلا بعد استلام المنتج والتأكد منه
+                        </div>
+                    </div>
+
+                    <form method="POST" action="{% url 'orders:create-order' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i> الاسم بالكامل *
+                                </label>
+                                <input type="text" class="form-control" name="customer_name"
+                                    placeholder="أدخل اسمك الكامل" value="{{ user.first_name }} {{ user.last_name }}"
+                                    required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-phone"></i> رقم الهاتف *
+                                </label>
+                                <input type="tel" class="form-control" name="customer_phone" placeholder="01xxxxxxxxx"
+                                    value="{{ user.phone_number }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-envelope"></i> البريد الإلكتروني
+                            </label>
+                            <input type="email" class="form-control" name="customer_email"
+                                placeholder="example@email.com" value="{{ user.email }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i> العنوان بالتفصيل *
+                            </label>
+                            <input type="text" class="form-control" name="address"
+                                placeholder="الشارع، المنطقة، المدينة" value="{{ user.address }}" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-city"></i> المحافظة *
+                                </label>
+                                <select class="form-control" name="governorate" required>
+                                    <option value="">اختر المحافظة</option>
+                                    <option>القاهرة</option>
+                                    <option>الجيزة</option>
+                                    <option>الإسكندرية</option>
+                                    <option>الدقهلية</option>
+                                    <option>الشرقية</option>
+                                    <option>القليوبية</option>
+                                    <option>الغربية</option>
+                                    <option>المنوفية</option>
+                                    <option>البحيرة</option>
+                                    <option>الفيوم</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-city"></i> المدينة
+                                </label>
+                                <input type="text" class="form-control" name="city" placeholder="المدينة">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-comment"></i> ملاحظات إضافية (اختياري)
+                            </label>
+                            <textarea class="form-control" name="notes" rows="3"
+                                placeholder="أي ملاحظات أو تعليمات خاصة بالتوصيل"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-confirm-order">
+                            <i class="fas fa-check-circle"></i> تأكيد الطلب
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="col-lg-4">
+                <div class="order-summary">
+                    <h3 class="summary-title">
+                        <i class="fas fa-receipt"></i> ملخص الطلب
+                    </h3>
+
+                    <div class="summary-row">
+                        <span>المجموع الفرعي:</span>
+                        <strong>{{subtotal}} جنيه</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>رسوم الشحن:</span>
+                        {% if deliveryFee == 0%}
+                        <strong class="text-success">مجاناً</strong>
+                        {% else %}
+                        <strong class="text-success">{{deliveryFee}}</strong>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="summary-row">
+                        <span>عدد المنتجات:</span>
+                        {% if cart_detail_data|length == 0%}
+
+                        <strong>لا يوجد منتجات</strong>
+                        {% elif cart_detail_data|length == 1 %}
+                        <strong>{{cart_detail_data|length}} منتج</strong>
+
+                        {% elif cart_detail_data|length > 1 %}
+                        <strong>{{cart_detail_data|length}} منتجات</strong>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="summary-total">
+                        <div class="d-flex justify-content-between">
+                            <span>الإجمالي:</span>
+                            <span>{{total}}</span>
+                        </div>
+                        <small style="font-size: 14px; font-weight: 400; color: #666;">
+                            (شامل جميع الرسوم)
+                        </small>
+                    </div>
+
+                    <div class="alert alert-warning mt-4"
+                        style="background-color: #fff3cd; border: none; border-radius: 10px;">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>ملحوظة هامة:</strong>
+                        <p class="mb-0 mt-2" style="font-size: 14px;">
+                            سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب وموعد التوصيل
+                        </p>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <a href="/products/" class="btn btn-outline-dark w-100">
+                            <i class="fas fa-arrow-right"></i> متابعة التسوق
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Increase / Decrease Quantity
+        document.querySelectorAll(".quantity-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let itemId = this.dataset.id;
+                let action = this.dataset.action;
+                updateCart(itemId, action);
+            });
+        });
+
+        // Manual Input Quantity Change
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            input.addEventListener("change", function () {
+                let itemId = this.dataset.id;
+                let newVal = parseInt(this.value);
+
+                if (newVal < 1) {
+                    this.value = 1;
+                    newVal = 1;
+                }
+
+                // نرسل أكشن increase أو decrease حسب الحركة
+                updateCart(itemId, "set", newVal);
+            });
+        });
+
+        // Delete Item
+        document.querySelectorAll(".btn-remove").forEach(btn => {
+            btn.addEventListener("click", function () {
+                let itemId = this.dataset.id;
+                updateCart(itemId, "delete");
+            });
+        });
+
+
+        // --------------------
+        //  AJAX Update Function
+        // --------------------
+        function updateCart(itemId, action, value = null) {
+
+            let url = `/orders/checkout/update/${itemId}/?action=${action}`;
+
+            if (action === "set") {
+                url += `&value=${value}`;
+            }
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+
+                    // If deleted:
+                    if (action === "delete") {
+                        document.querySelector(`[data-id='${itemId}']`)
+                            .closest(".cart-item").remove();
+                    } else {
+                        // Update quantity input
+                        document.querySelector(`.quantity-input[data-id='${itemId}']`).value = data.quantity;
+
+                        // Update item total price
+                        document.querySelector(`.cart-item-price[data-id='${itemId}']`).innerHTML =
+                            data.item_total + " ج";
+                    }
+
+                    // Update Summary Sidebar
+                    document.querySelector(".summary-row strong").innerHTML = data.sub_total + " جنيه";
+
+                    // Update delivery fee
+                    document.querySelectorAll(".summary-row strong")[1].innerHTML =
+                        data.deliveryFee == 0 ? "مجاناً" : data.deliveryFee + " جنيه";
+
+                    // Update total
+                    document.querySelector(".summary-total span:last-child").innerHTML = data.total;
+
+                    // Update items count
+                    updateItemsCount();
+
+                })
+                .catch(error => console.log("Error:", error));
+        }
+
+
+        // --------------------------
+        // Update number of items text
+        // --------------------------
+        function updateItemsCount() {
+            let count = document.querySelectorAll(".cart-item").length;
+            let text = "";
+
+            if (count === 0) {
+                text = "لا يوجد منتجات";
+            } else if (count === 1) {
+                text = "1 منتج";
+            } else {
+                text = count + " منتجات";
+            }
+
+            document.querySelectorAll(".summary-row strong")[2].innerHTML = text;
+        }
+
+    });
+</script>
+
+
+{% endblock content %}

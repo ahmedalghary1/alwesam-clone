@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>متجر الأدوات الكهربائية - الملف الشخصي</title>
+{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<style>
+    .profile-section {
+        padding: 80px 0;
+        background-color: var(--light-gray);
+    }
+
+    .profile-card {
+        background: var(--secondary-white);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 2px solid var(--light-gray);
+    }
+
+    .profile-avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        background: linear-gradient(135deg, var(--primary-black) 0%, var(--dark-gray) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 60px;
+        color: var(--primary-yellow);
+        border: 5px solid var(--primary-yellow);
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .profile-name {
+        font-size: 32px;
+        font-weight: 900;
+        color: var(--primary-black);
+        margin-bottom: 10px;
+    }
+
+    .profile-email {
+        color: #666;
+        font-size: 16px;
+    }
+
+    .info-group {
+        margin-bottom: 25px;
+    }
+
+    .info-label {
+        font-weight: 700;
+        color: var(--primary-black);
+        margin-bottom: 10px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+    }
+
+    .info-label i {
+        margin-left: 10px;
+        color: var(--primary-yellow);
+    }
+
+    .info-value {
+        background: var(--light-gray);
+        padding: 15px;
+        border-radius: 10px;
+        color: #333;
+        font-size: 16px;
+    }
+
+    .info-value.empty {
+        color: #999;
+        font-style: italic;
+    }
+
+    .edit-btn {
+        background-color: var(--primary-yellow);
+        color: var(--primary-black);
+        border: none;
+        padding: 15px 40px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .edit-btn:hover {
+        background-color: var(--primary-black);
+        color: var(--primary-yellow);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    }
+
+    .form-control {
+        border: 2px solid var(--light-gray);
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-yellow);
+        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+    }
+
+    .form-label {
+        font-weight: 700;
+        color: var(--primary-black);
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-size: 24px;
+        font-weight: 900;
+        color: var(--primary-black);
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-title i {
+        margin-left: 15px;
+        color: var(--primary-yellow);
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-cancel:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            {% if user.image %}
+                            <img src="{{ user.image.url }}" alt="Profile Picture">
+                            {% else %}
+                            <i class="fas fa-user"></i>
+                            {% endif %}
+                        </div>
+                        <h2 class="profile-name">
+                            {{ user.first_name }} {{ user.last_name }}
+                            {% if not user.first_name and not user.last_name %}
+                            مستخدم
+                            {% endif %}
+                        </h2>
+                        <p class="profile-email">{{ user.email }}</p>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-phone"></i> رقم الهاتف
+                        </div>
+                        <div class="info-value {% if not user.phone_number %}empty{% endif %}">
+                            {{ user.phone_number|default:"لم يتم إضافة رقم هاتف" }}
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-map-marker-alt"></i> العنوان
+                        </div>
+                        <div class="info-value {% if not user.address %}empty{% endif %}">
+                            {{ user.address|default:"لم يتم إضافة عنوان" }}
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-calendar"></i> تاريخ الانضمام
+                        </div>
+                        <div class="info-value">
+                            {{ user.date_joined|date:"d F Y" }}
+                        </div>
+                    </div>
+
+                    <button class="edit-btn" onclick="showEditForm()">
+                        <i class="fas fa-edit"></i> تعديل الملف الشخصي
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="profile-card" id="viewMode">
+                    <h3 class="section-title">
+                        <i class="fas fa-info-circle"></i> معلومات إضافية
+                    </h3>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-group">
+                                <div class="info-label">
+                                    <i class="fas fa-user"></i> الاسم الأول
+                                </div>
+                                <div class="info-value {% if not user.first_name %}empty{% endif %}">
+                                    {{ user.first_name|default:"غير محدد" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-group">
+                                <div class="info-label">
+                                    <i class="fas fa-user"></i> الاسم الأخير
+                                </div>
+                                <div class="info-value {% if not user.last_name %}empty{% endif %}">
+                                    {{ user.last_name|default:"غير محدد" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-id-card"></i> رقم الحساب
+                        </div>
+                        <div class="info-value">
+                            #{{ user.id }}
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-shopping-bag"></i> الطلبات
+                        </div>
+                        <div class="info-value">
+                            <a href="/orders/"
+                                style="color: var(--primary-yellow); text-decoration: none; font-weight: 700;">
+                                عرض طلباتي <i class="fas fa-arrow-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Form (Hidden by default) -->
+                <div class="profile-card" id="editMode" style="display: none;">
+                    <h3 class="section-title">
+                        <i class="fas fa-edit"></i> تعديل الملف الشخصي
+                    </h3>
+
+                    <!-- Messages inside edit form -->
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i> الاسم الأول
+                                </label>
+                                <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}"
+                                    placeholder="أدخل الاسم الأول">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i> الاسم الأخير
+                                </label>
+                                <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}"
+                                    placeholder="أدخل الاسم الأخير">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i> رقم الهاتف
+                            </label>
+                            <input type="tel" class="form-control" name="phone_number" value="{{ user.phone_number }}"
+                                placeholder="05xxxxxxxx">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i> العنوان
+                            </label>
+                            <textarea class="form-control" name="address" rows="3"
+                                placeholder="أدخل عنوانك بالتفصيل">{{ user.address }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-image"></i> صورة الملف الشخصي
+                            </label>
+                            <input type="file" class="form-control" name="image" accept="image/*">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <button type="submit" class="edit-btn">
+                                    <i class="fas fa-save"></i> حفظ التغييرات
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn-cancel w-100" onclick="hideEditForm()">
+                                    <i class="fas fa-times"></i> إلغاء
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function showEditForm() {
+        document.getElementById('viewMode').style.display = 'none';
+        document.getElementById('editMode').style.display = 'block';
+        // Scroll to edit form
+        document.getElementById('editMode').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function hideEditForm() {
+        document.getElementById('viewMode').style.display = 'block';
+        document.getElementById('editMode').style.display = 'none';
+    }
+
+    // Auto-open edit form if there are error messages
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'error' or message.tags == 'danger' %}
+    // Open edit form automatically when there's an error
+    showEditForm();
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</script>
+{% endblock content %}

@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>تفاصيل الطلب #{{ order.code }} - متجر الأدوات الكهربائية</title>
+{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<style>
+    .order-detail-section {
+        padding: 80px 0;
+        background-color: var(--light-gray);
+    }
+
+    .detail-card {
+        background: var(--secondary-white);
+        border-radius: 15px;
+        padding: 40px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 3px solid var(--primary-yellow);
+    }
+
+    .order-title {
+        font-size: 32px;
+        font-weight: 900;
+        color: var(--primary-black);
+    }
+
+    .order-title span {
+        color: var(--primary-yellow);
+    }
+
+    .order-status {
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .status-Received {
+        background-color: #cfe2ff;
+        color: #084298;
+    }
+
+    .status-Processed {
+        background-color: #fff3cd;
+        color: #664d03;
+    }
+
+    .status-Shipped {
+        background-color: #d1e7dd;
+        color: #0a3622;
+    }
+
+    .status-Delivered {
+        background-color: #d1ecf1;
+        color: #055160;
+    }
+
+    .section-title {
+        font-size: 24px;
+        font-weight: 900;
+        color: var(--primary-black);
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .section-title i {
+        color: var(--primary-yellow);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .info-box {
+        background: var(--light-gray);
+        padding: 20px;
+        border-radius: 10px;
+        border-right: 4px solid var(--primary-yellow);
+    }
+
+    .info-label {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .info-label i {
+        color: var(--primary-yellow);
+    }
+
+    .info-value {
+        color: var(--primary-black);
+        font-weight: 700;
+        font-size: 18px;
+    }
+
+    .products-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+    .products-table th {
+        background: var(--primary-black);
+        color: var(--primary-yellow);
+        padding: 15px;
+        text-align: right;
+        font-weight: 700;
+    }
+
+    .products-table td {
+        padding: 20px 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .product-name {
+        font-weight: 700;
+        color: var(--primary-black);
+        font-size: 16px;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .summary-box {
+        background: var(--light-gray);
+        border-radius: 15px;
+        padding: 30px;
+        margin-top: 30px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .summary-row:last-child {
+        border-bottom: none;
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--primary-black);
+        padding-top: 20px;
+        margin-top: 10px;
+        border-top: 2px solid var(--primary-yellow);
+    }
+
+    .summary-label {
+        color: #666;
+    }
+
+    .summary-value {
+        font-weight: 700;
+        color: var(--primary-black);
+    }
+
+    .address-box {
+        background: #fff;
+        border: 2px solid var(--primary-yellow);
+        border-radius: 15px;
+        padding: 25px;
+    }
+
+    .address-box p {
+        margin: 10px 0;
+        color: #666;
+    }
+
+    .address-box strong {
+        color: var(--primary-black);
+    }
+
+    .btn-back {
+        background-color: var(--primary-yellow);
+        color: var(--primary-black);
+        padding: 12px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background-color: var(--primary-black);
+        color: var(--primary-yellow);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<section class="order-detail-section">
+    <div class="container">
+        <div class="detail-card">
+            <div class="order-header">
+                <h1 class="order-title">
+                    طلب <span>#{{ order.code }}</span>
+                </h1>
+                <div class="order-status status-{{ order.status }}">
+                    {% if order.status == 'Received' %}
+                    <i class="fas fa-clock"></i> تم الاستلام
+                    {% elif order.status == 'Processed' %}
+                    <i class="fas fa-cog"></i> قيد المعالجة
+                    {% elif order.status == 'Shipped' %}
+                    <i class="fas fa-truck"></i> تم الشحن
+                    {% elif order.status == 'Delivered' %}
+                    <i class="fas fa-check-circle"></i> تم التوصيل
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-box">
+                    <div class="info-label">
+                        <i class="fas fa-calendar"></i> تاريخ الطلب
+                    </div>
+                    <div class="info-value">{{ order.order_time|date:"d F Y - H:i" }}</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">
+                        <i class="fas fa-hand-holding-usd"></i> طريقة الدفع
+                    </div>
+                    <div class="info-value">الدفع عند الاستلام</div>
+                </div>
+
+                {% if order.delivery_time %}
+                <div class="info-box">
+                    <div class="info-label">
+                        <i class="fas fa-truck"></i> موعد التوصيل المتوقع
+                    </div>
+                    <div class="info-value">{{ order.delivery_time|date:"d F Y" }}</div>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if order.address %}
+            <h3 class="section-title">
+                <i class="fas fa-map-marker-alt"></i> عنوان التوصيل
+            </h3>
+
+            <div class="address-box">
+                <p><strong>الاسم:</strong> {{ order.address.customer_name }}</p>
+                <p><strong>الهاتف:</strong> {{ order.address.customer_phone }}</p>
+                {% if order.address.customer_email %}
+                <p><strong>البريد الإلكتروني:</strong> {{ order.address.customer_email }}</p>
+                {% endif %}
+                <p><strong>المحافظة:</strong> {{ order.address.governorate }}</p>
+                {% if order.address.city %}
+                <p><strong>المدينة:</strong> {{ order.address.city }}</p>
+                {% endif %}
+                <p><strong>العنوان:</strong> {{ order.address.address_line }}</p>
+                {% if order.address.notes %}
+                <p><strong>ملاحظات:</strong> {{ order.address.notes }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="detail-card">
+            <h3 class="section-title">
+                <i class="fas fa-box"></i> المنتجات
+            </h3>
+
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>المنتج</th>
+                        <th>السعر</th>
+                        <th>الكمية</th>
+                        <th>الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_details %}
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                    class="product-image">
+                                {% else %}
+                                <div class="product-image"
+                                    style="background: var(--light-gray); display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-box" style="color: #999;"></i>
+                                </div>
+                                {% endif %}
+                                <span class="product-name">{{ item.product.name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ item.price }} جنيه</td>
+                        <td>{{ item.quantity }}</td>
+                        <td><strong>{{ item.total }} جنيه</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span class="summary-label">المجموع الفرعي:</span>
+                    <span class="summary-value">{{ order.subtotal }} جنيه</span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">رسوم التوصيل:</span>
+                    <span class="summary-value">{{ order.delivery_fee }} جنيه</span>
+                </div>
+
+                {% if order.discount > 0 %}
+                <div class="summary-row">
+                    <span class="summary-label">الخصم:</span>
+                    <span class="summary-value" style="color: #28a745;">-{{ order.discount }} جنيه</span>
+                </div>
+                {% endif %}
+
+                <div class="summary-row">
+                    <span class="summary-label">الإجمالي النهائي:</span>
+                    <span class="summary-value">{{ order.total_with_coupon|default:order.total }} جنيه</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'orders:my_orders' %}" class="btn-back">
+                <i class="fas fa-arrow-right"></i> العودة إلى طلباتي
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock content %}

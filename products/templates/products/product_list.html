@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>متجر الأدوات الكهربائية - المنتجات</title>
+{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/product_list.css' %}">
+{% endblock style %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container text-center">
+        <h1 class="page-title"><i class="fas fa-tools"></i> منتجاتنا</h1>
+        <p class="lead">تصفح مجموعتنا الواسعة من الأدوات الكهربائية المتميزة</p>
+    </div>
+</div>
+
+<!-- Search and Filter Section -->
+<section class="filter-section">
+    <div class="container">
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+            <form method="get" action="{% url 'products:product_list' %}" class="search-form">
+                <div class="search-input-group">
+                    <input type="text" name="search" class="search-input" placeholder="ابحث عن منتج..."
+                        value="{{ request.GET.search }}">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filter Toggle Button (Mobile) -->
+        <button class="filter-toggle-btn" onclick="toggleFilters()">
+            <i class="fas fa-filter"></i> الفلاتر
+            <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <!-- Filters Container -->
+        <div class="filters-container" id="filtersContainer">
+            <form method="get" action="{% url 'products:product_list' %}" id="filterForm">
+                <div class="filter-grid">
+                    <!-- Category Filter -->
+                    <div class="filter-item">
+                        <label class="filter-label">
+                            <i class="fas fa-tags"></i> الفئة
+                        </label>
+                        <select name="category" class="filter-select" onchange="submitFilters()">
+                            <option value="">جميع الفئات</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Price Range Filter -->
+                    <div class="filter-item">
+                        <label class="filter-label">
+                            <i class="fas fa-money-bill-wave"></i> نطاق السعر
+                        </label>
+                        <select name="price_range" class="filter-select" onchange="submitFilters()">
+                            <option value="">جميع الأسعار</option>
+                            <option value="0-1000" {% if request.GET.price_range == "0-1000" %}selected{% endif %}>
+                                أقل من 1000 جنيه
+                            </option>
+                            <option value="1000-5000" {% if request.GET.price_range == "1000-5000" %}selected{% endif %}>
+                                1000 - 5000 جنيه
+                            </option>
+                            <option value="5000-10000" {% if request.GET.price_range == "5000-10000" %}selected{% endif %}>
+                                5000 - 10000 جنيه
+                            </option>
+                            <option value="10000-plus" {% if request.GET.price_range == "10000-plus" %}selected{% endif %}>
+                                أكثر من 10000 جنيه
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Sort By Filter -->
+                    <div class="filter-item">
+                        <label class="filter-label">
+                            <i class="fas fa-sort"></i> الترتيب
+                        </label>
+                        <select name="sort" class="filter-select" onchange="submitFilters()">
+                            <option value="">الافتراضي</option>
+                            <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>
+                                السعر: من الأقل للأعلى
+                            </option>
+                            <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>
+                                السعر: من الأعلى للأقل
+                            </option>
+                            <option value="name_asc" {% if request.GET.sort == "name_asc" %}selected{% endif %}>
+                                الاسم: أ-ي
+                            </option>
+                            <option value="name_desc" {% if request.GET.sort == "name_desc" %}selected{% endif %}>
+                                الاسم: ي-أ
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Clear Filters Button -->
+                    <div class="filter-item">
+                        <label class="filter-label" style="opacity: 0;">تصفية</label>
+                        <a href="{% url 'products:product_list' %}" class="clear-filters-btn">
+                            <i class="fas fa-times"></i> مسح الفلاتر
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Active Filters Display -->
+        {% if request.GET.search or request.GET.category or request.GET.price_range or request.GET.sort %}
+        <div class="active-filters">
+            <span class="active-filters-label">الفلاتر النشطة:</span>
+
+            {% if request.GET.search %}
+            <span class="filter-tag">
+                البحث: "{{ request.GET.search }}"
+                <a href="?{% for key, value in request.GET.items %}{% if key != 'search' %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
+                    class="remove-filter">×</a>
+            </span>
+            {% endif %}
+
+            {% if request.GET.category %}
+            <span class="filter-tag">
+                الفئة
+                <a href="?{% for key, value in request.GET.items %}{% if key != 'category' %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
+                    class="remove-filter">×</a>
+            </span>
+            {% endif %}
+
+            {% if request.GET.price_range %}
+            <span class="filter-tag">
+                نطاق السعر
+                <a href="?{% for key, value in request.GET.items %}{% if key != 'price_range' %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
+                    class="remove-filter">×</a>
+            </span>
+            {% endif %}
+
+            {% if request.GET.sort %}
+            <span class="filter-tag">
+                الترتيب
+                <a href="?{% for key, value in request.GET.items %}{% if key != 'sort' %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
+                    class="remove-filter">×</a>
+            </span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Results Count -->
+        <div class="results-info">
+            <p>عرض <strong>{{ object_list|length }}</strong> منتج</p>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-section">
+    <div class="container">
+        <div class="row">
+            {% for product in object_list %}
+            <!-- Product Card -->
+            <div class="col-lg-4 col-md-6">
+                <div class="product-card">
+                    <div class="product-image">
+                        <a href="{% url 'products:product_detail' product.slug %}">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </a>
+                        {% if product.quantity == 0 %}
+                        <span class="product-badge out-of-stock">منتهي الكمية</span>
+                        {% elif product.quantity < 5 %} <span class="product-badge low-stock">الكمية محدودة</span>
+                            {% endif %}
+                    </div>
+                    <div class="product-body">
+                        <a class="product-title"
+                            href="{% url 'products:product_detail' product.slug %}">{{product.name}}</a>
+                        <p class="product-description">{{product.subtitle}}</p>
+                        <div class="product-price">
+                            <span>{{product.price}}</span> جنيه
+                        </div>
+
+
+                        <form action="/orders/add-to-cart" method="post" class="add-to-cart-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="btn btn-add-cart">
+                                <i class="fas fa-shopping-cart"></i> أضف إلى السلة
+                            </button>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="no-products">
+                    <i class="fas fa-box-open"></i>
+                    <h3>لا توجد منتجات</h3>
+                    <p>لم يتم العثور على منتجات تطابق معايير البحث</p>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary">
+                        <i class="fas fa-redo"></i> مسح الفلاتر
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+    // Toggle Filters on Mobile
+    function toggleFilters() {
+        const container = document.getElementById('filtersContainer');
+        const btn = document.querySelector('.filter-toggle-btn i:last-child');
+        container.classList.toggle('active');
+        btn.classList.toggle('fa-chevron-down');
+        btn.classList.toggle('fa-chevron-up');
+    }
+
+    // Auto-submit filters on change
+    function submitFilters() {
+        document.getElementById('filterForm').submit();
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('form.add-to-cart-form').on('submit', function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var url = form.attr('action');
+            var csrf_token = form.find('input[name=csrfmiddlewaretoken]').val();
+            var product_id = form.find('input[name=product_id]').val();
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    'product_id': product_id,
+                    'csrfmiddlewaretoken': csrf_token
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // تحديث رقم وعدد السلة مباشرة
+                        $('#cart-count').text(response.cart_count);
+                        $('#cart-total').text(response.total);
+
+                        // تحديد نوع الرسالة
+                        var messageClass = response.already_exists ?
+                            'cart-update-toast' : 'cart-success-toast';
+                        showToast(response.message, messageClass);
+                    } else if (response.out_of_stock) {
+                        showToast(response.message, 'cart-error-toast');
+                    } else if (response.insufficient) {
+                        showToast(response.message, 'cart-warning-toast');
+                    } else {
+                        showToast(response.message || 'حدث خطأ غير متوقع', 'cart-error-toast');
+                    }
+                },
+                error: function (xhr) {
+                    // التحقق إذا كان المستخدم غير مسجل دخول (401)
+                    if (xhr.status === 401) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.login_required && response.login_url) {
+                                // إعادة توجيه المستخدم لصفحة تسجيل الدخول
+                                window.location.href = response.login_url;
+                                return;
+                            }
+                        } catch (e) {
+                            // في حالة عدم القدرة على parse الاستجابة
+                            window.location.href = '/accounts/login/?next=' + window.location.pathname;
+                            return;
+                        }
+                    }
+
+                    // في حالة أي خطأ آخر
+                    alert('حدث خطأ أثناء إضافة المنتج للسلة ❌');
+                }
+            });
+        });
+    });
+
+    function showToast(message, className) {
+        console.log('Showing toast:', message, className); // للتشخيص
+
+        // إزالة أي رسائل سابقة من نفس النوع
+        var existingToast = $('.' + className);
+        if (existingToast.length) {
+            existingToast.remove();
+        }
+
+        var messageDiv = $('<div class="' + className + '"></div>').text(message);
+        $('body').append(messageDiv);
+
+        // التأكد من أن العنصر موجود ثم عرضه
+        messageDiv.css('display', 'block').fadeIn(200).delay(3000).fadeOut(500, function () {
+            $(this).remove();
+        });
+    }
+</script>
+
+
+{% endblock content %}

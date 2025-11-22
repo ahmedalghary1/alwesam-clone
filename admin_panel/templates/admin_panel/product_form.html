@@ -1,0 +1,212 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1>
+        <i class="fas fa-box"></i>
+        {% if action == 'create' %}إضافة منتج جديد{% else %}تعديل منتج{% endif %}
+    </h1>
+</div>
+
+<div class="content-card">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-8">
+                <h4 class="mb-3">معلومات المنتج</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">اسم المنتج *</label>
+                    {{ form.name }}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">الفئة</label>
+                        {{ form.category }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">العلامة التجارية</label>
+                        {{ form.brand }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">السعر *</label>
+                        {{ form.price }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">رقم المنتج (SKU) *</label>
+                        {{ form.sku }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">الكمية *</label>
+                        {{ form.quantity }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">وصف قصير</label>
+                    {{ form.subtitle }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">الوصف الكامل</label>
+                    {{ form.description }}
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h4 class="mb-3">الصورة والإعدادات</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">الصورة الرئيسية</label>
+                    {{ form.image }}
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="img-fluid mt-2" style="max-height: 200px;">
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        {{ form.is_featured }}
+                        <label class="form-check-label">منتج مميز</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        {{ form.is_active }}
+                        <label class="form-check-label">نشط</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Additional Images Section -->
+        {% if action == 'edit' %}
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-3">
+                    <i class="fas fa-images"></i> الصور الإضافية للمنتج
+                </h4>
+                <p class="text-muted">يمكنك إضافة صور إضافية للمنتج لعرضها في صفحة تفاصيل المنتج</p>
+
+                {{ formset.management_form }}
+
+                <div id="formset-container">
+                    {% for form in formset %}
+                    <div class="formset-form mb-3 p-3 border rounded">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <label class="form-label">صورة إضافية {{ forloop.counter }}</label>
+                                {{ form.image }}
+                                {{ form.id }}
+                                {% if form.instance.image %}
+                                <img src="{{ form.instance.image.url }}" class="img-thumbnail mt-2"
+                                    style="max-height: 100px;">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 text-end">
+                                {% if form.instance.pk %}
+                                <div class="form-check">
+                                    {{ form.DELETE }}
+                                    <label class="form-check-label text-danger">
+                                        <i class="fas fa-trash"></i> حذف هذه الصورة
+                                    </label>
+                                </div>
+                                {% else %}
+                                <button type="button" class="btn btn-sm btn-outline-danger remove-form">
+                                    <i class="fas fa-times"></i> إزالة
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button type="button" class="btn btn-outline-primary btn-sm" id="add-more">
+                    <i class="fas fa-plus"></i> إضافة صورة أخرى
+                </button>
+            </div>
+        </div>
+
+        <hr class="my-4">
+        {% endif %}
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-admin-primary">
+                <i class="fas fa-save"></i> حفظ
+            </button>
+            <a href="{% url 'admin_panel:products-list' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> إلغاء
+            </a>
+        </div>
+    </form>
+</div>
+
+{% if action == 'edit' %}
+<script>
+    // Formset management for adding more image forms dynamically
+    document.addEventListener('DOMContentLoaded', function () {
+        const addButton = document.getElementById('add-more');
+        if (!addButton) return;
+
+        addButton.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const container = document.getElementById('formset-container');
+            const totalFormsInput = document.querySelector('#id_productimages-TOTAL_FORMS');
+            const currentFormCount = parseInt(totalFormsInput.value);
+
+            // Create new form HTML
+            const newFormHtml = `
+                <div class="formset-form mb-3 p-3 border rounded">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <label class="form-label">صورة إضافية ${currentFormCount + 1}</label>
+                            <input type="file" name="productimages-${currentFormCount}-image" 
+                                   class="form-control" id="id_productimages-${currentFormCount}-image">
+                            <input type="hidden" name="productimages-${currentFormCount}-id" 
+                                   id="id_productimages-${currentFormCount}-id">
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-form">
+                                <i class="fas fa-times"></i> إزالة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add new form to container
+            container.insertAdjacentHTML('beforeend', newFormHtml);
+
+            // Update total forms count
+            totalFormsInput.value = currentFormCount + 1;
+
+            // Add event listener for remove button
+            const newForm = container.lastElementChild;
+            const removeBtn = newForm.querySelector('.remove-form');
+            removeBtn.addEventListener('click', function () {
+                newForm.remove();
+                // Note: We don't decrease TOTAL_FORMS as Django expects sequential numbers
+            });
+        });
+
+        // Add remove functionality to existing empty forms
+        document.querySelectorAll('.remove-form').forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.closest('.formset-form').remove();
+            });
+        });
+    });
+</script>
+{% endif %}
+
+{% endblock %}

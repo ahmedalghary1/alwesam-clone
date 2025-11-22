@@ -1,0 +1,88 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-shopping-cart"></i> تفاصيل الطلب #{{ order.code }}</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="content-card">
+            <h4 class="mb-3">المنتجات</h4>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>المنتج</th>
+                        <th>السعر</th>
+                        <th>الكمية</th>
+                        <th>الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_details %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.price }} جنيه</td>
+                        <td>{{ item.quantity }}</td>
+                        <td><strong>{{ item.total }} جنيه</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="mt-4 text-end">
+                <p><strong>المجموع الفرعي:</strong> {{ order.subtotal }} جنيه</p>
+                <p><strong>رسوم التوصيل:</strong> {{ order.delivery_fee }} جنيه</p>
+                <h4><strong>الإجمالي:</strong> {{ order.total }} جنيه</h4>
+            </div>
+        </div>
+
+        {% if order.address %}
+        <div class="content-card mt-3">
+            <h4 class="mb-3">معلومات التوصيل</h4>
+            <p><strong>الاسم:</strong> {{ order.address.customer_name }}</p>
+            <p><strong>الهاتف:</strong> {{ order.address.customer_phone }}</p>
+            <p><strong>المحافظة:</strong> {{ order.address.governorate }}</p>
+            <p><strong>العنوان:</strong> {{ order.address.address_line }}</p>
+            {% if order.address.notes %}
+            <p><strong>ملاحظات:</strong> {{ order.address.notes }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="content-card">
+            <h4 class="mb-3">تحديث الطلب</h4>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">الحالة</label>
+                    {{ form.status }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">موعد التوصيل</label>
+                    {{ form.delivery_time }}
+                </div>
+                <button type="submit" class="btn-admin-primary w-100">
+                    <i class="fas fa-save"></i> تحديث
+                </button>
+            </form>
+        </div>
+
+        <div class="content-card mt-3">
+            <h4 class="mb-3">معلومات عامة</h4>
+            <p><strong>تاريخ الطلب:</strong><br>{{ order.order_time|date:"d/m/Y H:i" }}</p>
+            {% if order.user %}
+            <p><strong>المستخدم:</strong><br>{{ order.user.email }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{% url 'admin_panel:orders-list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-right"></i> العودة إلى الطلبات
+    </a>
+</div>
+{% endblock %}

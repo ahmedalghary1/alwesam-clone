@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>تأكيد الطلب - متجر الأدوات الكهربائية</title>
+{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<style>
+    .success-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .success-card {
+        background: var(--secondary-white);
+        border-radius: 20px;
+        padding: 60px 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .success-icon {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, var(--primary-yellow) 0%, #ffed4e 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        animation: scaleIn 0.5s ease;
+    }
+
+    .success-icon i {
+        font-size: 60px;
+        color: var(--primary-black);
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .success-title {
+        font-size: 36px;
+        font-weight: 900;
+        color: var(--primary-black);
+        margin-bottom: 20px;
+    }
+
+    .success-subtitle {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 40px;
+    }
+
+    .order-code {
+        display: inline-block;
+        background: var(--light-gray);
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary-black);
+        margin-bottom: 40px;
+    }
+
+    .order-code span {
+        color: var(--primary-yellow);
+    }
+
+    .order-summary {
+        background: var(--light-gray);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 40px 0;
+        text-align: right;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .summary-row:last-child {
+        border-bottom: none;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary-black);
+    }
+
+    .summary-label {
+        color: #666;
+    }
+
+    .summary-value {
+        font-weight: 700;
+        color: var(--primary-black);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        padding: 15px 40px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 10px;
+        border: none;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-primary-action {
+        background-color: var(--primary-yellow);
+        color: var(--primary-black);
+    }
+
+    .btn-primary-action:hover {
+        background-color: var(--primary-black);
+        color: var(--primary-yellow);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    }
+
+    .btn-secondary-action {
+        background-color: var(--light-gray);
+        color: var(--primary-black);
+    }
+
+    .btn-secondary-action:hover {
+        background-color: #e9ecef;
+        transform: translateY(-2px);
+    }
+
+    .delivery-info {
+        background: #fff;
+        border: 2px solid var(--primary-yellow);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 30px 0;
+        text-align: right;
+    }
+
+    .delivery-info h4 {
+        color: var(--primary-black);
+        font-weight: 700;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .delivery-info h4 i {
+        color: var(--primary-yellow);
+    }
+
+    .delivery-info p {
+        margin: 10px 0;
+        color: #666;
+    }
+
+    .delivery-info strong {
+        color: var(--primary-black);
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<section class="success-section">
+    <div class="container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+
+            <h1 class="success-title">✅ تم تأكيد طلبك بنجاح!</h1>
+            <p class="success-subtitle">شكراً لك، سنتواصل معك قريباً لتأكيد موعد التوصيل</p>
+
+            <div class="order-code">
+                رقم الطلب: <span>#{{ order.code }}</span>
+            </div>
+
+            <div class="delivery-info">
+                <h4>
+                    <i class="fas fa-map-marker-alt"></i>
+                    عنوان التوصيل
+                </h4>
+                <p><strong>الاسم:</strong> {{ order.address.customer_name }}</p>
+                <p><strong>الهاتف:</strong> {{ order.address.customer_phone }}</p>
+                <p><strong>العنوان:</strong> {{ order.address.address_line }}</p>
+                <p><strong>المحافظة:</strong> {{ order.address.governorate }}</p>
+                {% if order.address.notes %}
+                <p><strong>ملاحظات:</strong> {{ order.address.notes }}</p>
+                {% endif %}
+            </div>
+
+            <div class="order-summary">
+                <h3 style="margin-bottom: 20px; color: var(--primary-black);">
+                    <i class="fas fa-receipt"></i> ملخص الطلب
+                </h3>
+
+                <div class="summary-row">
+                    <span class="summary-label">المجموع الفرعي:</span>
+                    <span class="summary-value">{{ order.subtotal }} جنيه</span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">رسوم التوصيل:</span>
+                    <span class="summary-value">{{ order.delivery_fee }} جنيه</span>
+                </div>
+
+                {% if order.discount > 0 %}
+                <div class="summary-row">
+                    <span class="summary-label">الخصم:</span>
+                    <span class="summary-value" style="color: #28a745;">-{{ order.discount }} جنيه</span>
+                </div>
+                {% endif %}
+
+                <div class="summary-row">
+                    <span class="summary-label">الإجمالي:</span>
+                    <span class="summary-value">{{ order.total_with_coupon|default:order.total }} جنيه</span>
+                </div>
+            </div>
+
+            <div class="alert alert-warning"
+                style="background-color: #fff3cd; border: none; border-radius: 10px; margin-top: 30px;">
+                <i class="fas fa-hand-holding-usd"></i>
+                <strong>طريقة الدفع:</strong> الدفع عند الاستلام (نقداً عند استلام المنتج)
+            </div>
+
+            <div class="action-buttons">
+                <a href="{% url 'orders:my_orders' %}" class="btn-action btn-primary-action">
+                    <i class="fas fa-list"></i> عرض طلباتي
+                </a>
+                <a href="{% url 'products:product_list' %}" class="btn-action btn-secondary-action">
+                    <i class="fas fa-shopping-bag"></i> متابعة التسوق
+                </a>
+                <a href="{% url 'home' %}" class="btn-action btn-secondary-action">
+                    <i class="fas fa-home"></i> العودة للرئيسية
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
