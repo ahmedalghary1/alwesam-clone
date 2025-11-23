@@ -46,13 +46,13 @@
                 <td>{{ order.total }} جنيه</td>
                 <td>
                     {% if order.status == 'Received' %}
-                    <span class="badge bg-primary">تم الاستلام</span>
+                    <span class="badge bg-primary">{{ order.get_status_display }}</span>
                     {% elif order.status == 'Processed' %}
-                    <span class="badge bg-warning">قيد المعالجة</span>
+                    <span class="badge bg-warning">{{ order.get_status_display }}</span>
                     {% elif order.status == 'Shipped' %}
-                    <span class="badge bg-info">تم الشحن</span>
+                    <span class="badge bg-info">{{ order.get_status_display }}</span>
                     {% elif order.status == 'Delivered' %}
-                    <span class="badge bg-success">تم التوصيل</span>
+                    <span class="badge bg-success">{{ order.get_status_display }}</span>
                     {% endif %}
                 </td>
                 <td>

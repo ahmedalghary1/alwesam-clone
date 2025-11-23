@@ -227,14 +227,15 @@
                 </h1>
                 <div class="order-status status-{{ order.status }}">
                     {% if order.status == 'Received' %}
-                    <i class="fas fa-clock"></i> تم الاستلام
+                    <i class="fas fa-clock"></i>
                     {% elif order.status == 'Processed' %}
-                    <i class="fas fa-cog"></i> قيد المعالجة
+                    <i class="fas fa-cog"></i>
                     {% elif order.status == 'Shipped' %}
-                    <i class="fas fa-truck"></i> تم الشحن
+                    <i class="fas fa-truck"></i>
                     {% elif order.status == 'Delivered' %}
-                    <i class="fas fa-check-circle"></i> تم التوصيل
+                    <i class="fas fa-check-circle"></i>
                     {% endif %}
+                    {{ order.get_status_display }}
                 </div>
             </div>
 

@@ -11,10 +11,10 @@ from utils.generate_code import generate_code
 
 
 ORDER_STATUS = (
-    ('Received','Received'),  
-    ('Processed','Processed'),
-    ('Shipped','Shipped'),
-    ('Delivered','Delivered')
+    ('Received', 'تم الاستلام'),  
+    ('Processed', 'قيد المعالجة'),
+    ('Shipped', 'تم الشحن'),
+    ('Delivered', 'تم التوصيل')
 )
 
 
