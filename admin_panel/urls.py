@@ -10,8 +10,8 @@ urlpatterns = [
     # Products Management
     path('products/', views.admin_products_list, name='products-list'),
     path('products/create/', views.admin_product_create, name='product-create'),
-    path('products/edit/<int:product_id>/', views.admin_product_edit, name='product-edit'),
-    path('products/delete/<int:product_id>/', views.admin_product_delete, name='product-delete'),
+    path('products/edit/<uuid:product_id>/', views.admin_product_edit, name='product-edit'),
+    path('products/delete/<uuid:product_id>/', views.admin_product_delete, name='product-delete'),
     
     # Orders Management
     path('orders/', views.admin_orders_list, name='orders-list'),

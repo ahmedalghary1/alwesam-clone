@@ -9,13 +9,12 @@ class ProductForm(forms.ModelForm):
     """
     class Meta:
         model = Product
-        fields = ['name', 'category', 'price', 'sku', 'quantity', 'brand', 
+        fields = ['name', 'category', 'price', 'quantity', 'brand', 
                   'subtitle', 'description', 'image', 'is_featured', 'is_active']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'اسم المنتج'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'السعر', 'step': '0.01'}),
-            'sku': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'رقم المنتج'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'الكمية المتوفرة'}),
             'brand': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'العلامة التجارية (اختياري)'}),
             'subtitle': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'وصف قصير', 'rows': 3}),

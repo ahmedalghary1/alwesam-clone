@@ -1,4 +1,4 @@
-
+import uuid
 from django.db import models
 from taggit.managers import TaggableManager
 from accounts.models import CustomUser 
@@ -31,11 +31,11 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField('name', max_length=120)
     category = models.ForeignKey(Category, verbose_name='الفئة', related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
     price = models.FloatField('price')
     image = models.ImageField('image', upload_to='product')
-    sku = models.IntegerField('sku')
     subtitle = models.TextField('subtitle', max_length=500)
     description = models.TextField('description', max_length=50000)
     created_at = models.DateTimeField(default=timezone.now)

@@ -197,7 +197,7 @@
 
                         <div class="product-meta">
                             <div class="meta-item">
-                                <span class="meta-label">رقم المنتج:</span>
+                                <span class="meta-label">معرف المنتج:</span>
                                 <span class="meta-value">{{ object.id }}</span>
                             </div>
                             <div class="meta-item">
@@ -367,56 +367,56 @@
     // Add to Cart Function
     function addToCart() {
         var quantity = parseInt(document.getElementById('productQuantity').value);
-        var productId = {{ object.id }};
+        var productId = '{{ object.id }}';
 
-    $.ajax({
-        type: 'POST',
-        url: '/orders/add-to-cart',
-        data: {
-            'product_id': productId,
-            'csrfmiddlewaretoken': '{{ csrf_token }}',
-            'quantity': quantity
-        },
-        success: function (response) {
-            if (response.success) {
-                // تحديث عداد السلة
-                $('#cart-count').text(response.cart_count);
+        $.ajax({
+            type: 'POST',
+            url: '/orders/add-to-cart',
+            data: {
+                'product_id': productId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                'quantity': quantity
+            },
+            success: function (response) {
+                if (response.success) {
+                    // تحديث عداد السلة
+                    $('#cart-count').text(response.cart_count);
 
-                // تحديد نوع الرسالة (نجاح أو تحديث)
-                var messageClass = response.already_exists ?
-                    'cart-update-toast' : 'cart-success-toast';
+                    // تحديد نوع الرسالة (نجاح أو تحديث)
+                    var messageClass = response.already_exists ?
+                        'cart-update-toast' : 'cart-success-toast';
 
-                // عرض رسالة
-                showToast(response.message, messageClass);
-            } else if (response.out_of_stock) {
-                showToast(response.message, 'cart-error-toast');
-            } else if (response.insufficient) {
-                showToast(response.message, 'cart-warning-toast');
-            } else {
-                showToast(response.message || 'حدث خطأ غير متوقع', 'cart-error-toast');
-            }
-        },
-        error: function (xhr) {
-            // التحقق إذا كان المستخدم غير مسجل دخول (401)
-            if (xhr.status === 401) {
-                try {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.login_required && response.login_url) {
-                        // إعادة توجيه المستخدم لصفحة تسجيل الدخول
-                        window.location.href = response.login_url;
+                    // عرض رسالة
+                    showToast(response.message, messageClass);
+                } else if (response.out_of_stock) {
+                    showToast(response.message, 'cart-error-toast');
+                } else if (response.insufficient) {
+                    showToast(response.message, 'cart-warning-toast');
+                } else {
+                    showToast(response.message || 'حدث خطأ غير متوقع', 'cart-error-toast');
+                }
+            },
+            error: function (xhr) {
+                // التحقق إذا كان المستخدم غير مسجل دخول (401)
+                if (xhr.status === 401) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.login_required && response.login_url) {
+                            // إعادة توجيه المستخدم لصفحة تسجيل الدخول
+                            window.location.href = response.login_url;
+                            return;
+                        }
+                    } catch (e) {
+                        // في حالة عدم القدرة على parse الاستجابة
+                        window.location.href = '/accounts/login/?next=' + window.location.pathname;
                         return;
                     }
-                } catch (e) {
-                    // في حالة عدم القدرة على parse الاستجابة
-                    window.location.href = '/accounts/login/?next=' + window.location.pathname;
-                    return;
                 }
-            }
 
-            // في حال أي خطأ آخر
-            showToast('حدث خطأ أثناء إضافة المنتج للسلة ❌', 'cart-error-toast');
-        }
-    });
+                // في حال أي خطأ آخر
+                showToast('حدث خطأ أثناء إضافة المنتج للسلة ❌', 'cart-error-toast');
+            }
+        });
     }
 
     function showToast(message, className) {
