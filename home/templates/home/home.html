@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% load i18n %}
 
 
 {% block title %}
@@ -23,7 +24,7 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 hero-content">
-                <h1 class="hero-title">أدوات كهربائية <span class="highlight">احترافية</span></h1>
+                <h1 class="hero-title">{% trans "أدوات كهربائية" %}<span class="highlight">احترافية</span></h1>
                 <p class="hero-subtitle">نوفر لك أفضل الأدوات الكهربائية بجودة عالية وأسعار منافسة لتلبية جميع احتياجاتك
                 </p>
                 <a href="{% url 'products:product_list' %}" class="btn btn-primary-custom">
