@@ -154,7 +154,7 @@ def admin_product_delete(request, product_id):
     """
     Delete product.
     """
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(Product, uuid =product_id)
     product_name = product.name
     product.delete()
     messages.success(request, f'✅ تم حذف المنتج "{product_name}" بنجاح.')
