@@ -12,157 +12,268 @@ from .models import DeliveryFee
 from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 
-
-@login_required
 def checkout(request, item_id=None):
-    try:
-        cart = Cart.objects.get(user=request.user, status='Inprogress')
-    except Cart.DoesNotExist:
-        # If cart doesn't exist, redirect to products
-        messages.warning(request, '⚠️ السلة فارغة.')
-        return redirect('product_list')
-    
+
+    # =========================
+    #   تحميل السلة (مستخدم / زائر)
+    # =========================
+    if request.user.is_authenticated:
+        cart, _ = Cart.objects.get_or_create(user=request.user, status="Inprogress")
+        cart_detail = CartDetail.objects.filter(cart=cart)
+
+        subtotal = sum(item.product.price * item.quantity for item in cart_detail)
+
+    else:
+        # ------ session cart ------
+        session_cart = request.session.get("cart", {})
+        cart = None
+        cart_detail = []
+
+        products = Product.objects.filter(id__in=session_cart.keys())
+
+        for product in products:
+            qty = session_cart[str(product.id)]
+            cart_detail.append({
+                "id": product.id,
+                "product": product,
+                "quantity": qty,
+                "total": product.price * qty
+            })
+
+        subtotal = sum(item["total"] for item in cart_detail)
+
+    # =========================
+    #   رسوم التوصيل
+    # =========================
     deliveryFee = DeliveryFee.objects.last()
     delivery_fee = deliveryFee.fee if deliveryFee else 0
-
-
-    # ----------- تحديث السلة لو الطلب AJAX ويحتوي على action ----------
-    action = request.GET.get('action')
-
-    if request.method == 'GET' and action:
-        if item_id:
-            try:
-                cart_detail_item = CartDetail.objects.get(id=item_id, cart=cart)
-                
-                if action == 'increase':
-                    cart_detail_item.quantity += 1
-                    cart_detail_item.total = round(cart_detail_item.product.price * cart_detail_item.quantity, 2)
-                    cart_detail_item.save()
-                elif action == 'decrease' and cart_detail_item.quantity > 1:
-                    cart_detail_item.quantity -= 1
-                    cart_detail_item.total = round(cart_detail_item.product.price * cart_detail_item.quantity, 2)
-                    cart_detail_item.save()
-                elif action == 'delete':
-                    cart_detail_item.delete()
-                    
-            except CartDetail.DoesNotExist:
-                return JsonResponse({'success': False, 'message': 'العنصر غير موجود'})
-
-        # حساب الإجمالي بعد التحديث
-        cart_detail = CartDetail.objects.filter(cart=cart)
-        subtotal = sum([item.product.price * item.quantity for item in cart_detail])
-        total = subtotal + delivery_fee
-
-        # إرجاع JSON مع البيانات المحدثة
-        response_data = {
-            'success': True,
-            'quantity': cart_detail_item.quantity if action != 'delete' else 0,
-            'item_total': round(cart_detail_item.total, 2) if action != 'delete' else 0,
-            'sub_total': round(subtotal, 2),
-            'deliveryFee': delivery_fee,
-            'total': f"{round(total, 2)} جنيه",
-        }
-        
-        return JsonResponse(response_data)
-
-    # ----------- عرض صفحة Checkout العادية ----------
-    cart_detail = CartDetail.objects.filter(cart=cart)
-    subtotal = sum([item.product.price * item.quantity for item in cart_detail])
     total = subtotal + delivery_fee
 
-    context = {
-        'cart_detail_data': cart_detail,
-        'deliveryFee': delivery_fee,
-        'subtotal': subtotal,
-        'total': total,
-    }
+    # =========================
+    #   عمليات تعديل السلة (AJAX)
+    # =========================
+    action = request.GET.get("action")
 
-    return render(request, 'orders/checkout.html', context)
+    if action:
+
+        # ========== لو المستخدم مسجل دخول ==========
+        if request.user.is_authenticated and item_id:
+
+            try:
+                item = CartDetail.objects.get(id=item_id, cart=cart)
+
+                if action == "increase":
+                    item.quantity += 1
+                elif action == "decrease" and item.quantity > 1:
+                    item.quantity -= 1
+                elif action == "delete":
+                    item.delete()
+                    item = None
+
+                if item:
+                    item.total = item.product.price * item.quantity
+                    item.save()
+
+            except CartDetail.DoesNotExist:
+                return JsonResponse({"success": False})
+
+            # إعادة الحساب
+            cart_detail = CartDetail.objects.filter(cart=cart)
+            subtotal = sum(i.product.price * i.quantity for i in cart_detail)
+            total = subtotal + delivery_fee
+
+            return JsonResponse({
+                "success": True,
+                "quantity": item.quantity if item else 0,
+                "item_total": item.total if item else 0,
+                "sub_total": subtotal,
+                "deliveryFee": delivery_fee,
+                "total": total
+            })
 
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
-from django.http import JsonResponse
-from .models import Product, Cart, CartDetail
+        # ========== تعديل session cart للزائر ==========
+        else:
+            session_cart = request.session.get("cart", {})
+
+            product_id = str(item_id)
+            if product_id not in session_cart:
+                return JsonResponse({"success": False})
+
+            if action == "increase":
+                session_cart[product_id] += 1
+
+            elif action == "decrease" and session_cart[product_id] > 1:
+                session_cart[product_id] -= 1
+
+            elif action == "delete":
+                del session_cart[product_id]
+
+            request.session["cart"] = session_cart
+
+            # إعادة الحساب للزائر
+            products = Product.objects.filter(id__in=session_cart.keys())
+            subtotal = sum(
+                Product.objects.get(id=pid).price * qty
+                for pid, qty in session_cart.items()
+            )
+            total = subtotal + delivery_fee
+
+            return JsonResponse({
+                "success": True,
+                "quantity": session_cart.get(product_id, 0),
+                "item_total": (Product.objects.get(id=item_id).price * session_cart.get(product_id, 0)) if item_id in session_cart else 0,
+                "sub_total": subtotal,
+                "deliveryFee": delivery_fee,
+                "total": total
+            })
+
+
+    # =========================
+    #   عرض صفحة checkout
+    # =========================
+    return render(request, "orders/checkout.html", {
+        "cart": cart,
+        "cart_detail_data": cart_detail,
+        "deliveryFee": delivery_fee,
+        "subtotal": subtotal,
+        "total": total,
+        "is_guest": not request.user.is_authenticated
+    })
+
+# def add_to_cart(request):
+
+#     if not request.user.is_authenticated:
+#         login_url = reverse('accounts:login')  
+#         next_param = request.build_absolute_uri()
+#         return JsonResponse({
+#             'login_required': True,
+#             'login_url': f"{login_url}?next={next_param}",
+#             'message': 'يرجى تسجيل الدخول أولاً'
+#         }, status=401)
+
+#     if request.method == 'POST':
+#         product = get_object_or_404(Product, id=request.POST.get('product_id'))
+#         quantity = int(request.POST.get('quantity', 1))
+
+#         # التحقق من توفر الكمية
+#         if product.quantity == 0:
+#             return JsonResponse({
+#                 'success': False,
+#                 'out_of_stock': True,
+#                 'message': '❌ عذراً، هذا المنتج غير متوفر حالياً'
+#             })
+
+#         cart, _ = Cart.objects.get_or_create(user=request.user, status='Inprogress')
+#         cart_detail, created = CartDetail.objects.get_or_create(cart=cart, product=product)
+
+#         if not created:
+#             # المنتج موجود مسبقاً
+#             new_quantity = cart_detail.quantity + quantity
+            
+#             if new_quantity > product.quantity:
+#                 return JsonResponse({
+#                     'success': False,
+#                     'insufficient': True,
+#                     'message': f'⚠️ الكمية المتوفرة من هذا المنتج: {product.quantity} قطعة فقط',
+#                     'available': product.quantity,
+#                     'current_in_cart': cart_detail.quantity
+#                 })
+            
+#             cart_detail.quantity = new_quantity
+#             already_exists = True
+#         else:
+#             if quantity > product.quantity:
+#                 return JsonResponse({
+#                     'success': False,
+#                     'insufficient': True,
+#                     'message': f'⚠️ الكمية المتوفرة من هذا المنتج: {product.quantity} قطعة فقط',
+#                     'available': product.quantity
+#                 })
+#             cart_detail.quantity = quantity
+#             already_exists = False
+
+#         cart_detail.total = round(product.price * cart_detail.quantity, 2)
+#         cart_detail.save()
+
+#         cart_detail_list = CartDetail.objects.filter(cart=cart)
+#         total = cart.cart_total
+#         cart_count = cart_detail_list.count()
+
+#         if already_exists:
+#             message = f"🔄 المنتج '{product.name}' موجود مسبقاً - تم تحديث الكمية"
+#         else:
+#             message = f"✅ تم إضافة '{product.name}' إلى السلة بنجاح"
+
+#         return JsonResponse({
+#             'success': True,
+#             'message': message,
+#             'already_exists': already_exists,
+#             'total': total,
+#             'cart_count': cart_count,
+#         })
+
+#     return JsonResponse({'success': False, 'message': 'طريقة الطلب غير صحيحة'}, status=400)
+
 
 
 def add_to_cart(request):
 
+    # لو المستخدم غير مسجل دخول → استخدم session cart
     if not request.user.is_authenticated:
-        login_url = reverse('accounts:login')  # استخدام namespace الصحيح
-        next_param = request.build_absolute_uri()
-        return JsonResponse({
-            'login_required': True,
-            'login_url': f"{login_url}?next={next_param}",
-            'message': 'يرجى تسجيل الدخول أولاً'
-        }, status=401)
+        session_cart = request.session.get('cart', {})
 
-    if request.method == 'POST':
         product = get_object_or_404(Product, id=request.POST.get('product_id'))
         quantity = int(request.POST.get('quantity', 1))
 
-        # التحقق من توفر الكمية
-        if product.quantity == 0:
+        # تحقق من المخزون
+        if quantity > product.quantity:
             return JsonResponse({
                 'success': False,
-                'out_of_stock': True,
-                'message': '❌ عذراً، هذا المنتج غير متوفر حالياً'
+                'message': f"⚠️ الكمية المتوفرة من '{product.name}' هي {product.quantity}",
             })
+
+        # تحديث السلة
+        if str(product.id) in session_cart:
+            new_qty = session_cart[str(product.id)] + quantity
+            if new_qty > product.quantity:
+                return JsonResponse({'success': False, 'message': '⚠️ كمية غير متاحة'})
+            session_cart[str(product.id)] = new_qty
+        else:
+            session_cart[str(product.id)] = quantity
+
+        request.session['cart'] = session_cart
+
+        return JsonResponse({
+            'success': True,
+            'message': f"🛒 تم إضافة {product.name} إلى السلة",
+            'cart_count': len(session_cart),
+        })
+
+    # ---------- المستخدم المسجل دخول ----------
+    if request.method == 'POST':
+        product = get_object_or_404(Product, id=request.POST.get('product_id'))
+        quantity = int(request.POST.get('quantity', 1))
 
         cart, _ = Cart.objects.get_or_create(user=request.user, status='Inprogress')
         cart_detail, created = CartDetail.objects.get_or_create(cart=cart, product=product)
 
         if not created:
-            # المنتج موجود مسبقاً
-            new_quantity = cart_detail.quantity + quantity
-            
-            if new_quantity > product.quantity:
-                return JsonResponse({
-                    'success': False,
-                    'insufficient': True,
-                    'message': f'⚠️ الكمية المتوفرة من هذا المنتج: {product.quantity} قطعة فقط',
-                    'available': product.quantity,
-                    'current_in_cart': cart_detail.quantity
-                })
-            
-            cart_detail.quantity = new_quantity
-            already_exists = True
+            cart_detail.quantity += quantity
         else:
-            if quantity > product.quantity:
-                return JsonResponse({
-                    'success': False,
-                    'insufficient': True,
-                    'message': f'⚠️ الكمية المتوفرة من هذا المنتج: {product.quantity} قطعة فقط',
-                    'available': product.quantity
-                })
             cart_detail.quantity = quantity
-            already_exists = False
 
         cart_detail.total = round(product.price * cart_detail.quantity, 2)
         cart_detail.save()
 
-        cart_detail_list = CartDetail.objects.filter(cart=cart)
-        total = cart.cart_total
-        cart_count = cart_detail_list.count()
-
-        if already_exists:
-            message = f"🔄 المنتج '{product.name}' موجود مسبقاً - تم تحديث الكمية"
-        else:
-            message = f"✅ تم إضافة '{product.name}' إلى السلة بنجاح"
-
         return JsonResponse({
             'success': True,
-            'message': message,
-            'already_exists': already_exists,
-            'total': total,
-            'cart_count': cart_count,
+            'message': f"🛒 تم إضافة {product.name} إلى السلة",
+            'cart_count': CartDetail.objects.filter(cart=cart).count(),
         })
 
-    return JsonResponse({'success': False, 'message': 'طريقة الطلب غير صحيحة'}, status=400)
+    return JsonResponse({'success': False})
 
-
-from django.contrib.auth.decorators import login_required
-from .models import OrderAddress
 
 @login_required
 def create_order(request):

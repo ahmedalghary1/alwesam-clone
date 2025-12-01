@@ -159,9 +159,20 @@
                                 placeholder="أي ملاحظات أو تعليمات خاصة بالتوصيل"></textarea>
                         </div>
 
-                        <button type="submit" class="btn-confirm-order">
-                            <i class="fas fa-check-circle"></i> تأكيد الطلب
-                        </button>
+
+
+                        {% if is_guest %}
+                            <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn-confirm-order">
+                                <i class="fas fa-check-circle"></i>
+                                تسجيل الدخول لتأكيد الطلب
+                            </a>
+                        {% else %}
+                            <button type="submit" class="btn-confirm-order">
+                                <i class="fas fa-check-circle"></i> تأكيد الطلب
+                            </button>
+                        {% endif %}
+
+                        
                     </form>
                 </div>
 
