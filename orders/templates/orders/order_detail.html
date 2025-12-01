@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-<title>تفاصيل الطلب #{{ order.code }} - متجر الأدوات الكهربائية</title>
+<title>
+ تفاصيل الطلب #{{ order.code }} - متجر الأدوات الكهربائية
+</title>
 {% endblock title %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link href="{% static 'css/home.css' %}" rel="stylesheet"/>
 <style>
     .order-detail-section {
         padding: 80px 0;
@@ -219,143 +222,224 @@
 
 {% block content %}
 <section class="order-detail-section">
-    <div class="container">
-        <div class="detail-card">
-            <div class="order-header">
-                <h1 class="order-title">
-                    طلب <span>#{{ order.code }}</span>
-                </h1>
-                <div class="order-status status-{{ order.status }}">
-                    {% if order.status == 'Received' %}
-                    <i class="fas fa-clock"></i>
-                    {% elif order.status == 'Processed' %}
-                    <i class="fas fa-cog"></i>
-                    {% elif order.status == 'Shipped' %}
-                    <i class="fas fa-truck"></i>
-                    {% elif order.status == 'Delivered' %}
-                    <i class="fas fa-check-circle"></i>
-                    {% endif %}
+ <div class="container">
+  <div class="detail-card">
+   <div class="order-header">
+    <h1 class="order-title">
+     {% trans "طلب" %}
+     <span>
+      #{{ order.code }}
+     </span>
+    </h1>
+    <div class="order-status status-{{ order.status }}">
+     {% if order.status == 'Received' %}
+     <i class="fas fa-clock">
+     </i>
+     {% elif order.status == 'Processed' %}
+     <i class="fas fa-cog">
+     </i>
+     {% elif order.status == 'Shipped' %}
+     <i class="fas fa-truck">
+     </i>
+     {% elif order.status == 'Delivered' %}
+     <i class="fas fa-check-circle">
+     </i>
+     {% endif %}
                     {{ order.get_status_display }}
-                </div>
-            </div>
-
-            <div class="info-grid">
-                <div class="info-box">
-                    <div class="info-label">
-                        <i class="fas fa-calendar"></i> تاريخ الطلب
-                    </div>
-                    <div class="info-value">{{ order.order_time|date:"d F Y - H:i" }}</div>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-label">
-                        <i class="fas fa-hand-holding-usd"></i> طريقة الدفع
-                    </div>
-                    <div class="info-value">الدفع عند الاستلام</div>
-                </div>
-
-                {% if order.delivery_time %}
-                <div class="info-box">
-                    <div class="info-label">
-                        <i class="fas fa-truck"></i> موعد التوصيل المتوقع
-                    </div>
-                    <div class="info-value">{{ order.delivery_time|date:"d F Y" }}</div>
-                </div>
-                {% endif %}
-            </div>
-
-            {% if order.address %}
-            <h3 class="section-title">
-                <i class="fas fa-map-marker-alt"></i> عنوان التوصيل
-            </h3>
-
-            <div class="address-box">
-                <p><strong>الاسم:</strong> {{ order.address.customer_name }}</p>
-                <p><strong>الهاتف:</strong> {{ order.address.customer_phone }}</p>
-                {% if order.address.customer_email %}
-                <p><strong>البريد الإلكتروني:</strong> {{ order.address.customer_email }}</p>
-                {% endif %}
-                <p><strong>المحافظة:</strong> {{ order.address.governorate }}</p>
-                {% if order.address.city %}
-                <p><strong>المدينة:</strong> {{ order.address.city }}</p>
-                {% endif %}
-                <p><strong>العنوان:</strong> {{ order.address.address_line }}</p>
-                {% if order.address.notes %}
-                <p><strong>ملاحظات:</strong> {{ order.address.notes }}</p>
-                {% endif %}
-            </div>
-            {% endif %}
-        </div>
-
-        <div class="detail-card">
-            <h3 class="section-title">
-                <i class="fas fa-box"></i> المنتجات
-            </h3>
-
-            <table class="products-table">
-                <thead>
-                    <tr>
-                        <th>المنتج</th>
-                        <th>السعر</th>
-                        <th>الكمية</th>
-                        <th>الإجمالي</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in order_details %}
-                    <tr>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                {% if item.product.image %}
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
-                                    class="product-image">
-                                {% else %}
-                                <div class="product-image"
-                                    style="background: var(--light-gray); display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-box" style="color: #999;"></i>
-                                </div>
-                                {% endif %}
-                                <span class="product-name">{{ item.product.name }}</span>
-                            </div>
-                        </td>
-                        <td>{{ item.price }} جنيه</td>
-                        <td>{{ item.quantity }}</td>
-                        <td><strong>{{ item.total }} جنيه</strong></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <div class="summary-box">
-                <div class="summary-row">
-                    <span class="summary-label">المجموع الفرعي:</span>
-                    <span class="summary-value">{{ order.subtotal }} جنيه</span>
-                </div>
-
-                <div class="summary-row">
-                    <span class="summary-label">رسوم التوصيل:</span>
-                    <span class="summary-value">{{ order.delivery_fee }} جنيه</span>
-                </div>
-
-                {% if order.discount > 0 %}
-                <div class="summary-row">
-                    <span class="summary-label">الخصم:</span>
-                    <span class="summary-value" style="color: #28a745;">-{{ order.discount }} جنيه</span>
-                </div>
-                {% endif %}
-
-                <div class="summary-row">
-                    <span class="summary-label">الإجمالي النهائي:</span>
-                    <span class="summary-value">{{ order.total_with_coupon|default:order.total }} جنيه</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center mt-4">
-            <a href="{% url 'orders:my_orders' %}" class="btn-back">
-                <i class="fas fa-arrow-right"></i> العودة إلى طلباتي
-            </a>
-        </div>
     </div>
+   </div>
+   <div class="info-grid">
+    <div class="info-box">
+     <div class="info-label">
+      <i class="fas fa-calendar">
+      </i>
+      {% trans "تاريخ الطلب" %}
+     </div>
+     <div class="info-value">
+      {{ order.order_time|date:"d F Y - H:i" }}
+     </div>
+    </div>
+    <div class="info-box">
+     <div class="info-label">
+      <i class="fas fa-hand-holding-usd">
+      </i>
+      {% trans "طريقة الدفع" %}
+     </div>
+     <div class="info-value">
+      {% trans "الدفع عند الاستلام" %}
+     </div>
+    </div>
+    {% if order.delivery_time %}
+    <div class="info-box">
+     <div class="info-label">
+      <i class="fas fa-truck">
+      </i>
+      {% trans "موعد التوصيل المتوقع" %}
+     </div>
+     <div class="info-value">
+      {{ order.delivery_time|date:"d F Y" }}
+     </div>
+    </div>
+    {% endif %}
+   </div>
+   {% if order.address %}
+   <h3 class="section-title">
+    <i class="fas fa-map-marker-alt">
+    </i>
+    {% trans "عنوان التوصيل" %}
+   </h3>
+   <div class="address-box">
+    <p>
+     <strong>
+      {% trans "الاسم:" %}
+     </strong>
+     {{ order.address.customer_name }}
+    </p>
+    <p>
+     <strong>
+      {% trans "الهاتف:" %}
+     </strong>
+     {{ order.address.customer_phone }}
+    </p>
+    {% if order.address.customer_email %}
+    <p>
+     <strong>
+      {% trans "البريد الإلكتروني:" %}
+     </strong>
+     {{ order.address.customer_email }}
+    </p>
+    {% endif %}
+    <p>
+     <strong>
+      {% trans "المحافظة:" %}
+     </strong>
+     {{ order.address.governorate }}
+    </p>
+    {% if order.address.city %}
+    <p>
+     <strong>
+      {% trans "المدينة:" %}
+     </strong>
+     {{ order.address.city }}
+    </p>
+    {% endif %}
+    <p>
+     <strong>
+      {% trans "العنوان:" %}
+     </strong>
+     {{ order.address.address_line }}
+    </p>
+    {% if order.address.notes %}
+    <p>
+     <strong>
+      {% trans "ملاحظات:" %}
+     </strong>
+     {{ order.address.notes }}
+    </p>
+    {% endif %}
+   </div>
+   {% endif %}
+  </div>
+  <div class="detail-card">
+   <h3 class="section-title">
+    <i class="fas fa-box">
+    </i>
+    {% trans "المنتجات" %}
+   </h3>
+   <table class="products-table">
+    <thead>
+     <tr>
+      <th>
+       {% trans "المنتج" %}
+      </th>
+      <th>
+       {% trans "السعر" %}
+      </th>
+      <th>
+       {% trans "الكمية" %}
+      </th>
+      <th>
+       {% trans "الإجمالي" %}
+      </th>
+     </tr>
+    </thead>
+    <tbody>
+     {% for item in order_details %}
+     <tr>
+      <td>
+       <div style="display: flex; align-items: center; gap: 15px;">
+        {% if item.product.image %}
+        <img alt="{{ item.product.name }}" class="product-image" src="{{ item.product.image.url }}"/>
+        {% else %}
+        <div class="product-image" style="background: var(--light-gray); display: flex; align-items: center; justify-content: center;">
+         <i class="fas fa-box" style="color: #999;">
+         </i>
+        </div>
+        {% endif %}
+        <span class="product-name">
+         {{ item.product.name }}
+        </span>
+       </div>
+      </td>
+      <td>
+       {{ item.price }} جنيه
+      </td>
+      <td>
+       {{ item.quantity }}
+      </td>
+      <td>
+       <strong>
+        {{ item.total }} جنيه
+       </strong>
+      </td>
+     </tr>
+     {% endfor %}
+    </tbody>
+   </table>
+   <div class="summary-box">
+    <div class="summary-row">
+     <span class="summary-label">
+      {% trans "المجموع الفرعي:" %}
+     </span>
+     <span class="summary-value">
+      {{ order.subtotal }} جنيه
+     </span>
+    </div>
+    <div class="summary-row">
+     <span class="summary-label">
+      {% trans "رسوم التوصيل:" %}
+     </span>
+     <span class="summary-value">
+      {{ order.delivery_fee }} جنيه
+     </span>
+    </div>
+    {% if order.discount > 0 %}
+    <div class="summary-row">
+     <span class="summary-label">
+      {% trans "الخصم:" %}
+     </span>
+     <span class="summary-value" style="color: #28a745;">
+      -{{ order.discount }} جنيه
+     </span>
+    </div>
+    {% endif %}
+    <div class="summary-row">
+     <span class="summary-label">
+      {% trans "الإجمالي النهائي:" %}
+     </span>
+     <span class="summary-value">
+      {{ order.total_with_coupon|default:order.total }} جنيه
+     </span>
+    </div>
+   </div>
+  </div>
+  <div class="text-center mt-4">
+   <a class="btn-back" href="{% url 'orders:my_orders' %}">
+    <i class="fas fa-arrow-right">
+    </i>
+    {% trans "العودة إلى طلباتي" %}
+   </a>
+  </div>
+ </div>
 </section>
 {% endblock content %}

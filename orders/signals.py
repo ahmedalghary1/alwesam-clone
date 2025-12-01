@@ -19,8 +19,25 @@ def merge_session_cart(sender, user, request, **kwargs):
 
         item, created = CartDetail.objects.get_or_create(cart=cart, product=product)
 
+        # Ensure numeric qty (session may store values as strings)
+        try:
+            qty_val = int(qty)
+        except (ValueError, TypeError):
+            # If qty can't be parsed, skip this item
+            continue
+
+        if qty_val <= 0:
+            # Ignore non-positive quantities
+            continue
+
         # تحديث الكمية بشكل صحيح
-        item.quantity += qty
+        if created:
+            # إذا كان العنصر جديد، نضع الكمية مباشرة
+            item.quantity = qty_val
+        else:
+            # إذا كان موجود مسبقاً، نضيف الكمية الجديدة
+            item.quantity += qty_val
+        
         item.total = item.quantity * product.price
         item.save()
 

@@ -1,0 +1,425 @@
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:6: <title>تسجيل الخروج - نظام CRM</title>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:12: <!-- خط Cairo -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:239: <!-- أيقونة النجاح -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:247: <!-- العنوان -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:248: <h2 class="logout-title">تم تسجيل الخروج بنجاح</h2>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:250: <!-- الرسالة -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:252: شكراً لاستخدامك نظام CRM. نتمنى لك يوماً سعيداً!
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:254: يمكنك تسجيل الدخول مرة أخرى في أي وقت.
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:257: <!-- زر تسجيل الدخول مرة أخرى -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:260: تسجيل الدخول مرة أخرى
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:264: <!-- حقوق النشر -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_logout_page.html:266: <p class="mb-0">© 2025 نظام CRM. جميع الحقوق محفوظة.</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:8: <title>الملف الشخصي - نظام CRM</title>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:21: <!-- ========== Navbar العلوي ========== -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:30: الملف الشخصي
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:36: <!-- ========== المحتوى الرئيسي ========== -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:40: <!-- بطاقة الملف الشخصي -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:42: <!-- رأس البطاقة -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:45: <img src="https://ui-avatars.com/api/?name=محمد+علي&background=3b82f6&color=fff&size=300" alt="صورة المستخدم" class="profile-avatar" id="profileImage">
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:58: <span class="stat-label">المهام المكتملة</span>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:62: <span class="stat-label">المهام النشطة </span>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:68: <!-- جسم البطاقة -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:70: <!-- المعلومات الشخصية -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:74: المعلومات الشخصية
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:80: الاسم الكامل:
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:88: البريد الإلكتروني:
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:96: رقم الهاتف:
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:104: <!-- معلومات العمل -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:108: معلومات العمل
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:116: المسمي الوظيفي:
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:126: تاريخ الانضمام:
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:134: <!-- زر تعديل البيانات -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:138: تعديل البيانات
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:147: <!-- ========== Modal تعديل الملف الشخصي ========== -->
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:154: تعديل الملف الشخصي
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:163: <label class="form-label">الاسم الكامل</label>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:168: <label class="form-label">البريد الإلكتروني</label>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:173: <label class="form-label">رقم الهاتف</label>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:179: <label class="form-label">المسمي الوظيفي</label>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:188: <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:191: حفظ التغييرات
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:204: // وظيفة إظهار/إخفاء Sidebar على الموبايل
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:209: // وظيفة معاينة الصورة قبل الرفع
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:221: // معالج حفظ التغييرات
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:224: //     // هنا سيتم إرسال البيانات إلى السيرفر
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:225: //     alert('تم حفظ التغييرات بنجاح!');
+e:\web dev\alwesam\src\accounts\templates\accounts\crm_profile_page.html:229: // إخفاء Sidebar عند النقر خارجه
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:7: <title>متجر الأدوات الكهربائية - نسيت كلمة المرور</title>
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:225: <i class="fas fa-bolt"></i> الأدوات <span class="highlight">الكهربائية</span>
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:227: <p>متجرك الموثوق للأدوات الاحترافية</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:237: نسيت كلمة المرور؟
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:239: <p class="forgot-subtitle">لا تقلق، سنرسل لك رمز التحقق عبر البريد الإلكتروني</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:255: <i class="fas fa-envelope"></i> البريد الإلكتروني
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:259: placeholder="أدخل بريدك الإلكتروني" required>
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:266: <i class="fas fa-paper-plane"></i> إرسال رمز التحقق
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:273: تذكرت كلمة المرور؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a>
+e:\web dev\alwesam\src\accounts\templates\accounts\forgot_password.html:281: <i class="fas fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:297: /* إشعارات مخصصة */
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:363: <!-- منطقة الإشعارات -->
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:373: <!-- نموذج تسجيل الدخول -->
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:429: <span>أو سجل دخولك باستخدام</span>
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:483: // إنشاء عنصر الإشعار
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:493: // إضافة الإشعار إلى منطقة الإشعارات
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:496: // إزالة الإشعار بعد 3 ثوانٍ
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:508: showNotification('جاري تسجيل الدخول عبر Google...', 'info');
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:512: showNotification('تم تسجيل الدخول بنجاح عبر Google!', 'success');
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:522: showNotification('جاري تسجيل الدخول عبر Facebook...', 'info');
+e:\web dev\alwesam\src\accounts\templates\accounts\login_page.html:526: showNotification('تم تسجيل الدخول بنجاح عبر Facebook!', 'success');
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:5: <title>متجر الأدوات الكهربائية - الملف الشخصي</title>
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:194: مستخدم
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:202: <i class="fas fa-phone"></i> رقم الهاتف
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:211: <i class="fas fa-map-marker-alt"></i> العنوان
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:220: <i class="fas fa-calendar"></i> تاريخ الانضمام
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:228: <i class="fas fa-edit"></i> تعديل الملف الشخصي
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:236: <i class="fas fa-info-circle"></i> معلومات إضافية
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:243: <i class="fas fa-user"></i> الاسم الأول
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:253: <i class="fas fa-user"></i> الاسم الأخير
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:264: <i class="fas fa-id-card"></i> رقم الحساب
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:273: <i class="fas fa-shopping-bag"></i> الطلبات
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:278: عرض طلباتي <i class="fas fa-arrow-left"></i>
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:287: <i class="fas fa-edit"></i> تعديل الملف الشخصي
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:306: <i class="fas fa-user"></i> الاسم الأول
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:309: placeholder="أدخل الاسم الأول">
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:313: <i class="fas fa-user"></i> الاسم الأخير
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:316: placeholder="أدخل الاسم الأخير">
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:322: <i class="fas fa-phone"></i> رقم الهاتف
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:330: <i class="fas fa-map-marker-alt"></i> العنوان
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:333: placeholder="أدخل عنوانك بالتفصيل">{{ user.address }}</textarea>
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:338: <i class="fas fa-image"></i> صورة الملف الشخصي
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:346: <i class="fas fa-save"></i> حفظ التغييرات
+e:\web dev\alwesam\src\accounts\templates\accounts\profile.html:351: <i class="fas fa-times"></i> إلغاء
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:7: <title>متجر الأدوات الكهربائية - إنشاء حساب جديد</title>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:426: الأدوات <span class="highlight">الكهربائية</span>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:428: <p>متجرك الموثوق للأدوات الاحترافية</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:431: <!-- منطقة الإشعارات -->
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:450: <i class="fas fa-user-plus"></i> إنشاء حساب جديد
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:452: <p class="signup-subtitle">سجل الآن واستمتع بتجربة تسوق مميزة</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:458: <!-- الاسم الكامل -->
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:462: <i class="fas fa-user"></i> الاسم بالكامل
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:466: placeholder="أدخل اسمك الأول" required>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:473: <!-- البريد الإلكتروني ورقم الهاتف -->
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:477: <i class="fas fa-envelope"></i> البريد الإلكتروني
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:487: <i class="fas fa-phone"></i> رقم الهاتف
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:497: <!-- كلمة المرور وتأكيدها -->
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:501: <i class="fas fa-lock"></i> كلمة المرور
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:505: placeholder="أدخل كلمة المرور" required>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:514: <div class="password-hint">يجب أن تحتوي على 8 أحرف على الأقل</div>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:518: <i class="fas fa-lock"></i> تأكيد كلمة المرور
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:522: placeholder="أعد إدخال كلمة المرور" required>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:532: <!-- الموافقة على الشروط -->
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:536: أوافق على <a href="#">الشروط والأحكام</a> و <a href="#">سياسة الخصوصية</a>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:540: <!-- زر إنشاء الحساب -->
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:542: <i class="fas fa-user-plus"></i> إنشاء حساب
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:551: <span>أو سجل باستخدام</span>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:567: لديك حساب بالفعل؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a>
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:575: <i class="fas fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:652: showNotification('يجب الموافقة على الشروط والأحكام', 'danger');
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:658: showNotification('كلمة المرور غير متطابقة', 'danger');
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:664: showNotification('كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل', 'danger');
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:670: showNotification('البريد الإلكتروني غير صحيح', 'danger');
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:681: showNotification('جاري التسجيل عبر Google...', 'info');
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:684: showNotification('تم التسجيل بنجاح عبر Google!', 'success');
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:692: showNotification('جاري التسجيل عبر Facebook...', 'info');
+e:\web dev\alwesam\src\accounts\templates\accounts\register.html:695: showNotification('تم التسجيل بنجاح عبر Facebook!', 'success');
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:7: <title>متجر الأدوات الكهربائية - إنشاء كلمة مرور جديدة</title>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:288: <i class="fas fa-bolt"></i> الأدوات <span class="highlight">الكهربائية</span>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:290: <p>متجرك الموثوق للأدوات الاحترافية</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:300: إنشاء كلمة مرور جديدة
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:302: <p class="reset-subtitle">اختر كلمة مرور قوية لحماية حسابك</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:318: <i class="fas fa-lock"></i> كلمة المرور الجديدة
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:322: placeholder="أدخل كلمة المرور الجديدة" required>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:331: <div class="password-hint">يجب أن تحتوي على 8 أحرف على الأقل</div>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:337: <i class="fas fa-lock"></i> تأكيد كلمة المرور
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:341: placeholder="أعد إدخال كلمة المرور" required>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:351: <h6><i class="fas fa-shield-alt"></i> نصائح لكلمة مرور قوية:</h6>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:353: <li>استخدم 8 أحرف على الأقل</li>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:354: <li>اجمع بين الأحرف الكبيرة والصغيرة</li>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:355: <li>أضف أرقاماً ورموزاً خاصة</li>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:356: <li>تجنب المعلومات الشخصية الواضحة</li>
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:362: <i class="fas fa-check"></i> تأكيد كلمة المرور الجديدة
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:370: <i class="fas fa-arrow-right"></i> العودة إلى تسجيل الدخول
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:379: <i class="fas fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:432: alert('كلمتا المرور غير متطابقتين');
+e:\web dev\alwesam\src\accounts\templates\accounts\reset_password.html:435: alert('كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل');
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:7: <title>متجر الأدوات الكهربائية - رمز التحقق</title>
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:271: <i class="fas fa-bolt"></i> الأدوات <span class="highlight">الكهربائية</span>
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:273: <p>متجرك الموثوق للأدوات الاحترافية</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:283: رمز التحقق
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:285: <p class="verify-subtitle">أدخل الرمز المكون من 6 أرقام المرسل إلى بريدك الإلكتروني</p>
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:320: صلاحية الرمز: <span id="timer">15:00</span>
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:325: <i class="fas fa-check"></i> التحقق من الرمز
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:334: <i class="fas fa-redo"></i> إعادة إرسال الرمز
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:341: <i class="fas fa-arrow-right"></i> العودة إلى تسجيل الدخول
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:350: <i class="fas fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+e:\web dev\alwesam\src\accounts\templates\accounts\verify_code.html:420: document.getElementById('timer').textContent = 'انتهت الصلاحية';
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:7: {% block title %}<title>لوحة التحكم - متجر الأدوات الكهربائية</title>{% endblock %}
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:235: <h3><i class="fas fa-tools"></i> متجر الأدوات</h3>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:236: <p>لوحة التحكم</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:243: <i class="fas fa-chart-line"></i> الرئيسية
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:249: <i class="fas fa-box"></i> المنتجات
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:255: <i class="fas fa-tags"></i> الفئات
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:261: <i class="fas fa-shopping-cart"></i> الطلبات
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:267: <i class="fas fa-users"></i> المستخدمين
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:272: <i class="fas fa-cog"></i> إدارة Django
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:277: <i class="fas fa-home"></i> الموقع الرئيسي
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\base.html:282: <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:3: {% block title %}إدارة الفئات - لوحة التحكم{% endblock %}
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:8: <h1><i class="fas fa-tags"></i> إدارة الفئات</h1>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:16: <input type="text" name="search" class="form-control" placeholder="ابحث عن فئة..." value="{{ search }}">
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:18: <i class="fas fa-search"></i> بحث
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:22: <i class="fas fa-times"></i> مسح
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:29: <i class="fas fa-plus"></i> إضافة فئة جديدة
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:41: <th>اسم الفئة</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:42: <th>الأيقونة</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:43: <th>الوصف</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:44: <th>عدد المنتجات</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:45: <th>تاريخ الإنشاء</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:46: <th>الإجراءات</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:63: <span class="badge bg-primary">{{ category.products_count }} منتج</span>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:68: title="تعديل">
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:73: onclick="return confirm('هل أنت متأكد من حذف الفئة &quot;{{ category.name }}&quot;?{% if category.products_count %}\n\nتحذير: هذه الفئة تحتوي على {{ category.products_count }} منتج.{% endif %}')"
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:74: title="حذف">
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:86: <h4 class="mt-3">لا توجد فئات</h4>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:87: <p class="text-muted">لم يتم العثور على أي فئات{% if search %} تطابق البحث{% endif %}.</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html:89: <i class="fas fa-plus"></i> إضافة فئة جديدة
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:4: {% if action == 'add' %}إضافة فئة جديدة{% else %}تعديل الفئة{% endif %} - لوحة التحكم
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:12: {% if action == 'add' %}إضافة فئة جديدة{% else %}تعديل الفئة: {{ category.name }}{% endif %}
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:22: <!-- اسم الفئة -->
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:25: <i class="fas fa-tag"></i> اسم الفئة <span class="text-danger">*</span>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:35: <!-- الأيقونة -->
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:38: <i class="fas fa-icons"></i> الأيقونة (Font Awesome)
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:42: مثال: fas fa-tools, fas fa-hammer, fas fa-wrench
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:43: <a href="https://fontawesome.com/icons" target="_blank">(قائمة الأيقونات)</a>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:52: <!-- الوصف -->
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:55: <i class="fas fa-align-right"></i> الوصف
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:70: {% if action == 'add' %}إضافة الفئة{% else %}حفظ التعديلات{% endif %}
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:73: <i class="fas fa-times"></i> إلغاء
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:82: <h5><i class="fas fa-info-circle"></i> معلومات إضافية</h5>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:85: <p><strong>عدد المنتجات:</strong> {{ category.products.count }} منتج</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:86: <p><strong>تاريخ الإنشاء:</strong> {{ category.created_at|date:"Y-m-d H:i" }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html:89: <p><strong>المعرف (Slug):</strong> {{ category.slug }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:3: {% block title %}<title>لوحة التحكم - متجر الأدوات الكهربائية</title>{% endblock %}
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:7: <h1><i class="fas fa-chart-line"></i> لوحة التحكم</h1>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:15: <div class="stat-label">إجمالي المنتجات</div>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:22: <div class="stat-label">إجمالي الطلبات</div>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:29: <div class="stat-label">طلبات قيد الانتظار</div>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:36: <div class="stat-label">المستخدمين</div>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:44: <h3 class="mb-3"><i class="fas fa-shopping-bag"></i> أحدث الطلبات</h3>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:49: <th>رقم الطلب</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:50: <th>الحالة</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:51: <th>الإجمالي</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:52: <th>الإجراءات</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:60: <td>{{ order.total }} جنيه</td>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:72: <p class="text-muted text-center">لا توجد طلبات</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:79: <h3 class="mb-3"><i class="fas fa-exclamation-triangle"></i> منتجات منخفضة المخزون</h3>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:84: <th>اسم المنتج</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:85: <th>الكمية</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:86: <th>الإجراءات</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html:105: <p class="text-muted text-center">جميع المنتجات متوفرة</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:5: <h1><i class="fas fa-shopping-cart"></i> إدارة الطلبات</h1>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:11: <input type="text" name="search" class="form-control" placeholder="بحث برقم الطلب أو اسم العميل"
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:16: <option value="">جميع الحالات</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:17: <option value="Received" {% if selected_status == 'Received' %}selected{% endif %}>تم الاستلام</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:18: <option value="Processed" {% if selected_status == 'Processed' %}selected{% endif %}>قيد المعالجة</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:19: <option value="Shipped" {% if selected_status == 'Shipped' %}selected{% endif %}>تم الشحن</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:20: <option value="Delivered" {% if selected_status == 'Delivered' %}selected{% endif %}>تم التوصيل</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:24: <button type="submit" class="btn-admin-primary w-100">بحث</button>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:32: <th>رقم الطلب</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:33: <th>العميل</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:34: <th>التاريخ</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:35: <th>الإجمالي</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:36: <th>الحالة</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:37: <th>الإجراءات</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:44: <td>{{ order.address.customer_name|default:"غير محدد" }}</td>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:46: <td>{{ order.total }} جنيه</td>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:60: <i class="fas fa-eye"></i> عرض
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html:68: <p class="text-center text-muted">لا توجد طلبات</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:5: <h1><i class="fas fa-shopping-cart"></i> تفاصيل الطلب #{{ order.code }}</h1>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:11: <h4 class="mb-3">المنتجات</h4>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:15: <th>المنتج</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:16: <th>السعر</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:17: <th>الكمية</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:18: <th>الإجمالي</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:25: <td>{{ item.price }} جنيه</td>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:27: <td><strong>{{ item.total }} جنيه</strong></td>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:34: <p><strong>المجموع الفرعي:</strong> {{ order.subtotal }} جنيه</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:35: <p><strong>رسوم التوصيل:</strong> {{ order.delivery_fee }} جنيه</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:36: <h4><strong>الإجمالي:</strong> {{ order.total }} جنيه</h4>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:42: <h4 class="mb-3">معلومات التوصيل</h4>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:43: <p><strong>الاسم:</strong> {{ order.address.customer_name }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:44: <p><strong>الهاتف:</strong> {{ order.address.customer_phone }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:45: <p><strong>المحافظة:</strong> {{ order.address.governorate }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:46: <p><strong>العنوان:</strong> {{ order.address.address_line }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:48: <p><strong>ملاحظات:</strong> {{ order.address.notes }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:56: <h4 class="mb-3">تحديث الطلب</h4>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:60: <label class="form-label">الحالة</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:64: <label class="form-label">موعد التوصيل</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:68: <i class="fas fa-save"></i> تحديث
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:74: <h4 class="mb-3">معلومات عامة</h4>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:75: <p><strong>تاريخ الطلب:</strong><br>{{ order.order_time|date:"d/m/Y H:i" }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:77: <p><strong>المستخدم:</strong><br>{{ order.user.email }}</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html:85: <i class="fas fa-arrow-right"></i> العودة إلى الطلبات
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:6: <h1><i class="fas fa-box"></i> إدارة المنتجات</h1>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:8: <i class="fas fa-plus"></i> إضافة منتج جديد
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:16: <input type="text" name="search" class="form-control" placeholder="بحث..." value="{{ search }}">
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:20: <option value="">جميع الفئات</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:28: <option value="">جميع الحالات</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:29: <option value="active">نشط</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:30: <option value="inactive">غير نشط</option>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:34: <button type="submit" class="btn-admin-primary w-100">بحث</button>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:42: <th>الصورة</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:43: <th>الاسم</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:44: <th>الفئة</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:45: <th>السعر</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:46: <th>الكمية</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:47: <th>الحالة</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:48: <th>الإجراءات</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:64: <td>{{ product.price }} جنيه</td>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:73: <span class="badge bg-success">نشط</span>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:75: <span class="badge bg-secondary">غير نشط</span>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:83: onclick="return confirm('هل أنت متأكد من حذف هذا المنتج؟')">
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html:92: <p class="text-center text-muted">لا توجد منتجات</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:7: {% if action == 'create' %}إضافة منتج جديد{% else %}تعديل منتج{% endif %}
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:17: <h4 class="mb-3">معلومات المنتج</h4>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:20: <label class="form-label">اسم المنتج *</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:26: <label class="form-label">الفئة</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:30: <label class="form-label">العلامة التجارية</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:37: <label class="form-label">السعر *</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:41: <label class="form-label">الكمية *</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:47: <label class="form-label">وصف قصير</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:52: <label class="form-label">الوصف الكامل</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:58: <h4 class="mb-3">الصورة والإعدادات</h4>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:61: <label class="form-label">الصورة الرئيسية</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:71: <label class="form-check-label">منتج مميز</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:78: <label class="form-check-label">نشط</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:91: <i class="fas fa-images"></i> الصور الإضافية للمنتج
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:93: <p class="text-muted">يمكنك إضافة صور إضافية للمنتج لعرضها في صفحة تفاصيل المنتج</p>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:102: <label class="form-label">صورة إضافية {{ forloop.counter }}</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:115: <i class="fas fa-trash"></i> حذف هذه الصورة
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:120: <i class="fas fa-times"></i> إزالة
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:130: <i class="fas fa-plus"></i> إضافة صورة أخرى
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:140: <i class="fas fa-save"></i> حفظ
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:143: <i class="fas fa-times"></i> إلغاء
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:168: <label class="form-label">صورة إضافية ${currentFormCount + 1}</label>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html:176: <i class="fas fa-times"></i> إزالة
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:5: <h1><i class="fas fa-users"></i> إدارة المستخدمين</h1>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:11: <input type="text" name="search" class="form-control" placeholder="بحث بالبريد الإلكتروني أو الاسم"
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:15: <button type="submit" class="btn-admin-primary w-100">بحث</button>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:23: <th>الاسم</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:24: <th>البريد الإلكتروني</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:25: <th>الهاتف</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:26: <th>تاريخ التسجيل</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:27: <th>الصلاحيات</th>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:39: <span class="badge bg-danger">مدير رئيسي</span>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:41: <span class="badge bg-warning">موظف</span>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:43: <span class="badge bg-secondary">مستخدم عادي</span>
+e:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html:51: <p class="text-center text-muted">لا يوجد مستخدمين</p>
+e:\web dev\alwesam\src\home\templates\home\home.html:56: خبرتنا الطويلة في هذا المجال تجعلنا الخيار الأمثل لكل من يبحث عن الجودة والموثوقية. نحن نفخر بثقة
+e:\web dev\alwesam\src\home\templates\home\home.html:57: عملائنا ونسعى دائماً لتحقيق رضاهم التام.
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:39: <!-- صورة المنتج -->
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:46: <!-- اسم المنتج و الوصف -->
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:52: <!-- السعر -->
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:57: <!-- أزرار التحكم بالكمية -->
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:67: <!-- زر الحذف -->
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:93: <!-- رسالة تسجيل الدخول للزوار -->
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:108: <!-- نموذج الطلب للمستخدمين المسجلين -->
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:280: // نرسل أكشن increase أو decrease حسب الحركة
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:319: data.item_total + " ج";
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:323: document.querySelector(".summary-row strong").innerHTML = data.sub_total + " جنيه";
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:327: data.deliveryFee == 0 ? "مجاناً" : data.deliveryFee + " جنيه";
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:348: text = "لا يوجد منتجات";
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:350: text = "1 منتج";
+e:\web dev\alwesam\src\orders\templates\orders\checkout.html:352: text = count + " منتجات";
+e:\web dev\alwesam\src\orders\templates\orders\my_orders.html:6: <title>طلباتي - متجر الأدوات الكهربائية</title>
+e:\web dev\alwesam\src\orders\templates\orders\my_orders.html:241: <div class="info-value">{{ order.total_with_coupon|default:order.total }} جنيه</div>
+e:\web dev\alwesam\src\orders\templates\orders\my_orders.html:249: <div class="info-value">{{ order.order_detail.count }} منتج</div>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:5: <title>تفاصيل الطلب #{{ order.code }} - متجر الأدوات الكهربائية</title>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:226: طلب <span>#{{ order.code }}</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:245: <i class="fas fa-calendar"></i> تاريخ الطلب
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:252: <i class="fas fa-hand-holding-usd"></i> طريقة الدفع
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:254: <div class="info-value">الدفع عند الاستلام</div>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:260: <i class="fas fa-truck"></i> موعد التوصيل المتوقع
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:269: <i class="fas fa-map-marker-alt"></i> عنوان التوصيل
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:273: <p><strong>الاسم:</strong> {{ order.address.customer_name }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:274: <p><strong>الهاتف:</strong> {{ order.address.customer_phone }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:276: <p><strong>البريد الإلكتروني:</strong> {{ order.address.customer_email }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:278: <p><strong>المحافظة:</strong> {{ order.address.governorate }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:280: <p><strong>المدينة:</strong> {{ order.address.city }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:282: <p><strong>العنوان:</strong> {{ order.address.address_line }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:284: <p><strong>ملاحظات:</strong> {{ order.address.notes }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:292: <i class="fas fa-box"></i> المنتجات
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:298: <th>المنتج</th>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:299: <th>السعر</th>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:300: <th>الكمية</th>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:301: <th>الإجمالي</th>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:321: <td>{{ item.price }} جنيه</td>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:323: <td><strong>{{ item.total }} جنيه</strong></td>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:331: <span class="summary-label">المجموع الفرعي:</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:332: <span class="summary-value">{{ order.subtotal }} جنيه</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:336: <span class="summary-label">رسوم التوصيل:</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:337: <span class="summary-value">{{ order.delivery_fee }} جنيه</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:342: <span class="summary-label">الخصم:</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:343: <span class="summary-value" style="color: #28a745;">-{{ order.discount }} جنيه</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:348: <span class="summary-label">الإجمالي النهائي:</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:349: <span class="summary-value">{{ order.total_with_coupon|default:order.total }} جنيه</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_detail.html:356: <i class="fas fa-arrow-right"></i> العودة إلى طلباتي
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:5: <title>تأكيد الطلب - متجر الأدوات الكهربائية</title>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:197: <h1 class="success-title">✅ تم تأكيد طلبك بنجاح!</h1>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:198: <p class="success-subtitle">شكراً لك، سنتواصل معك قريباً لتأكيد موعد التوصيل</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:201: رقم الطلب: <span>#{{ order.code }}</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:207: عنوان التوصيل
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:209: <p><strong>الاسم:</strong> {{ order.address.customer_name }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:210: <p><strong>الهاتف:</strong> {{ order.address.customer_phone }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:211: <p><strong>العنوان:</strong> {{ order.address.address_line }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:212: <p><strong>المحافظة:</strong> {{ order.address.governorate }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:214: <p><strong>ملاحظات:</strong> {{ order.address.notes }}</p>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:220: <i class="fas fa-receipt"></i> ملخص الطلب
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:224: <span class="summary-label">المجموع الفرعي:</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:225: <span class="summary-value">{{ order.subtotal }} جنيه</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:229: <span class="summary-label">رسوم التوصيل:</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:230: <span class="summary-value">{{ order.delivery_fee }} جنيه</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:235: <span class="summary-label">الخصم:</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:236: <span class="summary-value" style="color: #28a745;">-{{ order.discount }} جنيه</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:241: <span class="summary-label">الإجمالي:</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:242: <span class="summary-value">{{ order.total_with_coupon|default:order.total }} جنيه</span>
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:249: <strong>طريقة الدفع:</strong> الدفع عند الاستلام (نقداً عند استلام المنتج)
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:254: <i class="fas fa-list"></i> عرض طلباتي
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:257: <i class="fas fa-shopping-bag"></i> متابعة التسوق
+e:\web dev\alwesam\src\orders\templates\orders\order_success.html:260: <i class="fas fa-home"></i> العودة للرئيسية
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:7: <title>{{ object.name }} - متجر الوسام</title>
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:13: /* رسالة النجاح */
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:31: /* رسالة التحديث */
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:49: /* رسالة التحذير */
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:67: /* رسالة الخطأ */
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:161: <strong>وصف المنتج:</strong><br>
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:295: الإلكتروني info@elwsam.com
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:309: <i class="fas fa-layer-group"></i> منتجات ذات صلة
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:321: <div class="related-product-price">{{ product.price }} جنيه</div>
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:383: // تحديث عداد السلة
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:386: // تحديد نوع الرسالة (نجاح أو تحديث)
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:390: // عرض رسالة
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:397: showToast(response.message || 'حدث خطأ غير متوقع', 'cart-error-toast');
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:401: // التحقق إذا كان المستخدم غير مسجل دخول (401)
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:406: // إعادة توجيه المستخدم لصفحة تسجيل الدخول
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:411: // في حالة عدم القدرة على parse الاستجابة
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:417: // في حال أي خطأ آخر
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:418: showToast('حدث خطأ أثناء إضافة المنتج للسلة ❌', 'cart-error-toast');
+e:\web dev\alwesam\src\products\templates\products\product_detail.html:424: // إزالة أي رسائل سابقة من نفس النوع
+e:\web dev\alwesam\src\products\templates\products\product_list.html:110: <label class="filter-label" style="opacity: 0;">تصفية</label>
+e:\web dev\alwesam\src\products\templates\products\product_list.html:142: نطاق السعر
+e:\web dev\alwesam\src\products\templates\products\product_list.html:150: الترتيب
+e:\web dev\alwesam\src\products\templates\products\product_list.html:188: <span>{{product.price}}</span> جنيه
+e:\web dev\alwesam\src\products\templates\products\product_list.html:257: // تحديث رقم وعدد السلة مباشرة
+e:\web dev\alwesam\src\products\templates\products\product_list.html:261: // تحديد نوع الرسالة
+e:\web dev\alwesam\src\products\templates\products\product_list.html:270: showToast(response.message || 'حدث خطأ غير متوقع', 'cart-error-toast');
+e:\web dev\alwesam\src\products\templates\products\product_list.html:274: // التحقق إذا كان المستخدم غير مسجل دخول (401)
+e:\web dev\alwesam\src\products\templates\products\product_list.html:279: // إعادة توجيه المستخدم لصفحة تسجيل الدخول
+e:\web dev\alwesam\src\products\templates\products\product_list.html:284: // في حالة عدم القدرة على parse الاستجابة
+e:\web dev\alwesam\src\products\templates\products\product_list.html:290: // في حالة أي خطأ آخر
+e:\web dev\alwesam\src\products\templates\products\product_list.html:291: alert('حدث خطأ أثناء إضافة المنتج للسلة ❌');
+e:\web dev\alwesam\src\products\templates\products\product_list.html:298: console.log('Showing toast:', message, className); // للتشخيص
+e:\web dev\alwesam\src\products\templates\products\product_list.html:300: // إزالة أي رسائل سابقة من نفس النوع
+e:\web dev\alwesam\src\products\templates\products\product_list.html:309: // التأكد من أن العنصر موجود ثم عرضه
+e:\web dev\alwesam\src\templates\base.html:104: {% if LANGUAGE_CODE == 'ar' %} العربية {% else %} English {% endif %}
+e:\web dev\alwesam\src\templates\base.html:127: <i class="fas fa-user"></i> {{ user.first_name|default:"حسابي" }}

@@ -1,220 +1,265 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-<title>متجر الأدوات الكهربائية - المنتجات</title>
+<title>
+ {% trans "متجر الأدوات الكهربائية - المنتجات" %}
+</title>
 {% endblock title %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/product_list.css' %}">
+<link href="{% static 'css/product_list.css' %}" rel="stylesheet"/>
 {% endblock style %}
 
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">
-    <div class="container text-center">
-        <h1 class="page-title"><i class="fas fa-tools"></i> منتجاتنا</h1>
-        <p class="lead">تصفح مجموعتنا الواسعة من الأدوات الكهربائية المتميزة</p>
-    </div>
+ <div class="container text-center">
+  <h1 class="page-title">
+   <i class="fas fa-tools">
+   </i>
+   {% trans "منتجاتنا" %}
+  </h1>
+  <p class="lead">
+   {% trans "تصفح مجموعتنا الواسعة من الأدوات الكهربائية المتميزة" %}
+  </p>
+ </div>
 </div>
-
 <!-- Search and Filter Section -->
 <section class="filter-section">
-    <div class="container">
-        <!-- Search Bar -->
-        <div class="search-wrapper">
-            <form method="get" action="{% url 'products:product_list' %}" class="search-form">
-                <div class="search-input-group">
-                    <input type="text" name="search" class="search-input" placeholder="ابحث عن منتج..."
-                        value="{{ request.GET.search }}">
-                    <button type="submit" class="search-btn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Filter Toggle Button (Mobile) -->
-        <button class="filter-toggle-btn" onclick="toggleFilters()">
-            <i class="fas fa-filter"></i> الفلاتر
-            <i class="fas fa-chevron-down"></i>
-        </button>
-
-        <!-- Filters Container -->
-        <div class="filters-container" id="filtersContainer">
-            <form method="get" action="{% url 'products:product_list' %}" id="filterForm">
-                <div class="filter-grid">
-                    <!-- Category Filter -->
-                    <div class="filter-item">
-                        <label class="filter-label">
-                            <i class="fas fa-tags"></i> الفئة
-                        </label>
-                        <select name="category" class="filter-select" onchange="submitFilters()">
-                            <option value="">جميع الفئات</option>
-                            {% for category in categories %}
-                            <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
-                                {{ category.name }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <!-- Price Range Filter -->
-                    <div class="filter-item">
-                        <label class="filter-label">
-                            <i class="fas fa-money-bill-wave"></i> نطاق السعر
-                        </label>
-                        <select name="price_range" class="filter-select" onchange="submitFilters()">
-                            <option value="">جميع الأسعار</option>
-                            <option value="0-1000" {% if request.GET.price_range == "0-1000" %}selected{% endif %}>
-                                أقل من 1000 جنيه
-                            </option>
-                            <option value="1000-5000" {% if request.GET.price_range == "1000-5000" %}selected{% endif %}>
-                                1000 - 5000 جنيه
-                            </option>
-                            <option value="5000-10000" {% if request.GET.price_range == "5000-10000" %}selected{% endif %}>
-                                5000 - 10000 جنيه
-                            </option>
-                            <option value="10000-plus" {% if request.GET.price_range == "10000-plus" %}selected{% endif %}>
-                                أكثر من 10000 جنيه
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Sort By Filter -->
-                    <div class="filter-item">
-                        <label class="filter-label">
-                            <i class="fas fa-sort"></i> الترتيب
-                        </label>
-                        <select name="sort" class="filter-select" onchange="submitFilters()">
-                            <option value="">الافتراضي</option>
-                            <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>
-                                السعر: من الأقل للأعلى
-                            </option>
-                            <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>
-                                السعر: من الأعلى للأقل
-                            </option>
-                            <option value="name_asc" {% if request.GET.sort == "name_asc" %}selected{% endif %}>
-                                الاسم: أ-ي
-                            </option>
-                            <option value="name_desc" {% if request.GET.sort == "name_desc" %}selected{% endif %}>
-                                الاسم: ي-أ
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Clear Filters Button -->
-                    <div class="filter-item">
-                        <label class="filter-label" style="opacity: 0;">تصفية</label>
-                        <a href="{% url 'products:product_list' %}" class="clear-filters-btn">
-                            <i class="fas fa-times"></i> مسح الفلاتر
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <!-- Active Filters Display -->
-        {% if request.GET.search or request.GET.category or request.GET.price_range or request.GET.sort %}
-        <div class="active-filters">
-            <span class="active-filters-label">الفلاتر النشطة:</span>
-
-            {% if request.GET.search %}
-            <span class="filter-tag">
-                البحث: "{{ request.GET.search }}"
-                <a href="?{% for key, value in request.GET.items %}{% if key != 'search' %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
-                    class="remove-filter">×</a>
-            </span>
-            {% endif %}
+ <div class="container">
+  <!-- Search Bar -->
+  <div class="search-wrapper">
+   <form action="{% url 'products:product_list' %}" class="search-form" method="get">
+    <div class="search-input-group">
+     <input class="search-input" name="search" placeholder="{% trans 'البحث عن منتج...' %}" type="text" value="{{ request.GET.search }}"/>
+     <button class="search-btn" type="submit">
+      <i class="fas fa-search">
+      </i>
+     </button>
+    </div>
+   </form>
+  </div>
+  <!-- Filter Toggle Button (Mobile) -->
+  <button class="filter-toggle-btn" onclick="toggleFilters()">
+   <i class="fas fa-filter">
+   </i>
+   {% trans "الفلاتر" %}
+   <i class="fas fa-chevron-down">
+   </i>
+  </button>
+  <!-- Filters Container -->
+  <div class="filters-container" id="filtersContainer">
+   <form action="{% url 'products:product_list' %}" id="filterForm" method="get">
+    <div class="filter-grid">
+     <!-- Category Filter -->
+     <div class="filter-item">
+      <label class="filter-label">
+       <i class="fas fa-tags">
+       </i>
+       {% trans "الفئة" %}
+      </label>
+      <select class="filter-select" name="category" onchange="submitFilters()">
+       <option value="">
+        {% trans "جميع الفئات" %}
+       </option>
+       {% for category in categories %}
+       <option __tag_19__selected__tag_20__="" value="{{ category.id }}">
+        {{ category.name }}
+       </option>
+       {% endfor %}
+      </select>
+     </div>
+     <!-- Price Range Filter -->
+     <div class="filter-item">
+      <label class="filter-label">
+       <i class="fas fa-money-bill-wave">
+       </i>
+       {% trans "نطاق السعر" %}
+      </label>
+      <select class="filter-select" name="price_range" onchange="submitFilters()">
+       <option value="">
+        {% trans "جميع الأسعار" %}
+       </option>
+       <option __tag_24__selected__tag_25__="" value="0-1000">
+        {% trans "أقل من 1000 جنيه" %}
+       </option>
+       <option __tag_27__selected__tag_28__="" value="1000-5000">
+        {% trans "1000 - 5000 جنيه" %}
+       </option>
+       <option __tag_30__selected__tag_31__="" value="5000-10000">
+        {% trans "5000 - 10000 جنيه" %}
+       </option>
+       <option __tag_33__selected__tag_34__="" value="10000-plus">
+        {% trans "أكثر من 10000 جنيه" %}
+       </option>
+      </select>
+     </div>
+     <!-- Sort By Filter -->
+     <div class="filter-item">
+      <label class="filter-label">
+       <i class="fas fa-sort">
+       </i>
+       {% trans "الترتيب" %}
+      </label>
+      <select class="filter-select" name="sort" onchange="submitFilters()">
+       <option value="">
+        {% trans "الافتراضي" %}
+       </option>
+       <option __tag_38__selected__tag_39__="" value="price_asc">
+        {% trans "السعر: من الأقل للأعلى" %}
+       </option>
+       <option __tag_41__selected__tag_42__="" value="price_desc">
+        {% trans "السعر: من الأعلى للأقل" %}
+       </option>
+       <option __tag_44__selected__tag_45__="" value="name_asc">
+        {% trans "الاسم: أ-ي" %}
+       </option>
+       <option __tag_47__selected__tag_48__="" value="name_desc">
+        {% trans "الاسم: ي-أ" %}
+       </option>
+      </select>
+     </div>
+     <!-- Clear Filters Button -->
+     <div class="filter-item">
+      <label class="filter-label" style="opacity: 0;">
+       {% trans "تصفية" %}
+      </label>
+      <a class="clear-filters-btn" href="{% url 'products:product_list' %}">
+       <i class="fas fa-times">
+       </i>
+       {% trans "مسح الفلاتر" %}
+      </a>
+     </div>
+    </div>
+   </form>
+  </div>
+  <!-- Active Filters Display -->
+  {% if request.GET.search or request.GET.category or request.GET.price_range or request.GET.sort %}
+  <div class="active-filters">
+   <span class="active-filters-label">
+    {% trans "الفلاتر النشطة:" %}
+   </span>
+   {% if request.GET.search %}
+   <span class="filter-tag">
+    {% trans "البحث:" %} "{{ request.GET.search }}"
+    <a class="remove-filter" href="?{% for key, value in request.GET.items %}{% if key != 'search' %}{{ key }}={{ value }}&amp;{% endif %}{% endfor %}">
+     ×
+    </a>
+   </span>
+   {% endif %}
 
             {% if request.GET.category %}
-            <span class="filter-tag">
-                الفئة
-                <a href="?{% for key, value in request.GET.items %}{% if key != 'category' %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
-                    class="remove-filter">×</a>
-            </span>
-            {% endif %}
+   <span class="filter-tag">
+    {% trans "الفئة" %}
+    <a class="remove-filter" href="?{% for key, value in request.GET.items %}{% if key != 'category' %}{{ key }}={{ value }}&amp;{% endif %}{% endfor %}">
+     ×
+    </a>
+   </span>
+   {% endif %}
 
             {% if request.GET.price_range %}
-            <span class="filter-tag">
-                نطاق السعر
-                <a href="?{% for key, value in request.GET.items %}{% if key != 'price_range' %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
-                    class="remove-filter">×</a>
-            </span>
-            {% endif %}
+   <span class="filter-tag">
+    {% trans "نطاق السعر" %}
+    <a class="remove-filter" href="?{% for key, value in request.GET.items %}{% if key != 'price_range' %}{{ key }}={{ value }}&amp;{% endif %}{% endfor %}">
+     ×
+    </a>
+   </span>
+   {% endif %}
 
             {% if request.GET.sort %}
-            <span class="filter-tag">
-                الترتيب
-                <a href="?{% for key, value in request.GET.items %}{% if key != 'sort' %}{{ key }}={{ value }}&{% endif %}{% endfor %}"
-                    class="remove-filter">×</a>
-            </span>
-            {% endif %}
-        </div>
-        {% endif %}
-
-        <!-- Results Count -->
-        <div class="results-info">
-            <p>عرض <strong>{{ object_list|length }}</strong> منتج</p>
-        </div>
-    </div>
+   <span class="filter-tag">
+    {% trans "الترتيب" %}
+    <a class="remove-filter" href="?{% for key, value in request.GET.items %}{% if key != 'sort' %}{{ key }}={{ value }}&amp;{% endif %}{% endfor %}">
+     ×
+    </a>
+   </span>
+   {% endif %}
+  </div>
+  {% endif %}
+  <!-- Results Count -->
+  <div class="results-info">
+   <p>
+    {% blocktrans with count=object_list|length %}عرض
+    <strong>
+     {{ count }}
+    </strong>
+    منتج{% endblocktrans %}
+   </p>
+  </div>
+ </div>
 </section>
-
 <!-- Products Section -->
 <section class="products-section">
-    <div class="container">
-        <div class="row">
-            {% for product in object_list %}
-            <!-- Product Card -->
-            <div class="col-lg-4 col-md-6">
-                <div class="product-card">
-                    <div class="product-image">
-                        <a href="{% url 'products:product_detail' product.slug %}">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                        </a>
-                        {% if product.quantity == 0 %}
-                        <span class="product-badge out-of-stock">منتهي الكمية</span>
-                        {% elif product.quantity < 5 %} <span class="product-badge low-stock">الكمية محدودة</span>
-                            {% endif %}
-                    </div>
-                    <div class="product-body">
-                        <a class="product-title"
-                            href="{% url 'products:product_detail' product.slug %}">{{product.name}}</a>
-                        <p class="product-description">{{product.subtitle}}</p>
-                        <div class="product-price">
-                            <span>{{product.price}}</span> جنيه
-                        </div>
-
-
-                        <form action="/orders/add-to-cart" method="post" class="add-to-cart-form">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ product.id }}">
-                            <button type="submit" class="btn btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> أضف إلى السلة
-                            </button>
-                        </form>
-
-
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <div class="no-products">
-                    <i class="fas fa-box-open"></i>
-                    <h3>لا توجد منتجات</h3>
-                    <p>لم يتم العثور على منتجات تطابق معايير البحث</p>
-                    <a href="{% url 'products:product_list' %}" class="btn btn-primary">
-                        <i class="fas fa-redo"></i> مسح الفلاتر
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+ <div class="container">
+  <div class="row">
+   {% for product in object_list %}
+   <!-- Product Card -->
+   <div class="col-lg-4 col-md-6">
+    <div class="product-card">
+     <div class="product-image">
+      <a href="{% url 'products:product_detail' product.slug %}">
+       <img alt="{{ product.name }}" src="{% if product.image %}{{ product.image.url }}{% else %}{% endif %}"/>
+      </a>
+      {% if product.quantity == 0 %}
+      <span class="product-badge out-of-stock">
+       {% trans "منتهي الكمية" %}
+      </span>
+      {% elif product.quantity < 5 %}
+      <span class="product-badge low-stock">
+       {% trans "الكمية محدودة" %}
+      </span>
+      {% endif %}
+     </div>
+     <div class="product-body">
+      <a class="product-title" href="{% url 'products:product_detail' product.slug %}">
+       {{product.name}}
+      </a>
+      <p class="product-description">
+       {{product.subtitle}}
+      </p>
+      <div class="product-price">
+       <span>
+        {{product.price}}
+       </span>
+       {% trans "جنيه" %}
+      </div>
+      <form action="/orders/add-to-cart" class="add-to-cart-form" method="post">
+       {% csrf_token %}
+       <input name="product_id" type="hidden" value="{{ product.id }}"/>
+       <button class="btn btn-add-cart" type="submit">
+        <i class="fas fa-shopping-cart">
+        </i>
+        {% trans "أضف إلى السلة" %}
+       </button>
+      </form>
+     </div>
     </div>
+   </div>
+   {% empty %}
+   <div class="col-12">
+    <div class="no-products">
+     <i class="fas fa-box-open">
+     </i>
+     <h3>
+      {% trans "لا توجد منتجات" %}
+     </h3>
+     <p>
+      {% trans "لم يتم العثور على منتجات تطابق معايير البحث" %}
+     </p>
+     <a class="btn btn-primary" href="{% url 'products:product_list' %}">
+      <i class="fas fa-redo">
+      </i>
+      {% trans "مسح الفلاتر" %}
+     </a>
+    </div>
+   </div>
+   {% endfor %}
+  </div>
+ </div>
 </section>
-
 <script>
     // Toggle Filters on Mobile
     function toggleFilters() {
@@ -230,9 +275,7 @@
         document.getElementById('filterForm').submit();
     }
 </script>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
     $(document).ready(function () {
         $('form.add-to-cart-form').on('submit', function (e) {
@@ -310,6 +353,5 @@
         });
     }
 </script>
-
 
 {% endblock content %}

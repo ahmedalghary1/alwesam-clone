@@ -6,7 +6,7 @@ import datetime
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
-from .models import Order, OrderDetail, Cart, CartDetail, Coupon
+from .models import Order, OrderDetail, Cart, CartDetail, Coupon, OrderAddress
 from products.models import Product
 from .models import DeliveryFee
 from django.contrib.auth.decorators import login_required
@@ -60,7 +60,8 @@ def checkout(request, item_id=None):
         if request.user.is_authenticated and item_id:
 
             try:
-                item = CartDetail.objects.get(id=item_id, cart=cart)
+                # Convert item_id to int for CartDetail lookup
+                item = CartDetail.objects.get(id=int(item_id), cart=cart)
 
                 if action == "increase":
                     item.quantity += 1
@@ -74,7 +75,7 @@ def checkout(request, item_id=None):
                     item.total = item.product.price * item.quantity
                     item.save()
 
-            except CartDetail.DoesNotExist:
+            except (CartDetail.DoesNotExist, ValueError):
                 return JsonResponse({"success": False})
 
             # إعادة الحساب
@@ -119,10 +120,15 @@ def checkout(request, item_id=None):
             )
             total = subtotal + delivery_fee
 
+            # حساب item_total للمنتج الحالي
+            item_total = 0
+            if product_id in session_cart:
+                item_total = Product.objects.get(id=item_id).price * session_cart[product_id]
+
             return JsonResponse({
                 "success": True,
                 "quantity": session_cart.get(product_id, 0),
-                "item_total": (Product.objects.get(id=item_id).price * session_cart.get(product_id, 0)) if item_id in session_cart else 0,
+                "item_total": item_total,
                 "sub_total": subtotal,
                 "deliveryFee": delivery_fee,
                 "total": total
@@ -140,80 +146,6 @@ def checkout(request, item_id=None):
         "total": total,
         "is_guest": not request.user.is_authenticated
     })
-
-# def add_to_cart(request):
-
-#     if not request.user.is_authenticated:
-#         login_url = reverse('accounts:login')  
-#         next_param = request.build_absolute_uri()
-#         return JsonResponse({
-#             'login_required': True,
-#             'login_url': f"{login_url}?next={next_param}",
-#             'message': 'يرجى تسجيل الدخول أولاً'
-#         }, status=401)
-
-#     if request.method == 'POST':
-#         product = get_object_or_404(Product, id=request.POST.get('product_id'))
-#         quantity = int(request.POST.get('quantity', 1))
-
-#         # التحقق من توفر الكمية
-#         if product.quantity == 0:
-#             return JsonResponse({
-#                 'success': False,
-#                 'out_of_stock': True,
-#                 'message': '❌ عذراً، هذا المنتج غير متوفر حالياً'
-#             })
-
-#         cart, _ = Cart.objects.get_or_create(user=request.user, status='Inprogress')
-#         cart_detail, created = CartDetail.objects.get_or_create(cart=cart, product=product)
-
-#         if not created:
-#             # المنتج موجود مسبقاً
-#             new_quantity = cart_detail.quantity + quantity
-            
-#             if new_quantity > product.quantity:
-#                 return JsonResponse({
-#                     'success': False,
-#                     'insufficient': True,
-#                     'message': f'⚠️ الكمية المتوفرة من هذا المنتج: {product.quantity} قطعة فقط',
-#                     'available': product.quantity,
-#                     'current_in_cart': cart_detail.quantity
-#                 })
-            
-#             cart_detail.quantity = new_quantity
-#             already_exists = True
-#         else:
-#             if quantity > product.quantity:
-#                 return JsonResponse({
-#                     'success': False,
-#                     'insufficient': True,
-#                     'message': f'⚠️ الكمية المتوفرة من هذا المنتج: {product.quantity} قطعة فقط',
-#                     'available': product.quantity
-#                 })
-#             cart_detail.quantity = quantity
-#             already_exists = False
-
-#         cart_detail.total = round(product.price * cart_detail.quantity, 2)
-#         cart_detail.save()
-
-#         cart_detail_list = CartDetail.objects.filter(cart=cart)
-#         total = cart.cart_total
-#         cart_count = cart_detail_list.count()
-
-#         if already_exists:
-#             message = f"🔄 المنتج '{product.name}' موجود مسبقاً - تم تحديث الكمية"
-#         else:
-#             message = f"✅ تم إضافة '{product.name}' إلى السلة بنجاح"
-
-#         return JsonResponse({
-#             'success': True,
-#             'message': message,
-#             'already_exists': already_exists,
-#             'total': total,
-#             'cart_count': cart_count,
-#         })
-
-#     return JsonResponse({'success': False, 'message': 'طريقة الطلب غير صحيحة'}, status=400)
 
 
 
@@ -344,6 +276,8 @@ def create_order(request):
             
             # Create order details from cart
             for cart_item in cart_detail:
+
+
                 OrderDetail.objects.create(
                     order=order,
                     product=cart_item.product,
@@ -352,6 +286,11 @@ def create_order(request):
                     total=cart_item.total
                 )
                 
+                print(order,
+                    cart_item.product,
+                    cart_item.quantity,
+                    cart_item.product.price,
+                    cart_item.total)
                 # إنقاص الكمية من المخزون
                 product = cart_item.product
                 product.quantity -= cart_item.quantity

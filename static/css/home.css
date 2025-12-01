@@ -135,13 +135,20 @@
     font-size: 50px;
     color: var(--primary-yellow);
     margin-bottom: 20px;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--primary-black);
     width: 100px;
     height: 100px;
-    line-height: 100px;
     border-radius: 50%;
     transition: all 0.3s ease;
+}
+
+.feature-icon i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .feature-card:hover .feature-icon {

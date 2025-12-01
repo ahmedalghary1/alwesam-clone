@@ -78,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
                 'accounts.custom_context_processor.custom_user_context',
                 'orders.cart_context_processor.get_cart_data'
             ],
@@ -122,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'ar'
+LANGUAGE_CODE = 'en'
 
 LANGUAGES = [
     ('ar','Arabic'),

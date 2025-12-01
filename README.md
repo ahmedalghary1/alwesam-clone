@@ -123,3 +123,19 @@ src/
 - البريد الإلكتروني يُستخدم كـ username
 - جميع الصفحات responsive
 - تطبيق كامل بدون أي API خارجية للدفع
+
+## 🌐 التدويل وI18N (Internationalization)
+
+- تمت إضافة أدوات للمساعدة في وضع وسوم الترجمة في القوالب تلقائياً تحت المجلد `tools/`.
+- سكربت `tools/add_translations_in_templates.py` يقوم بإضافة `{% load i18n %}` ولف النصوص الثابتة بـ `{% trans %}` أو `{% blocktrans %}` إن لزم الأمر. نسخة احتياطية (`.bak`) تُنشأ قبل التعديل.
+- سكربت `tools/find_untranslated_strings.py` يولد تقريراً في `tools/untranslated_report.txt` يحدّد الأماكن التي تحتاج مراجعة يدوية.
+- لتوليد ملفات .po وملفات .mo المُجمّعة:
+
+```powershell
+& "e:/web dev/alwesam/Scripts/python.exe" manage.py makemessages -l ar
+& "e:/web dev/alwesam/Scripts/python.exe" manage.py makemessages -l en
+& "e:/web dev/alwesam/Scripts/python.exe" manage.py compilemessages
+```
+
+- بعد ذلك، راجع `locale/<lang>/LC_MESSAGES/django.po` وأدخل الترجمات المطلوبة ثم شغّل `compilemessages` مجدداً.
+- ملاحظة: يجب تثبيت أدوات gettext على النظام (xgettext/msgfmt) ليعمل `makemessages/compilemessages` بشكل صحيح على Windows.

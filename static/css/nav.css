@@ -75,12 +75,21 @@ body {
     object-fit: contain;
     display: block;
     transform: scaleX(-1);
+    /* High-quality image rendering */
     image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     image-rendering: high-quality;
     -webkit-backface-visibility: hidden;
     -webkit-transform: translateZ(0) scaleX(-1);
     backface-visibility: hidden;
+    /* Smooth interpolation for better quality */
+    -ms-interpolation-mode: bicubic;
+    image-rendering: auto;
+    image-rendering: smooth;
+    /* Anti-aliasing */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .logo-svg {
@@ -214,8 +223,28 @@ body {
 .footer-title img {
     width: 45px;
     height: 45px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 50%;
+    /* High-quality image rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    image-rendering: high-quality;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0) scaleX(-1);
+    backface-visibility: hidden;
+    /* Smooth interpolation for better quality */
+    -ms-interpolation-mode: bicubic;
+    image-rendering: auto;
+    image-rendering: smooth;
+    /* Anti-aliasing */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Better quality display */
+    transform: scaleX(-1);
+    background-color: #000;
+    padding: 3px;
+    border: 2px solid var(--primary-yellow);
 }
 
 .footer-links {

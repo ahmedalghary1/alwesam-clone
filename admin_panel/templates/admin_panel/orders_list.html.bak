@@ -1,0 +1,69 @@
+{% extends 'admin_panel/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="page-header">
+<h1><i class="fas fa-shopping-cart"></i>{% trans "إدارة الطلبات" %}</h1>
+</div>
+<div class="content-card">
+<form class="row mb-4" method="GET">
+<div class="col-md-5">
+<input class="form-control" name="search" placeholder='{% trans "بحث برقم الطلب أو اسم العميل" %}' type="text" value="{{ search }}"/>
+</div>
+<div class="col-md-4">
+<select class="form-control" name="status">
+<option value="">{% trans "جميع الحالات" %}</option>
+<option value="Received" {% if selected_status == 'Received' %}selected{% endif %}>{% trans "تم الاستلام" %}</option>
+<option value="Processed" {% if selected_status == 'Processed' %}selected{% endif %}>{% trans "قيد المعالجة" %}</option>
+<option value="Shipped" {% if selected_status == 'Shipped' %}selected{% endif %}>{% trans "تم الشحن" %}</option>
+<option value="Delivered" {% if selected_status == 'Delivered' %}selected{% endif %}>{% trans "تم التوصيل" %}</option>
+</select>
+</div>
+<div class="col-md-3">
+<button class="btn-admin-primary w-100" type="submit">{% trans "بحث" %}</button>
+</div>
+</form>
+
+    {% if orders %}
+    <table class="admin-table">
+<thead>
+<tr>
+<th>{% trans "رقم الطلب" %}</th>
+<th>{% trans "العميل" %}</th>
+<th>{% trans "التاريخ" %}</th>
+<th>{% trans "الإجمالي" %}</th>
+<th>{% trans "الحالة" %}</th>
+<th>{% trans "الإجراءات" %}</th>
+</tr>
+</thead>
+<tbody>
+            {% for order in orders %}
+            <tr>
+<td><strong>#{{ order.code }}</strong></td>
+<td>{{ order.address.customer_name|default:"غير محدد" }}</td>
+<td>{{ order.order_time|date:"d/m/Y" }}</td>
+<td>{{ order.total }} جنيه</td>
+<td>
+                    {% if order.status == 'Received' %}
+                    <span class="badge bg-primary">{{ order.get_status_display }}</span>
+                    {% elif order.status == 'Processed' %}
+                    <span class="badge bg-warning">{{ order.get_status_display }}</span>
+                    {% elif order.status == 'Shipped' %}
+                    <span class="badge bg-info">{{ order.get_status_display }}</span>
+                    {% elif order.status == 'Delivered' %}
+                    <span class="badge bg-success">{{ order.get_status_display }}</span>
+                    {% endif %}
+                </td>
+<td>
+<a class="btn btn-sm btn-admin-primary" href="{% url 'admin_panel:order-detail' order.code %}">
+<i class="fas fa-eye"></i>{% trans "عرض" %}</a>
+</td>
+</tr>
+            {% endfor %}
+        </tbody>
+</table>
+    {% else %}
+    <p class="text-center text-muted">{% trans "لا توجد طلبات" %}</p>
+    {% endif %}
+</div>
+{% endblock %}

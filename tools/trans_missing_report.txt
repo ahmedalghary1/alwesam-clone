@@ -1,0 +1,8 @@
+E:\web dev\alwesam\src\admin_panel\templates\admin_panel\categories_list.html
+E:\web dev\alwesam\src\admin_panel\templates\admin_panel\category_form.html
+E:\web dev\alwesam\src\admin_panel\templates\admin_panel\dashboard.html
+E:\web dev\alwesam\src\admin_panel\templates\admin_panel\orders_list.html
+E:\web dev\alwesam\src\admin_panel\templates\admin_panel\order_detail.html
+E:\web dev\alwesam\src\admin_panel\templates\admin_panel\products_list.html
+E:\web dev\alwesam\src\admin_panel\templates\admin_panel\product_form.html
+E:\web dev\alwesam\src\admin_panel\templates\admin_panel\users_list.html
