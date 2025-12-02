@@ -382,14 +382,14 @@
        </div>
       </td>
       <td>
-       {{ item.price }} جنيه
+       {{ item.price }} {% trans "جنيه" %}
       </td>
       <td>
        {{ item.quantity }}
       </td>
       <td>
        <strong>
-        {{ item.total }} جنيه
+        {{ item.total }} {% trans "جنيه" %}
        </strong>
       </td>
      </tr>
@@ -402,7 +402,7 @@
       {% trans "المجموع الفرعي:" %}
      </span>
      <span class="summary-value">
-      {{ order.subtotal }} جنيه
+      {{ order.subtotal }} {% trans "جنيه" %}
      </span>
     </div>
     <div class="summary-row">
@@ -410,7 +410,7 @@
       {% trans "رسوم التوصيل:" %}
      </span>
      <span class="summary-value">
-      {{ order.delivery_fee }} جنيه
+      {{ order.delivery_fee }} {% trans "جنيه" %}
      </span>
     </div>
     {% if order.discount > 0 %}
@@ -419,7 +419,7 @@
       {% trans "الخصم:" %}
      </span>
      <span class="summary-value" style="color: #28a745;">
-      -{{ order.discount }} جنيه
+      -{{ order.discount }} {% trans "جنيه" %}
      </span>
     </div>
     {% endif %}
@@ -428,7 +428,7 @@
       {% trans "الإجمالي النهائي:" %}
      </span>
      <span class="summary-value">
-      {{ order.total_with_coupon|default:order.total }} جنيه
+      {{ order.total_with_coupon|default:order.total }} {% trans "جنيه" %}
      </span>
     </div>
    </div>

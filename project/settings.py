@@ -28,8 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-hcde(hu+oq^tno9-ls$%y!gn0j+q!vrf)1^7e41h%j=g&)og$-')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+# DEBUG = os.environ.get('DEBUG', 'False') == 'False'
 
+DEBUG = True
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 TAGGIT_CASE_INSENSITIVE = True
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
     'taggit',
 
+    'modeltranslation',
 
     'products',
     'home',
@@ -95,8 +97,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600,
-        conn_health_checks=True,
+
     )
 }
 
@@ -123,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'ar'
 
 LANGUAGES = [
     ('ar','Arabic'),
@@ -188,11 +189,3 @@ DEFAULT_FROM_EMAIL = 'متجر الوسام للأدوات الكهربائية 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-# Security settings for production
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = 'DENY'

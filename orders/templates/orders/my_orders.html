@@ -257,7 +257,7 @@
        {% trans "الإجمالي" %}
       </div>
       <div class="info-value">
-       {{ order.total_with_coupon|default:order.total }} جنيه
+       {{ order.total_with_coupon|default:order.total }} {% trans "جنيه" %}
       </div>
      </div>
     </div>
@@ -269,7 +269,7 @@
        {% trans "عدد المنتجات" %}
       </div>
       <div class="info-value">
-       {{ order.order_detail.count }} منتج
+       {{ order.order_detail.count }} {% trans "منتج" %}
       </div>
      </div>
     </div>

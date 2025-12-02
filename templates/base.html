@@ -7,7 +7,6 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="{% static 'images/ELWSAM.png' %}" rel="icon" type="image/x-icon"/>
-<link href="{% static 'css/nav.css' %}" rel="stylesheet"/>
     {% block title %}
 
     {% endblock title %}
@@ -19,27 +18,73 @@
 <!-- Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <!-- Custom CSS -->
+<link href="{% static 'css/nav.css' %}" rel="stylesheet"/>
 
     {% block style %}
 
     {% endblock style %}
 
+<style>
+@media (max-width: 768px) {
+
+    /* تصغير حجم أزرار النافبار */
+    .navbar .btn,
+    .navbar #languageDropdown,
+    .navbar #userMenu {
+        padding: 4px 8px !important;
+        font-size: 12px !important;
+        height: 38px !important;
+    }
+
+    /* تصغير حجم زر السلة فقط */
+    .btn-primary-custom {
+        padding: 4px 10px !important;
+        font-size: 12px !important;
+        height: 40px !important;
+    }
+
+    /* تصغير حجم الأيقونات داخل الأزرار */
+    .navbar .btn i,
+    .btn-primary-custom i {
+        font-size: 14px !important;
+    }
+
+    /* تقليل المسافة بين الأزرار */
+    .navbar .d-flex.align-items-center.gap-3 {
+        gap: 6px !important;
+    }
+    
+}
+@media (max-width: 768px) {
+
+    /* محاذاة النص + الأيقونة في منتصف الزر */
+    .navbar .btn,
+    .btn-primary-custom,
+    #languageDropdown,
+    #userMenu {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 4px; /* مسافة صغيرة بين الأيقونة والكلام */
+    }
+
+    /* ضبط حجم الأيقونة */
+    .navbar .btn i,
+    .btn-primary-custom i {
+        line-height: 1 !important;
+    }
+}
+
+.navbar {
+    margin-bottom: 0 !important;
+}
+
+</style>
+
+
 </head>
 <body>
-<!-- Top Header -->
-<div class="top-header">
-<div class="container">
-<div class="row">
-<div class="col-md-6">
-<i class="fas fa-phone-alt"></i> 201062692455+
-                    <span class="mx-3">|</span>
-<i class="fas fa-envelope"></i>{% trans "info@elwsam.com" %}</div>
-<div class="col-md-6 text-start">
-<span>{% trans "مرحباً بكم في متجر الأدوات الكهربائية" %}</span>
-</div>
-</div>
-</div>
-</div>
+
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg sticky-top">
 <div class="container">
@@ -107,7 +152,12 @@
                     {% if user.is_authenticated %}
                     <div class="dropdown">
 <button aria-expanded="false" class="btn btn-outline-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" id="userMenu" type="button">
-<i class="fas fa-user"></i> {{ user.first_name|default:"حسابي" }}
+<i class="fas fa-user"></i>{% if user.first_name %}
+    {{ user.first_name }}
+{% else %}
+    {% trans "حسابي" %}
+{% endif %}
+
                         </button>
 <ul aria-labelledby="userMenu" class="dropdown-menu dropdown-menu-end">
 <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
@@ -141,7 +191,7 @@
 </div>
 </div>
 </nav>
-<div class="container mt-3">
+<div class="container mt-1">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">

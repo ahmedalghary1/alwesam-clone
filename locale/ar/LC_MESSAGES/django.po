@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-01 12:33+0200\n"
+"POT-Creation-Date: 2025-12-02 10:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: .\accounts\templates\accounts\forgot_password.html:2
 #: .\accounts\templates\accounts\reset_password.html:2
 #: .\accounts\templates\accounts\verify_code.html:2
-#: .\admin_panel\templates\admin_panel\base.html:2 .\templates\base.html:5
+#: .\admin_panel\templates\admin_panel\base.html:2
 msgid "html"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgid "الملف الشخصي - نظام CRM"
 msgstr "الملف الشخصي"
 
 #: .\accounts\templates\accounts\crm_profile_page.html:27
-#: .\templates\base.html:146
+#: .\templates\base.html:114
 msgid "الملف الشخصي"
 msgstr "الملف الشخصي"
 
@@ -145,7 +145,7 @@ msgstr "الاسم بالكامل"
 
 #: .\accounts\templates\accounts\crm_profile_page.html:181
 #: .\accounts\templates\accounts\forgot_password.html:261
-#: .\accounts\templates\accounts\register.html:482
+#: .\accounts\templates\accounts\register.html:483
 #: .\admin_panel\templates\admin_panel\users_list.html:31
 #: .\orders\templates\orders\checkout.html:141
 msgid "البريد الإلكتروني"
@@ -154,7 +154,7 @@ msgstr "البريد الإلكتروني"
 #: .\accounts\templates\accounts\crm_profile_page.html:187
 #: .\accounts\templates\accounts\profile.html:209
 #: .\accounts\templates\accounts\profile.html:341
-#: .\accounts\templates\accounts\register.html:494
+#: .\accounts\templates\accounts\register.html:495
 #: .\orders\templates\orders\checkout.html:132
 msgid "رقم الهاتف"
 msgstr "رقم الهاتف"
@@ -182,8 +182,8 @@ msgid "متجر الأدوات الكهربائية - نسيت كلمة المر
 msgstr "متجر الأدوات الكهربائية - السلة"
 
 #: .\accounts\templates\accounts\forgot_password.html:224
-#: .\accounts\templates\accounts\login_page.html:353
-#: .\accounts\templates\accounts\register.html:423
+#: .\accounts\templates\accounts\login_page.html:355
+#: .\accounts\templates\accounts\register.html:424
 #: .\accounts\templates\accounts\reset_password.html:287
 #: .\accounts\templates\accounts\verify_code.html:270
 #, fuzzy
@@ -192,16 +192,16 @@ msgid "الأدوات"
 msgstr "للأدوات"
 
 #: .\accounts\templates\accounts\forgot_password.html:226
-#: .\accounts\templates\accounts\login_page.html:355
-#: .\accounts\templates\accounts\register.html:425
+#: .\accounts\templates\accounts\login_page.html:357
+#: .\accounts\templates\accounts\register.html:426
 #: .\accounts\templates\accounts\reset_password.html:289
-#: .\accounts\templates\accounts\verify_code.html:272 .\templates\base.html:60
+#: .\accounts\templates\accounts\verify_code.html:272 .\templates\base.html:53
 msgid "الكهربائية"
 msgstr "الكهربائية"
 
 #: .\accounts\templates\accounts\forgot_password.html:230
-#: .\accounts\templates\accounts\login_page.html:359
-#: .\accounts\templates\accounts\register.html:429
+#: .\accounts\templates\accounts\login_page.html:361
+#: .\accounts\templates\accounts\register.html:430
 #: .\accounts\templates\accounts\reset_password.html:293
 #: .\accounts\templates\accounts\verify_code.html:276
 #, fuzzy
@@ -210,7 +210,7 @@ msgid "متجرك الموثوق للأدوات الاحترافية"
 msgstr "متجر الأدوات الكهربائية - السلة"
 
 #: .\accounts\templates\accounts\forgot_password.html:240
-#: .\accounts\templates\accounts\login_page.html:423
+#: .\accounts\templates\accounts\login_page.html:425
 msgid "نسيت كلمة المرور؟"
 msgstr ""
 
@@ -235,16 +235,16 @@ msgid "تذكرت كلمة المرور؟"
 msgstr ""
 
 #: .\accounts\templates\accounts\forgot_password.html:280
-#: .\accounts\templates\accounts\login_page.html:370
-#: .\accounts\templates\accounts\login_page.html:430
-#: .\accounts\templates\accounts\register.html:579 .\templates\base.html:87
-#: .\templates\base.html:184
+#: .\accounts\templates\accounts\login_page.html:372
+#: .\accounts\templates\accounts\login_page.html:432
+#: .\accounts\templates\accounts\register.html:580 .\templates\base.html:70
+#: .\templates\base.html:137
 msgid "تسجيل الدخول"
 msgstr "تسجيل الدخول"
 
 #: .\accounts\templates\accounts\forgot_password.html:289
-#: .\accounts\templates\accounts\login_page.html:459
-#: .\accounts\templates\accounts\register.html:588
+#: .\accounts\templates\accounts\login_page.html:461
+#: .\accounts\templates\accounts\register.html:589
 #: .\accounts\templates\accounts\reset_password.html:399
 #: .\accounts\templates\accounts\verify_code.html:360
 msgid "العودة إلى الصفحة الرئيسية"
@@ -257,38 +257,38 @@ msgid "متجر الأدوات الكهربائية - تسجيل الدخول"
 msgstr "متجر الأدوات الكهربائية - السلة"
 
 #: .\accounts\templates\accounts\login_page.html:351
-#: .\accounts\templates\accounts\register.html:421 .\templates\base.html:55
-#: .\templates\base.html:212
+#: .\accounts\templates\accounts\register.html:422 .\templates\base.html:48
+#: .\templates\base.html:167
 msgid "Logo"
 msgstr ""
 
-#: .\accounts\templates\accounts\login_page.html:373
+#: .\accounts\templates\accounts\login_page.html:375
 msgid "سجل دخولك للوصول إلى حسابك"
 msgstr ""
 
-#: .\accounts\templates\accounts\login_page.html:391
+#: .\accounts\templates\accounts\login_page.html:393
 #, fuzzy
 #| msgid "البريد الإلكتروني"
 msgid "البريد الإلكتروني أو رقم الهاتف"
 msgstr "البريد الإلكتروني"
 
-#: .\accounts\templates\accounts\login_page.html:404
-#: .\accounts\templates\accounts\register.html:509
+#: .\accounts\templates\accounts\login_page.html:406
+#: .\accounts\templates\accounts\register.html:510
 #, fuzzy
 #| msgid "سلة التسوق"
 msgid "كلمة المرور"
 msgstr "سلة التسوق"
 
-#: .\accounts\templates\accounts\login_page.html:419
+#: .\accounts\templates\accounts\login_page.html:421
 msgid "تذكرني"
 msgstr ""
 
-#: .\accounts\templates\accounts\login_page.html:448
+#: .\accounts\templates\accounts\login_page.html:450
 msgid "ليس لديك حساب؟"
 msgstr ""
 
-#: .\accounts\templates\accounts\login_page.html:450
-#: .\accounts\templates\accounts\register.html:454
+#: .\accounts\templates\accounts\login_page.html:452
+#: .\accounts\templates\accounts\register.html:455
 msgid "إنشاء حساب جديد"
 msgstr ""
 
@@ -366,7 +366,7 @@ msgid "أدخل الاسم الأخير"
 msgstr "أدخل اسمك الكامل"
 
 #: .\accounts\templates\accounts\profile.html:343
-#: .\accounts\templates\accounts\register.html:497
+#: .\accounts\templates\accounts\register.html:498
 msgid "05xxxxxxxx"
 msgstr ""
 
@@ -376,78 +376,78 @@ msgstr ""
 msgid "صورة الملف الشخصي"
 msgstr "الملف الشخصي"
 
-#: .\accounts\templates\accounts\register.html:7
+#: .\accounts\templates\accounts\register.html:9
 #, fuzzy
 #| msgid "متجر الأدوات الكهربائية - السلة"
 msgid "متجر الأدوات الكهربائية - إنشاء حساب جديد"
 msgstr "متجر الأدوات الكهربائية - السلة"
 
-#: .\accounts\templates\accounts\register.html:457
+#: .\accounts\templates\accounts\register.html:458
 msgid "سجل الآن واستمتع بتجربة تسوق مميزة"
 msgstr ""
 
-#: .\accounts\templates\accounts\register.html:467
+#: .\accounts\templates\accounts\register.html:468
 #: .\orders\templates\orders\checkout.html:124
 msgid "الاسم بالكامل"
 msgstr "الاسم بالكامل"
 
-#: .\accounts\templates\accounts\register.html:470
+#: .\accounts\templates\accounts\register.html:471
 #, fuzzy
 #| msgid "أدخل اسمك الكامل"
 msgid "أدخل اسمك الأول"
 msgstr "أدخل اسمك الكامل"
 
-#: .\accounts\templates\accounts\register.html:485
+#: .\accounts\templates\accounts\register.html:486
 #: .\orders\templates\orders\checkout.html:143
 msgid "example@email.com"
 msgstr ""
 
-#: .\accounts\templates\accounts\register.html:512
+#: .\accounts\templates\accounts\register.html:513
 #, fuzzy
 #| msgid "أدخل اسمك الكامل"
 msgid "أدخل كلمة المرور"
 msgstr "أدخل اسمك الكامل"
 
-#: .\accounts\templates\accounts\register.html:523
+#: .\accounts\templates\accounts\register.html:524
 #: .\accounts\templates\accounts\reset_password.html:338
 msgid "يجب أن تحتوي على 8 أحرف على الأقل"
 msgstr ""
 
-#: .\accounts\templates\accounts\register.html:530
+#: .\accounts\templates\accounts\register.html:531
 #: .\accounts\templates\accounts\reset_password.html:346
 #, fuzzy
 #| msgid "تأكيد الطلب"
 msgid "تأكيد كلمة المرور"
 msgstr "تأكيد الطلب"
 
-#: .\accounts\templates\accounts\register.html:533
+#: .\accounts\templates\accounts\register.html:534
 #: .\accounts\templates\accounts\reset_password.html:349
 msgid "أعد إدخال كلمة المرور"
 msgstr ""
 
-#: .\accounts\templates\accounts\register.html:545
+#: .\accounts\templates\accounts\register.html:546
 msgid "أوافق على"
 msgstr ""
 
-#: .\accounts\templates\accounts\register.html:547
+#: .\accounts\templates\accounts\register.html:548
 msgid "الشروط والأحكام"
 msgstr ""
 
-#: .\accounts\templates\accounts\register.html:549
+#: .\accounts\templates\accounts\register.html:550
 msgid "و"
 msgstr ""
 
-#: .\accounts\templates\accounts\register.html:551
+#: .\accounts\templates\accounts\register.html:552
 #, fuzzy
 #| msgid "سلة التسوق"
 msgid "سياسة الخصوصية"
 msgstr "سلة التسوق"
 
-#: .\accounts\templates\accounts\register.html:559
+#: .\accounts\templates\accounts\register.html:560
 msgid "إنشاء حساب"
 msgstr ""
 
-#: .\accounts\templates\accounts\register.html:577
+#: .\accounts\templates\accounts\register.html:578
 #, fuzzy
 #| msgid "العنوان بالتفصيل"
 msgid "لديك حساب بالفعل؟"
@@ -553,13 +553,13 @@ msgstr "للأدوات"
 
 #: .\admin_panel\templates\admin_panel\base.html:241
 #: .\admin_panel\templates\admin_panel\dashboard.html:15
-#: .\templates\base.html:164
+#: .\templates\base.html:124
 msgid "لوحة التحكم"
 msgstr "لوحة التحكم"
 
 #: .\admin_panel\templates\admin_panel\base.html:249
 #: .\products\templates\products\product_detail.html:110
-#: .\templates\base.html:72 .\templates\base.html:247
+#: .\templates\base.html:61 .\templates\base.html:182
 msgid "الرئيسية"
 msgstr "الرئيسية"
 
@@ -567,7 +567,7 @@ msgstr "الرئيسية"
 #: .\admin_panel\templates\admin_panel\order_detail.html:16
 #: .\orders\templates\orders\order_detail.html:347
 #: .\products\templates\products\product_detail.html:115
-#: .\templates\base.html:77 .\templates\base.html:254
+#: .\templates\base.html:64 .\templates\base.html:183
 msgid "المنتجات"
 msgstr "المنتجات"
 
@@ -590,7 +590,7 @@ msgstr ""
 msgid "الموقع الرئيسي"
 msgstr "المجموع الفرعي:"
 
-#: .\admin_panel\templates\admin_panel\base.html:298 .\templates\base.html:175
+#: .\admin_panel\templates\admin_panel\base.html:298 .\templates\base.html:131
 msgid "تسجيل الخروج"
 msgstr "تسجيل الخروج"
 
@@ -1160,29 +1160,28 @@ msgstr ""
 msgid "من نحن"
 msgstr ""
 
-#: .\home\templates\home\home.html:58
+#: .\home\templates\home\home.html:59
 msgid ""
 "نحن شركة رائدة في مجال توريد الأدوات الكهربائية الصناعية والمنزلية. نقدم "
 "مجموعة واسعة من المنتجات عالية الجودة من أفضل العلامات التجارية العالمية. "
 "نلتزم بتوفير أفضل الحلول لعملائنا مع خدمة عملاء متميزة وأسعار تنافسية."
 msgstr ""
 
-#: .\home\templates\home\home.html:61
+#: .\home\templates\home\home.html:62
 msgid ""
 "خبرتنا الطويلة في هذا المجال تجعلنا الخيار الأمثل لكل من يبحث عن الجودة "
-"والموثوقية. نحن نفخر بثقة\\n                    عملائنا ونسعى دائماً لتحقيق "
-"رضاهم التام."
+"والموثوقية. نحن نفخر بثقةعملائنا ونسعى دائماً لتحقيق رضاهم التام."
 msgstr ""
 
-#: .\home\templates\home\home.html:72
+#: .\home\templates\home\home.html:73
 msgid "لماذا نحن؟"
 msgstr ""
 
-#: .\home\templates\home\home.html:83
+#: .\home\templates\home\home.html:84
 msgid "جودة عالية"
 msgstr ""
 
-#: .\home\templates\home\home.html:86
+#: .\home\templates\home\home.html:87
 #, fuzzy
 #| msgid ""
 #| "متجرك الموثوق للحصول على أفضل الأدوات الكهربائية بجودة عالية وأسعار "
@@ -1192,50 +1191,50 @@ msgid ""
 msgstr ""
 "متجرك الموثوق للحصول على أفضل الأدوات الكهربائية بجودة عالية وأسعار تنافسية"
 
-#: .\home\templates\home\home.html:97
+#: .\home\templates\home\home.html:98
 #, fuzzy
 #| msgid "روابط سريعة"
 msgid "شحن سريع"
 msgstr "روابط سريعة"
 
-#: .\home\templates\home\home.html:100
+#: .\home\templates\home\home.html:101
 msgid "خدمة توصيل سريعة لجميع المحافظات مع إمكانية تتبع شحنتك أونلاين"
 msgstr ""
 
-#: .\home\templates\home\home.html:111
+#: .\home\templates\home\home.html:112
 #: .\orders\templates\orders\order_detail.html:269
 #, fuzzy
 #| msgid "الدفع عند الاستلام فقط"
 msgid "الدفع عند الاستلام"
 msgstr "الدفع عند الاستلام فقط"
 
-#: .\home\templates\home\home.html:114
+#: .\home\templates\home\home.html:115
 #, fuzzy
 #| msgid "لا تدفع أي مبلغ إلا بعد استلام المنتج والتأكد منه"
 msgid "لا تدفع إلا بعد استلام منتجك والتأكد من جودته ومطابقته للمواصفات"
 msgstr "لا تدفع أي مبلغ إلا بعد استلام المنتج والتأكد منه"
 
-#: .\home\templates\home\home.html:125
+#: .\home\templates\home\home.html:126
 msgid "دعم فني 24/7"
 msgstr ""
 
-#: .\home\templates\home\home.html:128
+#: .\home\templates\home\home.html:129
 msgid "فريق دعم فني متاح على مدار الساعة للإجابة على استفساراتك"
 msgstr ""
 
-#: .\home\templates\home\home.html:139
+#: .\home\templates\home\home.html:140
 msgid "ضمان شامل"
 msgstr ""
 
-#: .\home\templates\home\home.html:142
+#: .\home\templates\home\home.html:143
 msgid "جميع منتجاتنا مشمولة بضمان رسمي يغطي أي عيوب صناعية"
 msgstr ""
 
-#: .\home\templates\home\home.html:153
+#: .\home\templates\home\home.html:154
 msgid "أسعار منافسة"
 msgstr ""
 
-#: .\home\templates\home\home.html:156
+#: .\home\templates\home\home.html:157
 msgid "نقدم أفضل الأسعار في السوق مع عروض وخصومات مستمرة"
 msgstr ""
 
@@ -1414,8 +1413,8 @@ msgstr "متابعة التسوق"
 msgid "طلباتي - متجر الأدوات الكهربائية"
 msgstr "مرحباً بكم في متجر الأدوات الكهربائية"
 
-#: .\orders\templates\orders\my_orders.html:206 .\templates\base.html:83
-#: .\templates\base.html:153 .\templates\base.html:268
+#: .\orders\templates\orders\my_orders.html:206 .\templates\base.html:68
+#: .\templates\base.html:117 .\templates\base.html:186
 msgid "طلباتي"
 msgstr "طلباتي"
 
@@ -1773,56 +1772,56 @@ msgstr ""
 msgid "لم يتم العثور على منتجات تطابق معايير البحث"
 msgstr ""
 
-#: .\templates\base.html:40 .\templates\base.html:298
+#: .\templates\base.html:36 .\templates\base.html:195
 msgid "info@elwsam.com"
 msgstr ""
 
-#: .\templates\base.html:44
+#: .\templates\base.html:38
 msgid "مرحباً بكم في متجر الأدوات الكهربائية"
 msgstr "مرحباً بكم في متجر الأدوات الكهربائية"
 
-#: .\templates\base.html:58
+#: .\templates\base.html:53
 msgid "للأدوات"
 msgstr "للأدوات"
 
-#: .\templates\base.html:93 .\templates\base.html:282
+#: .\templates\base.html:74 .\templates\base.html:191
 msgid "تواصل معنا"
 msgstr "تواصل معنا"
 
-#: .\templates\base.html:103 .\templates\base.html:261
+#: .\templates\base.html:81 .\templates\base.html:185
 msgid "السلة"
 msgstr "السلة"
 
-#: .\templates\base.html:196
+#: .\templates\base.html:149
 msgid "Close"
 msgstr ""
 
-#: .\templates\base.html:214
+#: .\templates\base.html:169
 msgid "الأدوات الكهربائية"
 msgstr "الأدوات الكهربائية"
 
-#: .\templates\base.html:217
+#: .\templates\base.html:171
 msgid ""
 "متجرك الموثوق للحصول على أفضل الأدوات الكهربائية بجودة عالية وأسعار تنافسية"
 msgstr ""
 "متجرك الموثوق للحصول على أفضل الأدوات الكهربائية بجودة عالية وأسعار تنافسية"
 
-#: .\templates\base.html:240
+#: .\templates\base.html:180
 msgid "روابط سريعة"
 msgstr "روابط سريعة"
 
-#: .\templates\base.html:275
+#: .\templates\base.html:187
 msgid "حسابي"
 msgstr "حسابي"
 
-#: .\templates\base.html:288
+#: .\templates\base.html:193
 msgid "المطرية – محافظة الدقهلية – جمهورية مصر العربية"
 msgstr "المطرية – محافظة الدقهلية – جمهورية مصر العربية"
 
-#: .\templates\base.html:303
+#: .\templates\base.html:196
 msgid "السبت - الخميس: 9 صباحاً - 6 مساءً"
 msgstr "السبت - الخميس: 9 صباحاً - 6 مساءً"
 
-#: .\templates\base.html:310
+#: .\templates\base.html:201
 msgid "جميع الحقوق محفوظة © 2025 متجر الأدوات الكهربائية"
 msgstr "جميع الحقوق محفوظة © 2025 متجر الأدوات الكهربائية"

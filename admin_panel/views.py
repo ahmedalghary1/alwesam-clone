@@ -10,6 +10,7 @@ from products.models import Product, Category
 from orders.models import Order, OrderDetail
 from accounts.models import CustomUser
 
+from django.db import connection
 
 @admin_required
 def admin_dashboard(request):
@@ -86,34 +87,37 @@ def admin_products_list(request):
 
 @admin_required
 def admin_product_create(request):
-    """
-    Create new product.
-    """
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
-        formset = ProductImageFormSet(request.POST, request.FILES)
-        
+
         if form.is_valid():
-            product = form.save()
-            
-            # Save additional images if formset is valid
+            product = form.save(commit=False)
+            product.name = product.name_ar
+            product.subtitle = product.subtitle_ar
+            product.description = product.description_ar
+            product.save()
+
+            # formset لازم يكون بعد حفظ المنتج
+            formset = ProductImageFormSet(request.POST, request.FILES, instance=product)
+
             if formset.is_valid():
-                formset.instance = product
                 formset.save()
-            
-            messages.success(request, f'✅ تم إضافة المنتج "{product.name}" بنجاح.')
-            return redirect('admin_panel:products-list')
+                messages.success(request, f'✅ تم إضافة المنتج "{product.name}" بنجاح.')
+                return redirect('admin_panel:products-list')
+            else:
+                print("❌ Formset Errors:", formset.errors, formset.non_form_errors())
+
+        else:
+            formset = ProductImageFormSet()
     else:
         form = ProductForm()
         formset = ProductImageFormSet()
-    
-    context = {
+
+    return render(request, 'admin_panel/product_form.html', {
         'form': form,
         'formset': formset,
         'action': 'create',
-    }
-    
-    return render(request, 'admin_panel/product_form.html', context)
+    })
 
 
 @admin_required
@@ -154,7 +158,11 @@ def admin_product_delete(request, product_id):
     """
     Delete product.
     """
-    product = get_object_or_404(Product, uuid =product_id)
+
+    product = get_object_or_404(Product, id=product_id)
+    print('id:',product.id)
+    print('price:',product.price)
+    print('id:',product.quantity)
     product_name = product.name
     product.delete()
     messages.success(request, f'✅ تم حذف المنتج "{product_name}" بنجاح.')

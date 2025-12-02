@@ -2,10 +2,9 @@
 .hero-section {
     background: linear-gradient(180deg, #000000 0%, #4d4d4d 100%);
     color: var(--secondary-white);
-    padding: 100px 0;
     position: relative;
+    padding-top: 20px;
     overflow: hidden;
-    margin-bottom: 50px;
 
 
 }
@@ -65,7 +64,7 @@
 
 /* About Section */
 .about-section {
-    padding: 80px 0;
+    padding: 30px 0;
     background-color: var(--light-gray);
 }
 
@@ -169,6 +168,18 @@
 }
 
 
+
+/* تقليل المسافة بين العنوان والشرح */
+.hero-subtitle {
+    margin-bottom: 15px !important; /* بدل 30px */
+}
+
+/* تقليل حجم البادينغ داخل زر تصفح المنتجات */
+.btn-primary-custom {
+    padding: 10px 25px !important; /* بدل 15px 40px */
+    font-size: 16px !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero-title {
@@ -185,5 +196,19 @@
 
     .feature-card {
         margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+
+
+
+    .hero-subtitle {
+        margin-bottom: 12px !important;
+    }
+
+    .btn-primary-custom {
+        padding: 8px 20px !important;
+        font-size: 15px !important;
     }
 }

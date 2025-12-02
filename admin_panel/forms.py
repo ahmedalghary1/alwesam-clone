@@ -9,10 +9,21 @@ class ProductForm(forms.ModelForm):
     """
     class Meta:
         model = Product
-        fields = ['name', 'category', 'price', 'quantity', 'brand', 
-                  'subtitle', 'description', 'image', 'is_featured', 'is_active']
+        fields = ['name_ar', 'name_en',
+            'subtitle_ar', 'subtitle_en',
+            'description_ar', 'description_en',
+            'category', 'price', 'quantity', 'brand', 
+            'subtitle', 'description', 'image', 'is_featured', 'is_active']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'اسم المنتج'}),
+            'name_ar': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'اسم المنتج بالعربية'}),
+            'name_en': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'اسم المنتج بالإنجليزية'}),
+
+            'subtitle_ar': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'وصف قصير (عربي)', 'rows': 3}),
+            'subtitle_en': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Short Subtitle (English)', 'rows': 3}),
+
+            'description_ar': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'الوصف الكامل (عربي)', 'rows': 6}),
+            'description_en': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Full Description (English)', 'rows': 6}),
+
             'category': forms.Select(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'السعر', 'step': '0.01'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'الكمية المتوفرة'}),

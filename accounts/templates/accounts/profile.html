@@ -193,10 +193,7 @@
        {% endif %}
       </div>
       <h2 class="profile-name">
-       {{ user.first_name }} {{ user.last_name }}
-                            {% if not user.first_name and not user.last_name %}
-                            مستخدم
-                            {% endif %}
+       {{ user.first_name }} {{ user.last_name }}{% if not user.first_name and not user.last_name %} {% trans "مستخدم" %}{% endif %}
       </h2>
       <p class="profile-email">
        {{ user.email }}
@@ -209,7 +206,7 @@
        {% trans "رقم الهاتف" %}
       </div>
       <div class="info-value {% if not user.phone_number %}empty{% endif %}">
-       {{ user.phone_number|default:"لم يتم إضافة رقم هاتف" }}
+       {{ user.phone_number|default:" " }}
       </div>
      </div>
      <div class="info-group">
@@ -219,7 +216,7 @@
        {% trans "العنوان" %}
       </div>
       <div class="info-value {% if not user.address %}empty{% endif %}">
-       {{ user.address|default:"لم يتم إضافة عنوان" }}
+       {{ user.address|default:" " }}
       </div>
      </div>
      <div class="info-group">
@@ -267,7 +264,7 @@
          {% trans "الاسم الأخير" %}
         </div>
         <div class="info-value {% if not user.last_name %}empty{% endif %}">
-         {{ user.last_name|default:"غير محدد" }}
+         {{ user.last_name|default:" " }}
         </div>
        </div>
       </div>
@@ -348,7 +345,7 @@
         </i>
         {% trans "العنوان" %}
        </label>
-       <textarea class="form-control" name="address" placeholder="أدخل عنوانك بالتفصيل" rows="3">{{ user.address }}</textarea>
+       <textarea class="form-control" name="address" placeholder="{% trans "أدخل عنوانك بالتفصيل" %}" rows="3">{{ user.address }}</textarea>
       </div>
       <div class="mb-3">
        <label class="form-label">

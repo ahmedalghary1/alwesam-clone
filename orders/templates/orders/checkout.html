@@ -391,11 +391,11 @@
             let text = "";
 
             if (count === 0) {
-                text = "لا يوجد منتجات";
+                text = {% trans "لا يوجد منتجات" %};
             } else if (count === 1) {
-                text = "1 منتج";
+                text = {% trans "1 منتج" %};
             } else {
-                text = count + " منتجات";
+                text = count + {% trans " منتجات" %};
             }
 
             document.querySelectorAll(".summary-row strong")[2].innerHTML = text;
