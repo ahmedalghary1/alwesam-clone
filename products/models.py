@@ -29,16 +29,22 @@ class Category(models.Model):
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
+class Color(models.Model):
+    name = models.CharField('name', max_length=50)
+    hex_code = models.CharField(max_length=7, blank=True, null=True)   # مثل: #ff0000
+
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
-    name = models.CharField('name', max_length=120)
+    name = models.CharField('name', max_length=120,blank=True,null=True)
     category = models.ForeignKey(Category, verbose_name='الفئة', related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
-    price = models.FloatField('price')
-    image = models.ImageField('image', upload_to='product')
-    subtitle = models.TextField('subtitle', max_length=500)
-    description = models.TextField('description', max_length=50000)
+    subtitle = models.TextField('subtitle', max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to='product_colors', blank=True, null=True)
+
+    description = models.TextField('description', max_length=50000, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
-    quantity = models.IntegerField('quantity')
     tags = TaggableManager()
     brand = models.CharField('العلامة التجارية', max_length=100, blank=True)  # Optional brand field
     is_featured = models.BooleanField('مميز', default=False)  # Featured products
@@ -46,10 +52,14 @@ class Product(models.Model):
 
     slug = models.SlugField(blank=True, null=True, unique=True)
 
+    def get_min_price(self):
+        color = self.color.order_by('price').first()
+        return color.price if color else None
     def save(self, *args, **kwargs):
-        self.slug =slugify(self.name)
-        super(Product,self).save(*args, **kwargs)
-    
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+        super().save(*args, **kwargs)
+        
     def __str__(self) :
         return self.name
 
@@ -58,6 +68,26 @@ class Product(models.Model):
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
 
+
+
+class ProductColor(models.Model):
+    product = models.ForeignKey(
+        Product,
+        related_name='color',
+        on_delete=models.CASCADE
+    )
+    color = models.ForeignKey(
+        Color,
+        related_name='product_colors',
+        on_delete=models.CASCADE
+    )
+    price = models.FloatField()
+    quantity = models.IntegerField()
+    code = models.CharField(max_length=100)  # لكل لون كود خاص
+    mark = models.CharField(max_length=100, blank=True, null=True)  # لو تريد علامة خاصة لكل لون
+
+    def __str__(self):
+        return f"{self.product.name} - {self.color.name}"
 
 class ProductImages(models.Model):
     product = models.ForeignKey(Product,verbose_name=('product'),related_name='product_image',on_delete=models.CASCADE)

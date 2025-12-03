@@ -3,14 +3,15 @@ from django.contrib import messages
 from django.db.models import Count, Sum
 from django.utils import timezone
 from datetime import timedelta
+from django.db import transaction
 
 from .decorators import admin_required
 from .forms import ProductForm, ProductImageFormSet, OrderStatusForm, CategoryForm
-from products.models import Product, Category
+from products.models import Product, Category ,ProductColor,ProductImages
 from orders.models import Order, OrderDetail
 from accounts.models import CustomUser
+from .forms import ProductColorFormSet
 
-from django.db import connection
 
 @admin_required
 def admin_dashboard(request):
@@ -27,7 +28,7 @@ def admin_dashboard(request):
     recent_orders = Order.objects.all().order_by('-order_time')[:10]
     
     # Low stock products (quantity < 10)
-    low_stock_products = Product.objects.filter(quantity__lt=10, is_active=True).order_by('quantity')[:5]
+    low_stock_products = ProductColor.objects.filter(quantity__lt=10).order_by('quantity')[:5]
     
     # Revenue this month
     current_month = timezone.now().month
@@ -84,73 +85,85 @@ def admin_products_list(request):
     
     return render(request, 'admin_panel/products_list.html', context)
 
+@admin_required
+
+@admin_required
 
 @admin_required
 def admin_product_create(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ProductForm(request.POST, request.FILES)
+        color_formset = ProductColorFormSet(request.POST, prefix='colors')
+        image_formset = ProductImageFormSet(request.POST, request.FILES, prefix='images')
 
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.name = product.name_ar
-            product.subtitle = product.subtitle_ar
-            product.description = product.description_ar
-            product.save()
+        if form.is_valid() and color_formset.is_valid() and image_formset.is_valid():
+            product = form.save()
 
-            # formset لازم يكون بعد حفظ المنتج
-            formset = ProductImageFormSet(request.POST, request.FILES, instance=product)
+            # حفظ ألوان المنتج
+            color_forms = color_formset.save(commit=False)
+            for color_item in color_forms:
+                color_item.product = product
+                color_item.save()
 
-            if formset.is_valid():
-                formset.save()
-                messages.success(request, f'✅ تم إضافة المنتج "{product.name}" بنجاح.')
-                return redirect('admin_panel:products-list')
-            else:
-                print("❌ Formset Errors:", formset.errors, formset.non_form_errors())
+            # حفظ الصور الإضافية
+            image_forms = image_formset.save(commit=False)
+            for img in image_forms:
+                img.product = product
+                img.save()
 
-        else:
-            formset = ProductImageFormSet()
+            return redirect("admin_panel:products-list")
+
     else:
         form = ProductForm()
-        formset = ProductImageFormSet()
+        color_formset = ProductColorFormSet(prefix='colors')
+        image_formset = ProductImageFormSet(prefix='images')
 
-    return render(request, 'admin_panel/product_form.html', {
-        'form': form,
-        'formset': formset,
-        'action': 'create',
+    return render(request, "admin_panel/product_form.html", {
+        "form": form,
+        "color_formset": color_formset,
+        "image_formset": image_formset,
+        "action": "create",
     })
 
 
 @admin_required
 def admin_product_edit(request, product_id):
-    """
-    Edit existing product.
-    """
     product = get_object_or_404(Product, id=product_id)
-    
+
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
-        formset = ProductImageFormSet(request.POST, request.FILES, instance=product)
-        
-        if form.is_valid():
-            product = form.save()
-            
-            if formset.is_valid():
-                formset.save()
-            
-            messages.success(request, f'✅ تم تحديث المنتج "{product.name}" بنجاح.')
+        image_formset = ProductImageFormSet(request.POST, request.FILES, instance=product, prefix='images')
+        color_formset = ProductColorFormSet(request.POST, request.FILES, instance=product, prefix='colors')
+
+        if form.is_valid() and image_formset.is_valid() and color_formset.is_valid():
+            form.save()
+            image_formset.save()
+
+            # حفظ الألوان
+            color_forms = color_formset.save(commit=False)
+            for item in color_forms:
+                item.product = product
+                item.save()
+
+            # حذف الألوان المحذوفة
+            for obj in color_formset.deleted_objects:
+                obj.delete()
+
+            messages.success(request, f'تم تحديث المنتج "{product.name}" بنجاح.')
             return redirect('admin_panel:products-list')
+
     else:
         form = ProductForm(instance=product)
-        formset = ProductImageFormSet(instance=product)
-    
-    context = {
+        image_formset = ProductImageFormSet(instance=product, prefix='images')
+        color_formset = ProductColorFormSet(instance=product, prefix='colors')
+
+    return render(request, 'admin_panel/product_form.html', {
         'form': form,
-        'formset': formset,
+        'image_formset': image_formset,     # ✔ نفس اسم create
+        'color_formset': color_formset,     # ✔ نفس اسم create
         'product': product,
         'action': 'edit',
-    }
-    
-    return render(request, 'admin_panel/product_form.html', context)
+    })
 
 
 @admin_required
@@ -160,9 +173,8 @@ def admin_product_delete(request, product_id):
     """
 
     product = get_object_or_404(Product, id=product_id)
-    print('id:',product.id)
-    print('price:',product.price)
-    print('id:',product.quantity)
+    porduct_color = ProductColor.objects.filter(product=product)
+    porduct_color.delete()
     product_name = product.name
     product.delete()
     messages.success(request, f'✅ تم حذف المنتج "{product_name}" بنجاح.')
@@ -273,7 +285,9 @@ def admin_category_add(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
-            category = form.save()
+            category = form.save(commit=False)
+            category.name = form.cleaned_data['name_ar']
+            category.save()
             messages.success(request, f'✅ تم إضافة الفئة "{category.name}" بنجاح.')
             return redirect('admin_panel:categories-list')
     else:

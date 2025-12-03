@@ -2,122 +2,143 @@
 {% load i18n %}
 
 {% block title %}
-{% if action == 'add' %}إضافة فئة جديدة{% else %}تعديل الفئة{% endif %} - لوحة التحكم
+    {% if action == 'add' %}إضافة فئة جديدة{% else %}تعديل الفئة{% endif %} - لوحة التحكم
 {% endblock %}
 
 {% block content %}
+
 <!-- Page Header -->
 <div class="page-header">
- <h1>
-  <i class="fas fa-{% if action == 'add' %}plus{% else %}edit{% endif %}">
-  </i>
-  {% if action == 'add' %}إضافة فئة جديدة{% else %}تعديل الفئة: {{ category.name }}{% endif %}
- </h1>
+    <h1>
+        <i class="fas fa-{% if action == 'add' %}plus{% else %}edit{% endif %}"></i>
+        {% if action == 'add' %}
+            إضافة فئة جديدة
+        {% else %}
+            تعديل الفئة: {{ category.name }}
+        {% endif %}
+    </h1>
 </div>
+{% if form.name_ar.errors %}
+<div class="text-danger mt-1">{{ form.name_ar.errors }}</div>
+{% endif %}
+{% if form.name_en.errors %}
+<div class="text-danger mt-1">{{ form.name_en.errors }}</div>
+{% endif %}
 <!-- Form Card -->
 <div class="content-card">
- <form enctype="multipart/form-data" method="post">
-  {% csrf_token %}
-  <div class="row">
-   <!-- اسم الفئة -->
-   <div class="col-md-6 mb-3">
-    <label class="form-label" for="{{ form.name.id_for_label }}">
-     <i class="fas fa-tag">
-     </i>
-     {% trans "اسم الفئة" %}
-     <span class="text-danger">
-      *
-     </span>
-    </label>
-    {{ form.name }}
-                {% if form.name.errors %}
-    <div class="text-danger mt-1">
-     {{ form.name.errors }}
-    </div>
-    {% endif %}
-   </div>
-   <!-- الأيقونة -->
-   <div class="col-md-6 mb-3">
-    <label class="form-label" for="{{ form.icon.id_for_label }}">
-     <i class="fas fa-icons">
-     </i>
-     {% trans "الأيقونة (Font Awesome)" %}
-    </label>
-    {{ form.icon }}
-    <small class="text-muted d-block mt-1">
-     {% trans "مثال: fas fa-tools, fas fa-hammer, fas fa-wrench" %}
-     <a href="https://fontawesome.com/icons" target="_blank">
-      {% trans "(قائمة الأيقونات)" %}
-     </a>
-    </small>
-    {% if form.icon.errors %}
-    <div class="text-danger mt-1">
-     {{ form.icon.errors }}
-    </div>
-    {% endif %}
-   </div>
-   <!-- الوصف -->
-   <div class="col-12 mb-3">
-    <label class="form-label" for="{{ form.description.id_for_label }}">
-     <i class="fas fa-align-right">
-     </i>
-     {% trans "الوصف" %}
-    </label>
-    {{ form.description }}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+
+            <!-- اسم الفئة بالعربي -->
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.name.id_for_label }}" class="form-label">
+                    <i class="fas fa-tag"></i>
+                    {% trans "اسم الفئة بالعربي" %}
+                    <span class="text-danger">*</span>
+                </label>
+                {{ form.name_ar }}
+                {% if form.name_ar.errors %}
+                    <div class="text-danger mt-1">
+                        {{ form.name_ar.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- اسم الفئة -->
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.name.id_for_label }}" class="form-label">
+                    <i class="fas fa-tag"></i>
+                    {% trans "اسم الفئة بالانجليزي" %}
+                    <span class="text-danger">*</span>
+                </label>
+                {{ form.name_en }}
+                {% if form.name_en.errors %}
+                    <div class="text-danger mt-1">
+                        {{ form.name_en.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- الأيقونة -->
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.icon.id_for_label }}" class="form-label">
+                    <i class="fas fa-icons"></i>
+                    {% trans "الأيقونة (Font Awesome)" %}
+                </label>
+                {{ form.icon }}
+                <small class="text-muted d-block mt-1">
+                    {% trans "مثال: fas fa-tools, fas fa-hammer, fas fa-wrench" %}
+                    <a href="https://fontawesome.com/icons" target="_blank">
+                        {% trans "(قائمة الأيقونات)" %}
+                    </a>
+                </small>
+                {% if form.icon.errors %}
+                    <div class="text-danger mt-1">
+                        {{ form.icon.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- الوصف -->
+            <div class="col-12 mb-3">
+                <label for="{{ form.description.id_for_label }}" class="form-label">
+                    <i class="fas fa-align-right"></i>
+                    {% trans "الوصف" %}
+                </label>
+                {{ form.description }}
                 {% if form.description.errors %}
-    <div class="text-danger mt-1">
-     {{ form.description.errors }}
-    </div>
-    {% endif %}
-   </div>
-  </div>
-  <!-- Buttons -->
-  <div class="d-flex gap-2 mt-4">
-   <button class="btn btn-admin-primary" type="submit">
-    <i class="fas fa-save">
-    </i>
-    {% if action == 'add' %}إضافة الفئة{% else %}حفظ التعديلات{% endif %}
-   </button>
-   <a class="btn btn-secondary" href="{% url 'admin_panel:categories-list' %}">
-    <i class="fas fa-times">
-    </i>
-    {% trans "إلغاء" %}
-   </a>
-  </div>
- </form>
+                    <div class="text-danger mt-1">
+                        {{ form.description.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-admin-primary">
+                <i class="fas fa-save"></i>
+                {% if action == 'add' %}إضافة الفئة{% else %}حفظ التعديلات{% endif %}
+            </button>
+
+            <a href="{% url 'admin_panel:categories-list' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i>
+                {% trans "إلغاء" %}
+            </a>
+        </div>
+
+    </form>
 </div>
+
 <!-- Preview Card (if editing) -->
 {% if action == 'edit' and category %}
 <div class="content-card mt-4">
- <h5>
-  <i class="fas fa-info-circle">
-  </i>
-  {% trans "معلومات إضافية" %}
- </h5>
- <div class="row mt-3">
-  <div class="col-md-6">
-   <p>
-    <strong>
-     {% trans "عدد المنتجات:" %}
-    </strong>
-    {{ category.products.count }} منتج
-   </p>
-   <p>
-    <strong>
-     {% trans "تاريخ الإنشاء:" %}
-    </strong>
-    {{ category.created_at|date:"Y-m-d H:i" }}
-   </p>
-  </div>
-  <div class="col-md-6">
-   <p>
-    <strong>
-     {% trans "المعرف (Slug):" %}
-    </strong>
-    {{ category.slug }}
-   </p>
-  </div>
- </div>
+    <h5>
+        <i class="fas fa-info-circle"></i>
+        {% trans "معلومات إضافية" %}
+    </h5>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <p>
+                <strong>{% trans "عدد المنتجات:" %}</strong>
+                {{ category.products.count }} منتج
+            </p>
+            <p>
+                <strong>{% trans "تاريخ الإنشاء:" %}</strong>
+                {{ category.created_at|date:"Y-m-d H:i" }}
+            </p>
+        </div>
+
+        <div class="col-md-6">
+            <p>
+                <strong>{% trans "المعرف (Slug):" %}</strong>
+                {{ category.slug }}
+            </p>
+        </div>
+    </div>
 </div>
 {% endif %}
 

@@ -3,254 +3,554 @@
 
 {% block content %}
 <div class="page-header">
- <h1>
-  <i class="fas fa-box">
-  </i>
-  {% if action == 'create' %}إضافة منتج جديد{% else %}تعديل منتج{% endif %}
- </h1>
+    <h1>
+        <i class="fas fa-box"></i>
+        {% if action == 'create' %}إضافة منتج جديد{% else %}تعديل منتج{% endif %}
+    </h1>
 </div>
-{% if formset.non_form_errors %}
+
+<!-- عرض أخطاء النماذج -->
+{% if form.errors or color_formset.errors or image_formset.errors %}
 <div class="alert alert-danger">
-    {{ formset.non_form_errors }}
+    {% if form.errors %}
+        <h6>أخطاء في بيانات المنتج:</h6>
+        {% for field in form %}
+            {% if field.errors %}
+                <strong>{{ field.label }}:</strong> {{ field.errors|join:", " }}
+            {% endif %}
+        {% endfor %}
+        {% if form.non_field_errors %}
+            {{ form.non_field_errors|join:", " }}
+        {% endif %}
+    {% endif %}
+    
+    {% if color_formset.errors %}
+        <h6>أخطاء في الألوان:</h6>
+        {% for form in color_formset %}
+            {% if form.errors %}
+                <strong>لون {{ forloop.counter }}:</strong>
+                {% for field in form %}
+                    {% if field.errors %}
+                        {{ field.errors|join:", " }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        {% if color_formset.non_form_errors %}
+            {{ color_formset.non_form_errors|join:", " }}
+        {% endif %}
+    {% endif %}
+    
+    {% if image_formset.errors %}
+        <h6>أخطاء في الصور الإضافية:</h6>
+        {% for form in image_formset %}
+            {% if form.errors %}
+                <strong>صورة {{ forloop.counter }}:</strong>
+                {% for field in form %}
+                    {% if field.errors %}
+                        {{ field.errors|join:", " }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        {% if image_formset.non_form_errors %}
+            {{ image_formset.non_form_errors|join:", " }}
+        {% endif %}
+    {% endif %}
 </div>
 {% endif %}
 
-{% for form in formset %}
-    {% for field in form %}
-        {% if field.errors %}
-        <div class="alert alert-danger">
-            {{ field.errors }}
-        </div>
-        {% endif %}
-    {% endfor %}
-{% endfor %}
-
 <div class="content-card">
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="row">
+    <form method="POST" enctype="multipart/form-data" id="product-form">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-8">
+                <h4 class="mb-3">{% trans "معلومات المنتج" %}</h4>
 
-        <div class="col-md-8">
-            <h4 class="mb-3">{% trans "معلومات المنتج" %}</h4>
-
-            <!-- Arabic Name -->
-            <div class="mb-3">
-                <label class="form-label">{% trans "اسم المنتج (عربي) *" %}</label>
-                {{ form.name_ar }}
-            </div>
-
-            <!-- English Name -->
-            <div class="mb-3">
-                <label class="form-label">{% trans "اسم المنتج (إنجليزي)" %}</label>
-                {{ form.name_en }}
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">{% trans "الفئة" %}</label>
-                    {{ form.category }}
+                <!-- Arabic Name -->
+                <div class="mb-3">
+                    <label class="form-label">{% trans "اسم المنتج (عربي) *" %}</label>
+                    {{ form.name_ar }}
+                    {% if form.name_ar.errors %}
+                    <div class="text-danger small mt-1">{{ form.name_ar.errors }}</div>
+                    {% endif %}
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">{% trans "العلامة التجارية" %}</label>
-                    {{ form.brand }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">{% trans "السعر *" %}</label>
-                    {{ form.price }}
+                <!-- English Name -->
+                <div class="mb-3">
+                    <label class="form-label">{% trans "اسم المنتج (إنجليزي)" %}</label>
+                    {{ form.name_en }}
+                    {% if form.name_en.errors %}
+                    <div class="text-danger small mt-1">{{ form.name_en.errors }}</div>
+                    {% endif %}
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">{% trans "الكمية *" %}</label>
-                    {{ form.quantity }}
-                </div>
-            </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">{% trans "الفئة" %}</label>
+                        {{ form.category }}
+                        {% if form.category.errors %}
+                        <div class="text-danger small mt-1">{{ form.category.errors }}</div>
+                        {% endif %}
+                    </div>
 
-            <!-- Arabic Subtitle -->
-            <div class="mb-3">
-                <label class="form-label">{% trans "وصف قصير (عربي)" %}</label>
-                {{ form.subtitle_ar }}
-            </div>
-
-            <!-- English Subtitle -->
-            <div class="mb-3">
-                <label class="form-label">{% trans "وصف قصير (إنجليزي)" %}</label>
-                {{ form.subtitle_en }}
-            </div>
-
-            <!-- Arabic Description -->
-            <div class="mb-3">
-                <label class="form-label">{% trans "الوصف الكامل (عربي)" %}</label>
-                {{ form.description_ar }}
-            </div>
-
-            <!-- English Description -->
-            <div class="mb-3">
-                <label class="form-label">{% trans "الوصف الكامل (إنجليزي)" %}</label>
-                {{ form.description_en }}
-            </div>
-
-        </div>
-
-        <div class="col-md-4">
-            <h4 class="mb-3">{% trans "الصورة والإعدادات" %}</h4>
-
-            <div class="mb-3">
-                <label class="form-label">{% trans "الصورة الرئيسية" %}</label>
-                {{ form.image }}
-
-                {% if product.image %}
-                <img src="{{ product.image.url }}" class="img-fluid mt-2" style="max-height: 200px;">
-                {% endif %}
-            </div>
-
-            <div class="mb-3">
-                <div class="form-check">
-                    {{ form.is_featured }}
-                    <label class="form-check-label">{% trans "منتج مميز" %}</label>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <div class="form-check">
-                    {{ form.is_active }}
-                    <label class="form-check-label">{% trans "نشط" %}</label>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <hr class="my-4">
-
-    {% if action == 'edit' %}
-    <!-- Additional Images -->
-    <div class="row">
-        <div class="col-12">
-            <h4 class="mb-3"><i class="fas fa-images"></i> {% trans "الصور الإضافية للمنتج" %}</h4>
-
-            <p class="text-muted">{% trans "يمكنك إضافة صور إضافية للمنتج لعرضها في صفحة التفاصيل" %}</p>
-
-            {{ formset.management_form }}
-
-            <div id="formset-container">
-                {% for form in formset %}
-                <div class="formset-form mb-3 p-3 border rounded">
-                    <div class="row align-items-center">
-
-                        <div class="col-md-8">
-                            <label class="form-label">صورة إضافية {{ forloop.counter }}</label>
-                            {{ form.image }}
-                            {{ form.id }}
-
-                            {% if form.instance.image %}
-                            <img src="{{ form.instance.image.url }}" class="img-thumbnail mt-2" style="max-height:100px;">
-                            {% endif %}
-                        </div>
-
-                        <div class="col-md-4 text-end">
-                            {% if form.instance.pk %}
-                            <div class="form-check">
-                                {{ form.DELETE }}
-                                <label class="form-check-label text-danger">
-                                    <i class="fas fa-trash"></i> {% trans "حذف هذه الصورة" %}
-                                </label>
-                            </div>
-                            {% else %}
-                            <button type="button" class="btn btn-sm btn-outline-danger remove-form">
-                                <i class="fas fa-times"></i> {% trans "إزالة" %}
-                            </button>
-                            {% endif %}
-                        </div>
-
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">{% trans "العلامة التجارية" %}</label>
+                        {{ form.brand }}
+                        {% if form.brand.errors %}
+                        <div class="text-danger small mt-1">{{ form.brand.errors }}</div>
+                        {% endif %}
                     </div>
                 </div>
-                {% endfor %}
+
+
+
+                
+                <!-- Arabic Subtitle -->
+                <div class="mb-3">
+                    <label class="form-label">{% trans "وصف قصير (عربي)" %}</label>
+                    {{ form.subtitle_ar }}
+                    <div class="form-text text-muted">وصف مختصر يظهر في قائمة المنتجات</div>
+                    {% if form.subtitle_ar.errors %}
+                    <div class="text-danger small mt-1">{{ form.subtitle_ar.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- English Subtitle -->
+                <div class="mb-3">
+                    <label class="form-label">{% trans "وصف قصير (إنجليزي)" %}</label>
+                    {{ form.subtitle_en }}
+                    <div class="form-text text-muted">Short description for English users</div>
+                    {% if form.subtitle_en.errors %}
+                    <div class="text-danger small mt-1">{{ form.subtitle_en.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Arabic Description -->
+                <div class="mb-3">
+                    <label class="form-label">{% trans "الوصف الكامل (عربي)" %}</label>
+                    {{ form.description_ar }}
+                    <div class="form-text text-muted">الوصف التفصيلي للمنتج</div>
+                    {% if form.description_ar.errors %}
+                    <div class="text-danger small mt-1">{{ form.description_ar.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- English Description -->
+                <div class="mb-3">
+                    <label class="form-label">{% trans "الوصف الكامل (إنجليزي)" %}</label>
+                    {{ form.description_en }}
+                    <div class="form-text text-muted">Detailed product description for English users</div>
+                    {% if form.description_en.errors %}
+                    <div class="text-danger small mt-1">{{ form.description_en.errors }}</div>
+                    {% endif %}
+                </div>
             </div>
 
-            <button type="button" id="add-more" class="btn btn-outline-primary btn-sm">
-                <i class="fas fa-plus"></i> {% trans "إضافة صورة أخرى" %}
+            <div class="col-md-4">
+                <h4 class="mb-3">{% trans "الصورة والإعدادات" %}</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">{% trans "الصورة الرئيسية *" %}</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                    <div class="text-danger small mt-1">{{ form.image.errors }}</div>
+                    {% endif %}
+                    
+                    {% if action == 'edit' and product.image %}
+                    <div class="mt-2">
+                        <img src="{{ product.image.url }}" class="img-fluid rounded border" style="max-height: 200px; width: 100%; object-fit: cover;">
+                        <p class="text-muted small mt-1">الصورة الحالية</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        {{ form.is_featured }}
+                        <label class="form-check-label">{% trans "منتج مميز" %}</label>
+                        <div class="form-text text-muted">سيظهر في قسم المنتجات المميزة</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        {{ form.is_active }}
+                        <label class="form-check-label">{% trans "نشط" %}</label>
+                        <div class="form-text text-muted">المنتج غير النشط لن يظهر للمستخدمين</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- 1. ألوان المنتج (Product Colors) -->
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0"><i class="fas fa-palette"></i> {% trans "ألوان المنتج" %}</h4>
+                    <button type="button" id="add-color" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-plus"></i> {% trans "إضافة لون" %}
+                    </button>
+                </div>
+                <p class="text-muted">{% trans "يمكنك إضافة ألوان مختلفة للمنتج مع أسعار وكميات خاصة بكل لون" %}</p>
+
+                {{ color_formset.management_form }}
+                
+                <div id="color-formset-container">
+                    {% for color_form in color_formset %}
+                    <div class="color-formset-form mb-3 p-3 border rounded">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 mb-2">
+                                <label class="form-label small">{% trans "اللون" %}</label>
+                                {{ color_form.color }}
+                                {{ color_form.id }}
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label class="form-label small">{% trans "السعر" %}</label>
+                                {{ color_form.price }}
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label class="form-label small">{% trans "الكمية" %}</label>
+                                {{ color_form.quantity }}
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label class="form-label small">{% trans "الكود" %}</label>
+                                {{ color_form.code }}
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label class="form-label small">{% trans "مارك" %}</label>
+                                {{ color_form.mark }}
+                            </div>
+                            <div class="col-md-2 mb-2 text-end">
+                                {% if color_form.instance.pk %}
+                                <div class="form-check">
+                                    {{ color_form.DELETE }}
+                                    <label class="form-check-label text-danger small">
+                                        <i class="fas fa-trash"></i> {% trans "حذف" %}
+                                    </label>
+                                </div>
+                                {% else %}
+                                <button type="button" class="btn btn-sm btn-outline-danger remove-color-form">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if not color_formset.forms %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    {% trans "لم تتم إضافة أي ألوان بعد. يمكنك إضافة ألوان للمنتج باستخدام زر 'إضافة لون'." %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- 2. الصور الإضافية (Additional Images) -->
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0"><i class="fas fa-images"></i> {% trans "الصور الإضافية للمنتج" %}</h4>
+                    <button type="button" id="add-image" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-plus"></i> {% trans "إضافة صورة" %}
+                    </button>
+                </div>
+                <p class="text-muted">{% trans "يمكنك إضافة صور إضافية للمنتج لعرضها في معرض الصور" %}</p>
+
+                {{ image_formset.management_form }}
+                
+                <div id="image-formset-container" class="row">
+                    {% for image_form in image_formset %}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="image-formset-form h-100 p-3 border rounded">
+                            <div class="mb-2">
+                                <label class="form-label small">{% trans "صورة إضافية" %} {{ forloop.counter }}</label>
+                                {{ image_form.image }}
+                                {{ image_form.id }}
+                            </div>
+                            
+                            {% if action == 'edit' and image_form.instance.image %}
+                            <div class="mb-2">
+                                <img src="{{ image_form.instance.image.url }}" class="img-thumbnail w-100" style="height: 150px; object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            
+                            <div class="text-end">
+                                {% if image_form.instance.pk %}
+                                <div class="form-check">
+                                    {{ image_form.DELETE }}
+                                    <label class="form-check-label text-danger small">
+                                        <i class="fas fa-trash"></i> {% trans "حذف هذه الصورة" %}
+                                    </label>
+                                </div>
+                                {% else %}
+                                <button type="button" class="btn btn-sm btn-outline-danger remove-image-form">
+                                    <i class="fas fa-times"></i> {% trans "إزالة" %}
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if not image_formset.forms %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    {% trans "لم تتم إضافة أي صور إضافية بعد. يمكنك إضافة صور باستخدام زر 'إضافة صورة'." %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-admin-primary">
+                <i class="fas fa-save"></i> {% trans "حفظ المنتج" %}
             </button>
 
+            <a href="{% url 'admin_panel:products-list' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> {% trans "إلغاء" %}
+            </a>
         </div>
-    </div>
-
-    <hr class="my-4">
-    {% endif %}
-
-    <div class="d-flex gap-2">
-        <button type="submit" class="btn-admin-primary">
-            <i class="fas fa-save"></i> {% trans "حفظ" %}
-        </button>
-
-        <a href="{% url 'admin_panel:products-list' %}" class="btn btn-secondary">
-            <i class="fas fa-times"></i> {% trans "إلغاء" %}
-        </a>
-    </div>
-
-</form>
-
+    </form>
 </div>
-{% if action == 'edit' %}
+
 <script>
-    // Formset management for adding more image forms dynamically
     document.addEventListener('DOMContentLoaded', function () {
-        const addButton = document.getElementById('add-more');
-        if (!addButton) return;
+        // إدارة ألوان المنتج
+        const addColorButton = document.getElementById('add-color');
+        if (addColorButton) {
+            addColorButton.addEventListener('click', function () {
+                addColorForm();
+            });
+        }
 
-        addButton.addEventListener('click', function (e) {
-            e.preventDefault();
+        // إدارة الصور الإضافية
+        const addImageButton = document.getElementById('add-image');
+        if (addImageButton) {
+            addImageButton.addEventListener('click', function () {
+                addImageForm();
+            });
+        }
 
-            const container = document.getElementById('formset-container');
-            const totalFormsInput = document.querySelector('#id_productimages-TOTAL_FORMS');
+        // دالة لإضافة نموذج لون جديد
+        function addColorForm() {
+            const container = document.getElementById('color-formset-container');
+            const totalFormsInput = document.querySelector('#id_colors-TOTAL_FORMS');
+            const formPrefix = 'colors-';
+            
+            if (!totalFormsInput) return;
+            
             const currentFormCount = parseInt(totalFormsInput.value);
-
-            // Create new form HTML
+            const newIndex = currentFormCount;
+            
+            // إنشاء معرف فريد للنموذج الجديد
+            const formId = `color-form-${Date.now()}`;
+            
             const newFormHtml = `
-                <div class="formset-form mb-3 p-3 border rounded">
+                <div class="color-formset-form mb-3 p-3 border rounded" id="${formId}">
                     <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <label class="form-label">صورة إضافية ${currentFormCount + 1}</label>
-                            <input type="file" name="productimages-${currentFormCount}-image" 
-                                   class="form-control" id="id_productimages-${currentFormCount}-image">
-                            <input type="hidden" name="productimages-${currentFormCount}-id" 
-                                   id="id_productimages-${currentFormCount}-id">
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label small">اللون</label>
+                            <select name="${formPrefix + newIndex}-color" class="form-control form-control-sm" id="id_${formPrefix + newIndex}-color">
+                                <option value="">---------</option>
+                            </select>
+                            <input type="hidden" name="${formPrefix + newIndex}-id" id="id_${formPrefix + newIndex}-id">
                         </div>
-                        <div class="col-md-4 text-end">
-                            <button type="button" class="btn btn-sm btn-outline-danger remove-form">
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label small">السعر</label>
+                            <input type="number" name="${formPrefix + newIndex}-price" step="0.01" 
+                                   class="form-control form-control-sm" id="id_${formPrefix + newIndex}-price">
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label small">الكمية</label>
+                            <input type="number" name="${formPrefix + newIndex}-quantity" 
+                                   class="form-control form-control-sm" id="id_${formPrefix + newIndex}-quantity">
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label small">الكود</label>
+                            <input type="text" name="${formPrefix + newIndex}-code" 
+                                   class="form-control form-control-sm" id="id_${formPrefix + newIndex}-code">
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label small">مارك</label>
+                            <input type="text" name="${formPrefix + newIndex}-mark" 
+                                   class="form-control form-control-sm" id="id_${formPrefix + newIndex}-mark">
+                        </div>
+                        <div class="col-md-2 mb-2 text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-color-form" data-form-id="${formId}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', newFormHtml);
+            totalFormsInput.value = newIndex + 1;
+            
+            // إخفاء رسالة "لا توجد ألوان" إذا ظهرت
+            const infoAlert = container.previousElementSibling;
+            if (infoAlert && infoAlert.classList.contains('alert-info')) {
+                infoAlert.style.display = 'none';
+            }
+            
+            // إضافة حدث الإزالة للنموذج الجديد
+            const removeBtn = document.querySelector(`[data-form-id="${formId}"]`);
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function () {
+                    const formToRemove = document.getElementById(formId);
+                    if (formToRemove) {
+                        formToRemove.remove();
+                    }
+                });
+            }
+        }
+
+        // دالة لإضافة نموذج صورة جديد
+        function addImageForm() {
+            const container = document.getElementById('image-formset-container');
+            const totalFormsInput = document.querySelector('#id_images-TOTAL_FORMS');
+            const formPrefix = 'images-';
+            
+            if (!totalFormsInput) return;
+            
+            const currentFormCount = parseInt(totalFormsInput.value);
+            const newIndex = currentFormCount;
+            
+            // إنشاء معرف فريد للنموذج الجديد
+            const formId = `image-form-${Date.now()}`;
+            
+            const newFormHtml = `
+                <div class="col-md-6 col-lg-4 mb-3" id="${formId}">
+                    <div class="image-formset-form h-100 p-3 border rounded">
+                        <div class="mb-2">
+                            <label class="form-label small">صورة إضافية ${newIndex + 1}</label>
+                            <input type="file" name="${formPrefix + newIndex}-image" 
+                                   class="form-control form-control-sm" id="id_${formPrefix + newIndex}-image"
+                                   accept="image/*">
+                            <input type="hidden" name="${formPrefix + newIndex}-id" id="id_${formPrefix + newIndex}-id">
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-image-form" data-form-id="${formId}">
                                 <i class="fas fa-times"></i> إزالة
                             </button>
                         </div>
                     </div>
                 </div>
             `;
-
-            // Add new form to container
+            
             container.insertAdjacentHTML('beforeend', newFormHtml);
+            totalFormsInput.value = newIndex + 1;
+            
+            // إخفاء رسالة "لا توجد صور" إذا ظهرت
+            const infoAlert = container.previousElementSibling;
+            if (infoAlert && infoAlert.classList.contains('alert-info')) {
+                infoAlert.style.display = 'none';
+            }
+            
+            // إضافة حدث الإزالة للنموذج الجديد
+            const removeBtn = document.querySelector(`[data-form-id="${formId}"]`);
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function () {
+                    const formToRemove = document.getElementById(formId);
+                    if (formToRemove) {
+                        formToRemove.remove();
+                    }
+                });
+            }
+        }
 
-            // Update total forms count
-            totalFormsInput.value = currentFormCount + 1;
-
-            // Add event listener for remove button
-            const newForm = container.lastElementChild;
-            const removeBtn = newForm.querySelector('.remove-form');
-            removeBtn.addEventListener('click', function () {
-                newForm.remove();
-                // Note: We don't decrease TOTAL_FORMS as Django expects sequential numbers
+        // إضافة أحداث الإزالة للنماذج الموجودة
+        document.querySelectorAll('.remove-color-form').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const formElement = this.closest('.color-formset-form');
+                if (formElement) {
+                    formElement.remove();
+                }
             });
         });
 
-        // Add remove functionality to existing empty forms
-        document.querySelectorAll('.remove-form').forEach(btn => {
+        document.querySelectorAll('.remove-image-form').forEach(btn => {
             btn.addEventListener('click', function () {
-                this.closest('.formset-form').remove();
+                const formElement = this.closest('.col-md-6');
+                if (formElement) {
+                    formElement.remove();
+                }
             });
+        });
+        
+        // عرض معاينة الصورة عند اختيار صورة جديدة
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'file' && e.target.accept === 'image/*') {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imgElement = e.target.parentElement.querySelector('img');
+                        if (!imgElement) {
+                            // إنشاء عنصر صورة جديد
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+                            img.className = 'img-thumbnail w-100 mt-2';
+                            img.style = 'height: 150px; object-fit: cover;';
+                            e.target.parentElement.insertBefore(img, e.target.nextElementSibling);
+                        } else {
+                            imgElement.src = event.target.result;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
         });
     });
 </script>
-{% endif %}
 
+<style>
+    .color-formset-form:hover,
+    .image-formset-form:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.3s ease;
+    }
+    
+    .form-control-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .form-label.small {
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+    
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+    
+    .btn-admin-primary {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+    }
+    
+    .btn-admin-primary:hover {
+        background-color: #0b5ed7;
+        color: white;
+    }
+</style>
 {% endblock %}

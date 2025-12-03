@@ -42,7 +42,7 @@
        </div>
       </div>
       <!-- اسم المنتج و الوصف -->
-      <div class="col-md-3">
+      <div class="col-md-2">
        <h4 class="cart-item-title">
         {{item.product.name}}
        </h4>
@@ -50,10 +50,27 @@
         {{item.product.subtitle}}
        </p>
       </div>
+    <div class="col-md-2">
+
+        <!-- لون المنتج المختار - عرض احترافي -->
+        <div class="selected-color-box d-flex align-items-center mt-2">
+            <div class="color-circle"
+                style="background-color: {{ item.color.color.hex_code|default:'#ccc' }};">
+            </div>
+
+            <div class="ms-2">
+                <span class="color-label">اللون:</span>
+                <strong class="color-name">{{ item.color.color.name }}</strong>
+            
+            </div>
+        </div>
+    </div>
+
       <!-- السعر -->
       <div class="col-md-2">
        <div class="cart-item-price" data-id="{{ item.id }}">
-        {{item.product.price}} {% trans "ج" %}
+        {{item.color.price}}
+         {% trans "ج" %}
        </div>
       </div>
       <!-- أزرار التحكم بالكمية -->
@@ -69,7 +86,7 @@
        </div>
       </div>
       <!-- زر الحذف -->
-      <div class="col-md-2 text-center">
+      <div class="col-md-1 text-center">
        <button class="btn-remove" data-id="{{ item.id }}">
         <i class="fas fa-trash">
         </i>
@@ -391,11 +408,11 @@
             let text = "";
 
             if (count === 0) {
-                text = {% trans "لا يوجد منتجات" %};
+                text = "{% trans 'لا يوجد منتجات' %}";
             } else if (count === 1) {
-                text = {% trans "1 منتج" %};
+                text = "{% trans '1 منتج' %}";
             } else {
-                text = count + {% trans " منتجات" %};
+                text = count + "{% trans ' منتجات' %}";
             }
 
             document.querySelectorAll(".summary-row strong")[2].innerHTML = text;

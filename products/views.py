@@ -1,5 +1,5 @@
 from django.views.generic import ListView,DetailView
-from .models import Product,ProductImages
+from .models import Product,ProductImages,ProductColor
 
 from django.db.models import Q
 
@@ -87,12 +87,25 @@ class ProductListView(ListView):
         return context
 
 
-
 class ProductDetail(DetailView):
-    model=Product
-    def get_context_data(self, **kwargs) :
+    model = Product
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["images"] = ProductImages.objects.filter(product=self.get_object())
-        context["products"] = Product.objects.filter(tags__in=self.get_object().tags.all()).distinct()[:10]
+
+        product = self.get_object()
+
+        # صور المنتج
+        context["images"] = ProductImages.objects.filter(product=product)
+
+        # الألوان الخاصة بهذا المنتج (ProductColor)
+        context["product_colors"] = ProductColor.objects.filter(
+            product=product
+        ).select_related("color")
+
+        # منتجات مشابهة
+        context["products"] = Product.objects.filter(
+            tags__in=product.tags.all()
+        ).distinct()[:10]
+
         return context
-    

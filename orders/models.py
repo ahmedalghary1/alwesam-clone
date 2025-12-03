@@ -3,7 +3,7 @@ from django.db import models
 from accounts.models import CustomUser 
 from django.utils import timezone
 import datetime
-
+from products.models import ProductColor
 
 from products.models import Product
 from utils.generate_code import generate_code
@@ -96,25 +96,33 @@ class Cart(models.Model):
 
     @property
     def cart_total(self):
-        total = 0
-        for item in self.cart_detail.all():
-            total += item.total
-        return round(total,2)
+        return round(sum(item.total_price for item in self.cart_detail.all()), 2)
 
 class CartDetail(models.Model):
-    cart = models.ForeignKey(Cart,related_name = 'cart_detail',on_delete = models.CASCADE)
-    product = models.ForeignKey(Product,related_name = 'cartdetail_product',on_delete = models.SET_NULL,blank=True, null=True)
+    cart = models.ForeignKey(Cart, related_name='cart_detail', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='cartdetail_product', on_delete=models.SET_NULL, blank=True, null=True)
+    color = models.ForeignKey(ProductColor, related_name="cart_color", on_delete=models.SET_NULL, blank=True, null=True)
     quantity = models.IntegerField(default=1)
     total = models.FloatField(blank=True, null=True)
+
+    @property
+    def price(self):
+        return self.color.price
+
+    @property
+    def total_price(self):
+        return round(self.quantity * self.color.price, 2)
+
     def to_dict(self):
         return {
             'id': self.id,
             'product_id': self.product.id,
             'product_name': self.product.name,
-            'product_image': self.product.image.url if self.product.image else None ,  # If you have image URLs
+            'product_image': self.product.image.url if self.product.image else None,
             'quantity': self.quantity,
-            'total': str(self.total),
-            'product_price': str(self.product.price),
+            'total': str(self.total_price),
+            'product_price': str(self.color.price),
+            'color_name': self.color.color.name if self.color else None,
         }
 
 class Coupon(models.Model):

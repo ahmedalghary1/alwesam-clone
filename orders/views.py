@@ -7,80 +7,95 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 
 from .models import Order, OrderDetail, Cart, CartDetail, Coupon, OrderAddress
-from products.models import Product
+from products.models import Product ,ProductColor
 from .models import DeliveryFee
 from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 
+
 def checkout(request, item_id=None):
 
-    # =========================
-    #   تحميل السلة (مستخدم / زائر)
-    # =========================
+    # ===================================================
+    #   تحميل السلة (مستخدم مسجل دخول)
+    # ===================================================
     if request.user.is_authenticated:
         cart, _ = Cart.objects.get_or_create(user=request.user, status="Inprogress")
-        cart_detail = CartDetail.objects.filter(cart=cart)
+        cart_detail = CartDetail.objects.filter(cart=cart).select_related("color", "product")
 
-        subtotal = sum(item.product.price * item.quantity for item in cart_detail)
+        # تجاهل أي عنصر ليس لديه لون
+        valid_items = [item for item in cart_detail if item.color]
+
+        subtotal = sum(item.color.price * item.quantity for item in valid_items)
 
     else:
-        # ------ session cart ------
+        # ===================================================
+        #   Session cart للزائر
+        #   المفتاح هو: "productId-colorId"
+        # ===================================================
         session_cart = request.session.get("cart", {})
         cart = None
         cart_detail = []
 
-        products = Product.objects.filter(id__in=session_cart.keys())
+        for key, qty in session_cart.items():
+            product_id, color_id = key.split("-")
 
-        for product in products:
-            qty = session_cart[str(product.id)]
+            color_obj = get_object_or_404(ProductColor, id=color_id)
+
             cart_detail.append({
-                "id": product.id,
-                "product": product,
+                "id": key,
+                "product": color_obj.product,
+                "color": color_obj,
                 "quantity": qty,
-                "total": product.price * qty
+                "total": color_obj.price * qty
             })
 
         subtotal = sum(item["total"] for item in cart_detail)
 
-    # =========================
+    # ===================================================
     #   رسوم التوصيل
-    # =========================
+    # ===================================================
     deliveryFee = DeliveryFee.objects.last()
     delivery_fee = deliveryFee.fee if deliveryFee else 0
     total = subtotal + delivery_fee
 
-    # =========================
+    # ===================================================
     #   عمليات تعديل السلة (AJAX)
-    # =========================
+    # ===================================================
     action = request.GET.get("action")
 
     if action:
 
-        # ========== لو المستخدم مسجل دخول ==========
+        # ===================================================
+        #   تعديل السلة للمستخدم المسجل دخول
+        # ===================================================
         if request.user.is_authenticated and item_id:
 
             try:
-                # Convert item_id to int for CartDetail lookup
                 item = CartDetail.objects.get(id=int(item_id), cart=cart)
-
                 if action == "increase":
                     item.quantity += 1
+
                 elif action == "decrease" and item.quantity > 1:
                     item.quantity -= 1
+
                 elif action == "delete":
                     item.delete()
                     item = None
 
                 if item:
-                    item.total = item.product.price * item.quantity
+                    if not item.color:
+                        item.delete()
+                        return JsonResponse({"success": True, "deleted": True})
+
+                    item.total = item.color.price * item.quantity
                     item.save()
 
             except (CartDetail.DoesNotExist, ValueError):
                 return JsonResponse({"success": False})
 
-            # إعادة الحساب
+            # إعادة حساب الإجمالي
             cart_detail = CartDetail.objects.filter(cart=cart)
-            subtotal = sum(i.product.price * i.quantity for i in cart_detail)
+            subtotal = sum(i.color.price * i.quantity for i in cart_detail)
             total = subtotal + delivery_fee
 
             return JsonResponse({
@@ -92,52 +107,54 @@ def checkout(request, item_id=None):
                 "total": total
             })
 
-
-        # ========== تعديل session cart للزائر ==========
+        # ===================================================
+        #   تعديل Session cart للزائر
+        # ===================================================
         else:
             session_cart = request.session.get("cart", {})
 
-            product_id = str(item_id)
-            if product_id not in session_cart:
+            if item_id not in session_cart:
                 return JsonResponse({"success": False})
 
             if action == "increase":
-                session_cart[product_id] += 1
+                session_cart[item_id] += 1
 
-            elif action == "decrease" and session_cart[product_id] > 1:
-                session_cart[product_id] -= 1
+            elif action == "decrease" and session_cart[item_id] > 1:
+                session_cart[item_id] -= 1
 
             elif action == "delete":
-                del session_cart[product_id]
+                del session_cart[item_id]
 
             request.session["cart"] = session_cart
 
-            # إعادة الحساب للزائر
-            products = Product.objects.filter(id__in=session_cart.keys())
-            subtotal = sum(
-                Product.objects.get(id=pid).price * qty
-                for pid, qty in session_cart.items()
-            )
-            total = subtotal + delivery_fee
-
-            # حساب item_total للمنتج الحالي
+            # إعادة الحساب
+            subtotal = 0
             item_total = 0
-            if product_id in session_cart:
-                item_total = Product.objects.get(id=item_id).price * session_cart[product_id]
+
+            for key, qty in session_cart.items():
+                product_id, color_id = key.split("-")
+                color_obj = get_object_or_404(ProductColor, id=color_id)
+
+                item_total_current = color_obj.price * qty
+                subtotal += item_total_current
+
+                if key == item_id:
+                    item_total = item_total_current
+
+            total = subtotal + delivery_fee
 
             return JsonResponse({
                 "success": True,
-                "quantity": session_cart.get(product_id, 0),
+                "quantity": session_cart.get(item_id, 0),
                 "item_total": item_total,
                 "sub_total": subtotal,
                 "deliveryFee": delivery_fee,
                 "total": total
             })
 
-
-    # =========================
-    #   عرض صفحة checkout
-    # =========================
+    # ===================================================
+    #   عرض صفحة Checkout
+    # ===================================================
     return render(request, "orders/checkout.html", {
         "cart": cart,
         "cart_detail_data": cart_detail,
@@ -148,64 +165,85 @@ def checkout(request, item_id=None):
     })
 
 
-
 def add_to_cart(request):
 
-    # لو المستخدم غير مسجل دخول → استخدم session cart
+    product_id = request.POST.get('product_id')
+    color_id = request.POST.get('color_id')   # اللون المختار
+    quantity = int(request.POST.get('quantity', 1))
+
+    # التحقق من وجود اللون
+    product_color = get_object_or_404(ProductColor, id=color_id)
+
+    # ---------------------------------------------------------
+    # 1) المستخدم غير مسجل دخول → Session Cart
+    # ---------------------------------------------------------
     if not request.user.is_authenticated:
         session_cart = request.session.get('cart', {})
 
-        product = get_object_or_404(Product, id=request.POST.get('product_id'))
-        quantity = int(request.POST.get('quantity', 1))
+        key = f"{product_id}-{color_id}"
 
         # تحقق من المخزون
-        if quantity > product.quantity:
+        if quantity > product_color.quantity:
             return JsonResponse({
                 'success': False,
-                'message': f"⚠️ الكمية المتوفرة من '{product.name}' هي {product.quantity}",
+                'message': f"⚠️ الكمية المتوفرة من اللون {product_color.color.name} هي {product_color.quantity}",
             })
 
         # تحديث السلة
-        if str(product.id) in session_cart:
-            new_qty = session_cart[str(product.id)] + quantity
-            if new_qty > product.quantity:
+        if key in session_cart:
+            new_qty = session_cart[key] + quantity
+            if new_qty > product_color.quantity:
                 return JsonResponse({'success': False, 'message': '⚠️ كمية غير متاحة'})
-            session_cart[str(product.id)] = new_qty
+            session_cart[key] = new_qty
         else:
-            session_cart[str(product.id)] = quantity
+            session_cart[key] = quantity
 
         request.session['cart'] = session_cart
 
         return JsonResponse({
             'success': True,
-            'message': f"🛒 تم إضافة {product.name} إلى السلة",
+            'message': f"🛒 تم إضافة المنتج بلون {product_color.color.name} إلى السلة",
             'cart_count': len(session_cart),
         })
 
-    # ---------- المستخدم المسجل دخول ----------
+
+    # ---------------------------------------------------------
+    # 2) المستخدم مسجل دخول
+    # ---------------------------------------------------------
     if request.method == 'POST':
-        product = get_object_or_404(Product, id=request.POST.get('product_id'))
-        quantity = int(request.POST.get('quantity', 1))
+        product = get_object_or_404(Product, id=product_id)
 
         cart, _ = Cart.objects.get_or_create(user=request.user, status='Inprogress')
-        cart_detail, created = CartDetail.objects.get_or_create(cart=cart, product=product)
 
+        # كل عنصر بالسلة مرتبط بمنتج ولون
+        cart_detail, created = CartDetail.objects.get_or_create(
+            cart=cart,
+            product=product,
+            color=product_color
+        )
+
+        # التحقق من المخزون
         if not created:
-            cart_detail.quantity += quantity
+            new_qty = cart_detail.quantity + quantity
+            if new_qty > product_color.quantity:
+                return JsonResponse({'success': False, 'message': '⚠️ كمية غير متاحة لهذا اللون'})
+            cart_detail.quantity = new_qty
         else:
+            if quantity > product_color.quantity:
+                return JsonResponse({'success': False, 'message': '⚠️ كمية غير متاحة لهذا اللون'})
             cart_detail.quantity = quantity
 
-        cart_detail.total = round(product.price * cart_detail.quantity, 2)
+        # الحساب الجديد
+        cart_detail.total = round(product_color.price * cart_detail.quantity, 2)
         cart_detail.save()
 
         return JsonResponse({
             'success': True,
-            'message': f"🛒 تم إضافة {product.name} إلى السلة",
+            'message': f"🛒 تمت إضافة المنتج بلون {product_color.color.name} إلى السلة",
             'cart_count': CartDetail.objects.filter(cart=cart).count(),
         })
 
     return JsonResponse({'success': False})
-
 
 @login_required
 def create_order(request):
