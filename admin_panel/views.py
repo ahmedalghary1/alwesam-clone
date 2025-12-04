@@ -57,6 +57,7 @@ def admin_products_list(request):
     List all products with search and filter.
     """
     products = Product.objects.all().order_by('-created_at')
+    products_color= ProductColor.objects.all()
     
     # Search
     search = request.GET.get('search', '')
@@ -78,6 +79,7 @@ def admin_products_list(request):
     categories = Category.objects.all()
     
     context = {
+        'products_color':products_color,
         'products': products,
         'categories': categories,
         'search': search,
@@ -85,9 +87,6 @@ def admin_products_list(request):
     
     return render(request, 'admin_panel/products_list.html', context)
 
-@admin_required
-
-@admin_required
 
 @admin_required
 def admin_product_create(request):
@@ -128,7 +127,7 @@ def admin_product_create(request):
 
 @admin_required
 def admin_product_edit(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
+    product = Product.objects.get(id=product_id)
 
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)

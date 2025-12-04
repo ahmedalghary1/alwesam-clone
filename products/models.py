@@ -18,9 +18,19 @@ class Category(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
-    
+            base_slug = slugify(self.name, allow_unicode=True)
+            slug = base_slug
+            counter = 1
+
+            # لو الـ slug موجود، أضف -1, -2, -3 إلخ...
+            while Category.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
     

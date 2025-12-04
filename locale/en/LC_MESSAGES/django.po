@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-04 12:42+0200\n"
+"POT-Creation-Date: 2025-12-04 13:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1495,38 +1495,69 @@ msgstr "Cash on Delivery Only"
 #| msgid "الرئيسية"
 msgid "العودة للرئيسية"
 msgstr "Home"
-#: .\orders\views.py:197
+
+#: .\orders\views.py:182
+msgid "❌ المنتج رقم %(id)s غير موجود."
+msgstr "❌ The product with number %(id)s does not exist."
+
+#: .\orders\views.py:198
 msgid "⚠️ لا يوجد ألوان متاحة لهذا المنتج."
 msgstr "⚠️ No colors are available for this product."
 
-#: .\orders\views.py:206
+#: .\orders\views.py:207
 msgid "❌ اللون المحدد غير موجود لهذا المنتج."
 msgstr "❌ The selected color does not exist for this product."
 
-#: .\orders\views.py:227
+#: .\orders\views.py:221
+msgid "⚠️ الكمية المتاحة فقط هي %(qty)s"
+msgstr "⚠️ Only %(qty)s items are available."
+
+#: .\orders\views.py:229
 msgid "⚠️ كمية غير متاحة"
 msgstr "⚠️ Quantity not available."
 
-#: .\orders\views.py:254
-#: .\orders\views.py:258
+#: .\orders\views.py:237
+#, python-format
+msgid "🛒 تم إضافة المنتج بلون \"%(color)s\" إلى السلة"
+msgstr "🛒 The product with color \"%(color)s\" has been added to the cart."
+
+#: .\orders\views.py:255 .\orders\views.py:259
 msgid "⚠️ كمية غير متاحة لهذا اللون"
 msgstr "⚠️ Quantity not available for this color."
 
-#: .\orders\views.py:282
+#: .\orders\views.py:267
+#, python-format
+msgid "🛒 تمت إضافة المنتج بلون \"%(color)s\" إلى السلة"
+msgstr "🛒 The product with color \"%(color)s\" has been added to the cart."
+
+#: .\orders\views.py:283
 msgid "❌ السلة فارغة."
 msgstr "❌ The cart is empty."
 
-#: .\orders\views.py:286
+#: .\orders\views.py:287
 msgid "❌ السلة غير موجودة."
 msgstr "❌ The cart does not exist."
 
-#: .\orders\views.py:300
+#: .\orders\views.py:301
 msgid "❌ يرجى ملء جميع الحقول المطلوبة."
 msgstr "❌ Please fill in all required fields."
 
 #: .\orders\views.py:309
-msgid "يرجى تعديل الكمية في السلة."
-msgstr "Please adjust the quantity in the cart."
+#, python-format
+msgid ""
+"❌ عذراً، الكمية المتوفرة من \"%(product)s\" هي %(qty)s فقط. يرجى تعديل "
+"الكمية في السلة."
+msgstr "❌ Sorry, the available quantity of \"%(product)s\" is only %(qty)s. Please adjust the quantity in the cart."
+
+#: .\orders\views.py:369
+#, python-format
+msgid "✅ تم إنشاء الطلب بنجاح! رقم الطلب: %(code)s"
+msgstr "✅ Order created successfully! Order number: %(code)s"
+
+#: .\orders\views.py:374
+#, python-format
+msgid "❌ حدث خطأ أثناء إنشاء الطلب: %(error)s"
+msgstr "❌ An error occurred while creating the order: %(error)s"
 
 #: .\products\templates\products\product_detail.html:58
 msgid "breadcrumb"
@@ -1641,15 +1672,15 @@ msgstr ""
 msgid "منتجات ذات صلة"
 msgstr "Related Products"
 
-#: .\products\templates\products\product_detail.html:371
-#, fuzzy
-#| msgid "متوفر في المخزون (%(q)s قطعة)"
-msgid "متوفر في المخزون"
-msgstr "In stock (%(q)s items)"
 
-#: .\products\templates\products\product_detail.html:371
+
+#: .\products\templates\products\product_detail.html:372
+msgid "متوفر في المخزون"
+msgstr "In stock"
+
+#: .\products\templates\products\product_detail.html:372
 msgid "قطعة"
-msgstr ""
+msgstr "Item"
 
 #: .\products\templates\products\product_detail.html:374
 msgid "متوفر"
@@ -1850,6 +1881,9 @@ msgstr "Saturday - Thursday: 9 AM - 6 PM"
 #: .\templates\base.html:251
 msgid "جميع الحقوق محفوظة © 2025 متجر الأدوات الكهربائية"
 msgstr "All rights reserved © 2025 Electrical Tools Store"
+
+#~ msgid "يرجى تعديل الكمية في السلة."
+#~ msgstr "Please adjust the quantity in the cart."
 
 #~ msgid "السعر *"
 #~ msgstr "Price *"

@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
@@ -11,7 +13,6 @@ from products.models import Product ,ProductColor
 from .models import DeliveryFee
 from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
-from django.utils.translation import gettext as _
 
 
 def checkout(request, item_id=None):
@@ -20,7 +21,7 @@ def checkout(request, item_id=None):
     #   تحميل السلة (مستخدم مسجل دخول)
     # ===================================================
     if request.user.is_authenticated:
-        cart, _ = Cart.objects.get_or_create(user=request.user, status="Inprogress")
+        cart, created  = Cart.objects.get_or_create(user=request.user, status="Inprogress")
         cart_detail = CartDetail.objects.filter(cart=cart).select_related("color", "product")
 
         # تجاهل أي عنصر ليس لديه لون
@@ -179,7 +180,8 @@ def add_to_cart(request):
     except Product.DoesNotExist:
         return JsonResponse({
             'success': False,
-            'message': _(f"❌ المنتج رقم {product_id} غير موجود.")
+            'message': _('❌ المنتج رقم %(id)s غير موجود.') % {'id': product_id}
+
         }, status=400)
 
 
@@ -217,7 +219,8 @@ def add_to_cart(request):
         if quantity > product_color.quantity:
             return JsonResponse({
                 'success': False,
-                'message': _(f"⚠️ الكمية المتاحة فقط هي {product_color.quantity}")
+                'message': _('⚠️ الكمية المتاحة فقط هي %(qty)s') % {'qty': product_color.quantity}
+
             })
 
         # تحديث السلة
@@ -230,17 +233,16 @@ def add_to_cart(request):
             session_cart[key] = quantity
 
         request.session['cart'] = session_cart
-
         return JsonResponse({
             'success': True,
-            'message': _(f"🛒 تم إضافة المنتج بلون {product_color.color.name} إلى السلة"),
+            'message': _('🛒 تم إضافة المنتج بلون "%(color)s" إلى السلة') % {
+                'color': product_color.color.name
+            },
             'cart_count': len(session_cart),
         })
-
-    # ---------------------------------------------
     # 4) مسجل دخول → Database Cart
     # ---------------------------------------------
-    cart, _ = Cart.objects.get_or_create(user=request.user, status='Inprogress')
+    cart, created_cart  = Cart.objects.get_or_create(user=request.user, status='Inprogress')
 
     cart_detail, created = CartDetail.objects.get_or_create(
         cart=cart,
@@ -263,7 +265,7 @@ def add_to_cart(request):
 
     return JsonResponse({
         'success': True,
-        'message': _(f"🛒 تمت إضافة المنتج بلون {product_color.color.name} إلى السلة"),
+        'message': _('🛒 تمت إضافة المنتج بلون "%(color)s" إلى السلة') % {'color': product_color.color.name},
         'cart_count': CartDetail.objects.filter(cart=cart).count(),
     })
 
@@ -305,8 +307,11 @@ def create_order(request):
             if cart_item.quantity > cart_item.color.quantity:
                 messages.error(
                     request, 
-                    _(f'❌ عذراً، الكمية المتوفرة من "{cart_item.product.name}" هي {cart_item.color.quantity} فقط. '),
-                    _(f'يرجى تعديل الكمية في السلة.')
+                   _('❌ عذراً، الكمية المتوفرة من "%(product)s" هي %(qty)s فقط. يرجى تعديل الكمية في السلة.') % {
+    'product': cart_item.product.name,
+    'qty': cart_item.color.quantity
+}
+
                 )
                 return redirect('orders:checkout')
         
@@ -362,11 +367,13 @@ def create_order(request):
             cart.status = 'Completed'
             cart.save()
             
-            messages.success(request, f'✅ تم إنشاء الطلب بنجاح! رقم الطلب: {order.code}')
+            messages.success(request, _('✅ تم إنشاء الطلب بنجاح! رقم الطلب: %(code)s') % {'code': order.code}
+            )
             return redirect('orders:order_success', order_code=order.code)
             
         except Exception as e:
-            messages.error(request, f'❌ حدث خطأ أثناء إنشاء الطلب: {str(e)}')
+            messages.error(request,_('❌ حدث خطأ أثناء إنشاء الطلب: %(error)s') % {'error': str(e)}
+)
             return redirect('orders:checkout')
     
     return redirect('orders:checkout')

@@ -5,61 +5,59 @@ from django.db.models import Q
 
 
 
-
 class ProductListView(ListView):
     model = Product
     template_name = 'product_list.html'
     context_object_name = 'object_list'
-    paginate_by = 12  # عدد المنتجات في كل صفحة
+    paginate_by = 12
 
     def get_queryset(self):
-        queryset = Product.objects.filter(is_active=True)  # Only show active products
-        
-        # Search in name, subtitle, and description
+        queryset = Product.objects.filter(is_active=True).distinct()
+
+        # Search
         search_query = self.request.GET.get('search', '')
         if search_query:
             queryset = queryset.filter(
                 Q(name__icontains=search_query) | 
                 Q(subtitle__icontains=search_query) |
                 Q(description__icontains=search_query) |
-                Q(tags__name__icontains=search_query)  # Search in tags too
+                Q(tags__name__icontains=search_query)
             )
-        
-        # Filter by category
+
+        # Category filter
         category_id = self.request.GET.get('category', '')
         if category_id:
             queryset = queryset.filter(category_id=category_id)
-        
-        # Filter by brand
+
+        # Brand filter
         brand = self.request.GET.get('brand', '')
         if brand:
             queryset = queryset.filter(brand__iexact=brand)
-        
-        # Filter by price range
+
+        # Price filter
         price_range = self.request.GET.get('price_range', '')
-        if price_range:
-            if price_range == '0-1000':
-                queryset = queryset.filter(price__lt=1000)
-            elif price_range == '1000-5000':
-                queryset = queryset.filter(price__gte=1000, price__lt=5000)
-            elif price_range == '5000-10000':
-                queryset = queryset.filter(price__gte=5000, price__lt=10000)
-            elif price_range == '10000-plus':
-                queryset = queryset.filter(price__gte=10000)
-        
-        # Filter by availability
+        if price_range == '0-1000':
+            queryset = queryset.filter(color__price__lt=1000)
+        elif price_range == '1000-5000':
+            queryset = queryset.filter(color__price__gte=1000, color__price__lt=5000)
+        elif price_range == '5000-10000':
+            queryset = queryset.filter(color__price__gte=5000, color__price__lt=10000)
+        elif price_range == '10000-plus':
+            queryset = queryset.filter(color__price__gte=10000)
+
+        # Availability
         availability = self.request.GET.get('availability', '')
         if availability == 'in_stock':
-            queryset = queryset.filter(quantity__gt=0)
+            queryset = queryset.filter(color__quantity__gt=0)
         elif availability == 'out_of_stock':
-            queryset = queryset.filter(quantity=0)
-        
+            queryset = queryset.filter(color__quantity=0)
+
         # Sorting
         sort_by = self.request.GET.get('sort', '')
         if sort_by == 'price_asc':
-            queryset = queryset.order_by('price')
+            queryset = queryset.order_by('color__price')
         elif sort_by == 'price_desc':
-            queryset = queryset.order_by('-price')
+            queryset = queryset.order_by('-color__price')
         elif sort_by == 'name_asc':
             queryset = queryset.order_by('name')
         elif sort_by == 'name_desc':
@@ -67,24 +65,23 @@ class ProductListView(ListView):
         elif sort_by == 'newest':
             queryset = queryset.order_by('-created_at')
         else:
-            queryset = queryset.order_by('-created_at')  # Default sorting
-        
+            queryset = queryset.order_by('-created_at')
+
         return queryset.distinct()
-    
+
     def get_context_data(self, **kwargs):
         from .models import Category
         context = super().get_context_data(**kwargs)
-        
-        # Add all categories for filter
+
         context['categories'] = Category.objects.all()
-        
-        # Add all unique brands for filter
-        context['brands'] = Product.objects.filter(is_active=True).values_list('brand', flat=True).distinct().exclude(brand='')
-        
-        # Keep search query and filters
+        context['brands'] = Product.objects.filter(is_active=True)\
+            .values_list('brand', flat=True).distinct().exclude(brand='')
+
+        # Keep search query
         context['search_query'] = self.request.GET.get('search', '')
-        
+
         return context
+
 
 
 class ProductDetail(DetailView):

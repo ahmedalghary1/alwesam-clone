@@ -12,7 +12,7 @@ class ProductImagesInline(admin.TabularInline):
 class ProductColorInline(admin.TabularInline):
     model = ProductColor
     extra = 1
-    fields = ('color', 'price', 'quantity', 'code', 'mark', 'image')
+    fields = ('color', 'price', 'quantity', 'code', 'mark')
 
 
 # --- Product Admin ---

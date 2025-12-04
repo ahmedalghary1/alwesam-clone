@@ -359,15 +359,18 @@
         if (parseInt(qtyInput.value) > parseInt(qtyInput.max)) {
             qtyInput.value = qtyInput.max > 0 ? qtyInput.max : 1;
         }
-
         // حالة المخزون
         const stockIcon = document.getElementById('stockIcon');
         const stockText = document.getElementById('stockText');
 
         if (parseInt(data.quantity) > 0) {
             stockIcon.className = 'fas fa-check';
-            stockText.textContent =
-                "{{ _('متوفر في المخزون') }}" + " (" + data.quantity + " {{ _('قطعة') }})";
+            
+            var availableText = "{{ _('متوفر في المخزون') }}";
+            var pieceText = "{{ _('قطعة') }}";
+
+            stockText.innerHTML = availableText + " (" + data.quantity + " " + pieceText + ")";
+
             document.getElementById('addToCartBtn').disabled = false;
             document.getElementById('addToCartBtn').style.opacity = 1;
             document.getElementById('productBadge').textContent = '{% trans "متوفر" %}';
@@ -378,6 +381,7 @@
             document.getElementById('addToCartBtn').style.opacity = 0.5;
             document.getElementById('productBadge').textContent = '{% trans "غير متوفر" %}';
         }
+
 
         // حفظ البيانات
         selectedProductColorId = data.pc_id;

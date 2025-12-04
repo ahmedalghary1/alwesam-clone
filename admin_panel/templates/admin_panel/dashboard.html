@@ -111,7 +111,7 @@
        </span>
       </td>
       <td>
-       {{ order.total }} جنيه
+       {{ order.total }}  {% trans "جنيه" %}
       </td>
       <td>
        <a class="btn btn-sm btn-admin-primary" href="{% url 'admin_panel:order-detail' order.code %}">
@@ -153,24 +153,24 @@
      </tr>
     </thead>
     <tbody>
-     {% for product in low_stock_products %}
-     <tr>
-      <td>
-       {{ product.name }}
-      </td>
-      <td>
-       <span class="badge bg-danger">
-        {{ product.quantity }}
-       </span>
-      </td>
-      <td>
-       <a class="btn btn-sm btn-admin-primary" href="{% url 'admin_panel:product-edit' product.id %}">
-        <i class="fas fa-edit">
-        </i>
-       </a>
-      </td>
-     </tr>
-     {% endfor %}
+    {% for pc in low_stock_products %}
+        <tr>
+        <td>
+        {{ pc.product.name }}
+        </td>
+        <td>
+        <span class="badge bg-danger">
+        {{ pc.quantity }}
+        </span>
+        </td>
+        <td>
+        <a class="btn btn-sm btn-admin-primary" href="{% url 'admin_panel:product-edit' pc.product.id %}">
+        <i class="fas fa-edit"></i>
+        </a>
+        </td>
+        </tr>
+    {% endfor %}
+
     </tbody>
    </table>
    {% else %}

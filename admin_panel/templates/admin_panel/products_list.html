@@ -80,11 +80,11 @@
    </tr>
   </thead>
   <tbody>
-   {% for product in products %}
+   {% for product in products_color %}
    <tr>
     <td>
-     {% if product.image %}
-     <img src="{{ product.image.url }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"/>
+     {% if product.product.image %}
+     <img src="{{ product.product.image.url }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"/>
      {% else %}
      <div style="width: 50px; height: 50px; background: #ddd; border-radius: 5px;">
      </div>
@@ -92,11 +92,11 @@
     </td>
     <td>
      <strong>
-      {{ product.name }}
+      {{ product.product.name }}
      </strong>
     </td>
     <td>
-     {{ product.category.name|default:"-" }}
+     {{ product.product.category.name|default:"-" }}
     </td>
     <td>
      {{ product.price }} جنيه
@@ -111,7 +111,7 @@
                         {% endif %}
     </td>
     <td>
-     {% if product.is_active %}
+     {% if product.product.is_active %}
      <span class="badge bg-success">
       {% trans "نشط" %}
      </span>
@@ -122,11 +122,11 @@
      {% endif %}
     </td>
     <td>
-     <a class="btn btn-sm btn-admin-primary me-2" href="{% url 'admin_panel:product-edit' product.id %}">
+     <a class="btn btn-sm btn-admin-primary me-2" href="{% url 'admin_panel:product-edit' product.product.id %}">
       <i class="fas fa-edit">
       </i>
      </a>
-     <a class="btn btn-sm btn-admin-danger" href="{% url 'admin_panel:product-delete' product.id %}" onclick="return confirm('هل أنت متأكد من حذف هذا المنتج؟')">
+     <a class="btn btn-sm btn-admin-danger" href="{% url 'admin_panel:product-delete' product.product.id %}" onclick="return confirm('هل أنت متأكد من حذف هذا المنتج؟')">
       <i class="fas fa-trash">
       </i>
      </a>
