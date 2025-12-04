@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-02 14:42+0200\n"
+"POT-Creation-Date: 2025-12-04 12:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,7 +141,7 @@ msgstr "Full Name"
 #: .\accounts\templates\accounts\forgot_password.html:261
 #: .\accounts\templates\accounts\register.html:483
 #: .\admin_panel\templates\admin_panel\users_list.html:31
-#: .\orders\templates\orders\checkout.html:141
+#: .\orders\templates\orders\checkout.html:158
 msgid "البريد الإلكتروني"
 msgstr "Email"
 
@@ -149,7 +149,7 @@ msgstr "Email"
 #: .\accounts\templates\accounts\profile.html:206
 #: .\accounts\templates\accounts\profile.html:338
 #: .\accounts\templates\accounts\register.html:495
-#: .\orders\templates\orders\checkout.html:132
+#: .\orders\templates\orders\checkout.html:149
 msgid "رقم الهاتف"
 msgstr "Phone Number"
 
@@ -159,8 +159,8 @@ msgstr "Job Title"
 
 #: .\accounts\templates\accounts\crm_profile_page.html:200
 #: .\accounts\templates\accounts\profile.html:370
-#: .\admin_panel\templates\admin_panel\category_form.html:84
-#: .\admin_panel\templates\admin_panel\product_form.html:166
+#: .\admin_panel\templates\admin_panel\category_form.html:108
+#: .\admin_panel\templates\admin_panel\product_form.html:322
 msgid "إلغاء"
 msgstr "Cancel"
 
@@ -295,7 +295,7 @@ msgid "تاريخ الانضمام"
 msgstr "Join Date"
 
 #: .\accounts\templates\accounts\profile.html:244
-#: .\admin_panel\templates\admin_panel\category_form.html:95
+#: .\admin_panel\templates\admin_panel\category_form.html:120
 msgid "معلومات إضافية"
 msgstr "Additional Information"
 
@@ -353,7 +353,7 @@ msgid "سجل الآن واستمتع بتجربة تسوق مميزة"
 msgstr "Register now and enjoy a unique shopping experience"
 
 #: .\accounts\templates\accounts\register.html:468
-#: .\orders\templates\orders\checkout.html:124
+#: .\orders\templates\orders\checkout.html:141
 msgid "الاسم بالكامل"
 msgstr "Full Name"
 
@@ -362,7 +362,7 @@ msgid "أدخل اسمك الأول"
 msgstr "Enter your first name"
 
 #: .\accounts\templates\accounts\register.html:486
-#: .\orders\templates\orders\checkout.html:143
+#: .\orders\templates\orders\checkout.html:160
 msgid "example@email.com"
 msgstr "example@email.com"
 
@@ -498,7 +498,7 @@ msgid "لوحة التحكم"
 msgstr "Dashboard"
 
 #: .\admin_panel\templates\admin_panel\base.html:249
-#: .\products\templates\products\product_detail.html:110
+#: .\products\templates\products\product_detail.html:63
 #: .\templates\base.html:106 .\templates\base.html:232
 msgid "الرئيسية"
 msgstr "Home"
@@ -506,7 +506,7 @@ msgstr "Home"
 #: .\admin_panel\templates\admin_panel\base.html:256
 #: .\admin_panel\templates\admin_panel\order_detail.html:16
 #: .\orders\templates\orders\order_detail.html:347
-#: .\products\templates\products\product_detail.html:115
+#: .\products\templates\products\product_detail.html:68
 #: .\templates\base.html:109 .\templates\base.html:233
 msgid "المنتجات"
 msgstr "Products"
@@ -557,7 +557,6 @@ msgid "إضافة فئة جديدة"
 msgstr "Add New Category"
 
 #: .\admin_panel\templates\admin_panel\categories_list.html:53
-#: .\admin_panel\templates\admin_panel\category_form.html:27
 msgid "اسم الفئة"
 msgstr "Category Name"
 
@@ -566,7 +565,7 @@ msgid "الأيقونة"
 msgstr "Icon"
 
 #: .\admin_panel\templates\admin_panel\categories_list.html:59
-#: .\admin_panel\templates\admin_panel\category_form.html:64
+#: .\admin_panel\templates\admin_panel\category_form.html:87
 msgid "الوصف"
 msgstr "Description"
 
@@ -592,6 +591,7 @@ msgid "تعديل"
 msgstr "Edit"
 
 #: .\admin_panel\templates\admin_panel\categories_list.html:107
+#: .\admin_panel\templates\admin_panel\product_form.html:232
 msgid "حذف"
 msgstr "Delete"
 
@@ -599,28 +599,40 @@ msgstr "Delete"
 msgid "لا توجد فئات"
 msgstr "No categories found"
 
-#: .\admin_panel\templates\admin_panel\category_form.html:44
+#: .\admin_panel\templates\admin_panel\category_form.html:37
+#, fuzzy
+#| msgid "اسم الفئة"
+msgid "اسم الفئة بالعربي"
+msgstr "Category Name"
+
+#: .\admin_panel\templates\admin_panel\category_form.html:52
+#, fuzzy
+#| msgid "اسم الفئة"
+msgid "اسم الفئة بالانجليزي"
+msgstr "Category Name"
+
+#: .\admin_panel\templates\admin_panel\category_form.html:67
 msgid "الأيقونة (Font Awesome)"
 msgstr "Icon (Font Awesome)"
 
-#: .\admin_panel\templates\admin_panel\category_form.html:48
+#: .\admin_panel\templates\admin_panel\category_form.html:71
 msgid "مثال: fas fa-tools, fas fa-hammer, fas fa-wrench"
 msgstr "Example: fas fa-tools, fas fa-hammer, fas fa-wrench"
 
-#: .\admin_panel\templates\admin_panel\category_form.html:50
+#: .\admin_panel\templates\admin_panel\category_form.html:73
 msgid "(قائمة الأيقونات)"
 msgstr "(Icons list)"
 
-#: .\admin_panel\templates\admin_panel\category_form.html:101
-#: .\orders\templates\orders\checkout.html:254
+#: .\admin_panel\templates\admin_panel\category_form.html:126
+#: .\orders\templates\orders\checkout.html:271
 msgid "عدد المنتجات:"
 msgstr "Number of Products:"
 
-#: .\admin_panel\templates\admin_panel\category_form.html:107
+#: .\admin_panel\templates\admin_panel\category_form.html:130
 msgid "تاريخ الإنشاء:"
 msgstr "Creation Date:"
 
-#: .\admin_panel\templates\admin_panel\category_form.html:115
+#: .\admin_panel\templates\admin_panel\category_form.html:137
 msgid "المعرف (Slug):"
 msgstr "Slug:"
 
@@ -675,6 +687,7 @@ msgstr "Product Name"
 
 #: .\admin_panel\templates\admin_panel\dashboard.html:148
 #: .\admin_panel\templates\admin_panel\order_detail.html:28
+#: .\admin_panel\templates\admin_panel\product_form.html:216
 #: .\admin_panel\templates\admin_panel\products_list.html:72
 #: .\orders\templates\orders\order_detail.html:359
 msgid "الكمية"
@@ -690,13 +703,14 @@ msgid "المنتج"
 msgstr "Product"
 
 #: .\admin_panel\templates\admin_panel\order_detail.html:25
+#: .\admin_panel\templates\admin_panel\product_form.html:212
 #: .\admin_panel\templates\admin_panel\products_list.html:69
 #: .\orders\templates\orders\order_detail.html:356
 msgid "السعر"
 msgstr "Price"
 
 #: .\admin_panel\templates\admin_panel\order_detail.html:59
-#: .\orders\templates\orders\checkout.html:232
+#: .\orders\templates\orders\checkout.html:249
 #: .\orders\templates\orders\order_detail.html:402
 #: .\orders\templates\orders\order_success.html:259
 msgid "المجموع الفرعي:"
@@ -709,7 +723,7 @@ msgid "رسوم التوصيل:"
 msgstr "Delivery Fee:"
 
 #: .\admin_panel\templates\admin_panel\order_detail.html:71
-#: .\orders\templates\orders\checkout.html:273
+#: .\orders\templates\orders\checkout.html:290
 #: .\orders\templates\orders\order_success.html:285
 msgid "الإجمالي:"
 msgstr "Total:"
@@ -817,83 +831,152 @@ msgstr "Date"
 msgid "عرض"
 msgstr "View"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:18
+#: .\admin_panel\templates\admin_panel\product_form.html:69
 msgid "معلومات المنتج"
 msgstr "Product Information"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:22
-msgid "اسم المنتج *"
+#: .\admin_panel\templates\admin_panel\product_form.html:73
+#, fuzzy
+#| msgid "اسم المنتج *"
+msgid "اسم المنتج (عربي) *"
 msgstr "Product Name *"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:29
+#: .\admin_panel\templates\admin_panel\product_form.html:82
+#, fuzzy
+#| msgid "اسم المنتج *"
+msgid "اسم المنتج (إنجليزي)"
+msgstr "Product Name *"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:91
 #: .\admin_panel\templates\admin_panel\products_list.html:66
 #: .\products\templates\products\product_list.html:62
 #: .\products\templates\products\product_list.html:156
 msgid "الفئة"
 msgstr "Category"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:35
+#: .\admin_panel\templates\admin_panel\product_form.html:99
 msgid "العلامة التجارية"
 msgstr "Brand"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:43
-msgid "السعر *"
-msgstr "Price *"
-
-#: .\admin_panel\templates\admin_panel\product_form.html:49
-msgid "الكمية *"
-msgstr "Quantity *"
-
-#: .\admin_panel\templates\admin_panel\product_form.html:56
-msgid "وصف قصير"
+#: .\admin_panel\templates\admin_panel\product_form.html:112
+#, fuzzy
+#| msgid "وصف قصير"
+msgid "وصف قصير (عربي)"
 msgstr "Short Description"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:62
-#: .\products\templates\products\product_detail.html:264
-msgid "الوصف الكامل"
+#: .\admin_panel\templates\admin_panel\product_form.html:122
+#, fuzzy
+#| msgid "وصف قصير"
+msgid "وصف قصير (إنجليزي)"
+msgstr "Short Description"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:132
+#, fuzzy
+#| msgid "الوصف الكامل"
+msgid "الوصف الكامل (عربي)"
 msgstr "Full Description"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:69
+#: .\admin_panel\templates\admin_panel\product_form.html:142
+#, fuzzy
+#| msgid "الوصف الكامل"
+msgid "الوصف الكامل (إنجليزي)"
+msgstr "Full Description"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:152
 msgid "الصورة والإعدادات"
 msgstr "Image & Settings"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:73
-msgid "الصورة الرئيسية"
+#: .\admin_panel\templates\admin_panel\product_form.html:155
+#, fuzzy
+#| msgid "الصورة الرئيسية"
+msgid "الصورة الرئيسية *"
 msgstr "Main Image"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:84
+#: .\admin_panel\templates\admin_panel\product_form.html:172
 msgid "منتج مميز"
 msgstr "Featured Product"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:92
+#: .\admin_panel\templates\admin_panel\product_form.html:180
 #: .\admin_panel\templates\admin_panel\products_list.html:42
 #: .\admin_panel\templates\admin_panel\products_list.html:116
 msgid "نشط"
 msgstr "Active"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:106
+#: .\admin_panel\templates\admin_panel\product_form.html:193
+#, fuzzy
+#| msgid "معلومات المنتج"
+msgid "ألوان المنتج"
+msgstr "Product Information"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:195
+#, fuzzy
+#| msgid "إضافة صورة أخرى"
+msgid "إضافة لون"
+msgstr "Add Another Image"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:198
+#, fuzzy
+#| msgid "يمكنك إضافة صور إضافية للمنتج لعرضها في صفحة تفاصيل المنتج"
+msgid "يمكنك إضافة ألوان مختلفة للمنتج مع أسعار وكميات خاصة بكل لون"
+msgstr "You can add extra images to be shown on the product detail page"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:207
+msgid "اللون"
+msgstr "The color"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:220
+msgid "الكود"
+msgstr "code"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:224
+msgid "مارك"
+msgstr "mark"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:249
+msgid ""
+"لم تتم إضافة أي ألوان بعد. يمكنك إضافة ألوان للمنتج باستخدام زر 'إضافة لون'."
+msgstr ""
+
+#: .\admin_panel\templates\admin_panel\product_form.html:261
 msgid "الصور الإضافية للمنتج"
 msgstr "Additional Product Images"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:109
-msgid "يمكنك إضافة صور إضافية للمنتج لعرضها في صفحة تفاصيل المنتج"
+#: .\admin_panel\templates\admin_panel\product_form.html:263
+#, fuzzy
+#| msgid "إضافة صورة أخرى"
+msgid "إضافة صورة"
+msgstr "Add Another Image"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:266
+#, fuzzy
+#| msgid "يمكنك إضافة صور إضافية للمنتج لعرضها في صفحة تفاصيل المنتج"
+msgid "يمكنك إضافة صور إضافية للمنتج لعرضها في معرض الصور"
 msgstr "You can add extra images to be shown on the product detail page"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:133
+#: .\admin_panel\templates\admin_panel\product_form.html:275
+#, fuzzy
+#| msgid "معلومات إضافية"
+msgid "صورة إضافية"
+msgstr "Additional Information"
+
+#: .\admin_panel\templates\admin_panel\product_form.html:291
 msgid "حذف هذه الصورة"
 msgstr "Delete this Image"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:140
+#: .\admin_panel\templates\admin_panel\product_form.html:296
 msgid "إزالة"
 msgstr "Remove"
 
-#: .\admin_panel\templates\admin_panel\product_form.html:151
-msgid "إضافة صورة أخرى"
-msgstr "Add Another Image"
+#: .\admin_panel\templates\admin_panel\product_form.html:308
+msgid ""
+"لم تتم إضافة أي صور إضافية بعد. يمكنك إضافة صور باستخدام زر 'إضافة صورة'."
+msgstr ""
 
-#: .\admin_panel\templates\admin_panel\product_form.html:161
-msgid "حفظ"
-msgstr "Save"
+#: .\admin_panel\templates\admin_panel\product_form.html:318
+#, fuzzy
+#| msgid "وصف المنتج:"
+msgid "حفظ المنتج"
+msgstr "Product Description:"
 
 #: .\admin_panel\templates\admin_panel\products_list.html:10
 msgid "إدارة المنتجات"
@@ -935,7 +1018,7 @@ msgid "الاسم"
 msgstr "Name"
 
 #: .\admin_panel\templates\admin_panel\products_list.html:140
-#: .\products\templates\products\product_list.html:247
+#: .\products\templates\products\product_list.html:253
 msgid "لا توجد منتجات"
 msgstr "No Products Found"
 
@@ -1114,121 +1197,126 @@ msgstr "Shopping Cart"
 msgid "راجع طلبك قبل التأكيد"
 msgstr "Review your order before confirmation"
 
-#: .\orders\templates\orders\checkout.html:56
+#: .\orders\templates\orders\checkout.html:62
+msgid "اللون:"
+msgstr "The Color:"
+
+#: .\orders\templates\orders\checkout.html:73
+#: .\products\templates\products\product_detail.html:177
 msgid "ج"
 msgstr "LE"
 
-#: .\orders\templates\orders\checkout.html:86
+#: .\orders\templates\orders\checkout.html:103
 msgid "بيانات الطلب"
 msgstr "Order Details"
 
-#: .\orders\templates\orders\checkout.html:92
+#: .\orders\templates\orders\checkout.html:109
 msgid "الدفع عند الاستلام فقط"
 msgstr "Cash on Delivery Only"
 
-#: .\orders\templates\orders\checkout.html:95
+#: .\orders\templates\orders\checkout.html:112
 msgid "لا تدفع أي مبلغ إلا بعد استلام المنتج والتأكد منه"
 msgstr "Do not pay any amount until you receive and verify the product"
 
-#: .\orders\templates\orders\checkout.html:104
+#: .\orders\templates\orders\checkout.html:121
 msgid "يجب تسجيل الدخول أولاً لتأكيد الطلب"
 msgstr "You must login first to confirm the order"
 
-#: .\orders\templates\orders\checkout.html:107
+#: .\orders\templates\orders\checkout.html:124
 msgid "للمتابعة وإتمام عملية الشراء، يرجى تسجيل الدخول إلى حسابك"
 msgstr "To continue and complete the purchase, please login to your account"
 
-#: .\orders\templates\orders\checkout.html:112
+#: .\orders\templates\orders\checkout.html:129
 msgid "تسجيل الدخول الآن"
 msgstr "Login Now"
 
-#: .\orders\templates\orders\checkout.html:126
+#: .\orders\templates\orders\checkout.html:143
 msgid "أدخل اسمك الكامل"
 msgstr "Enter your full name"
 
-#: .\orders\templates\orders\checkout.html:134
+#: .\orders\templates\orders\checkout.html:151
 msgid "01xxxxxxxxx"
 msgstr "01xxxxxxxxx"
 
-#: .\orders\templates\orders\checkout.html:149
+#: .\orders\templates\orders\checkout.html:166
 msgid "العنوان بالتفصيل"
 msgstr "Detailed Address"
 
-#: .\orders\templates\orders\checkout.html:151
+#: .\orders\templates\orders\checkout.html:168
 msgid "الشارع، المنطقة، المدينة"
 msgstr "Street, Area, City"
 
-#: .\orders\templates\orders\checkout.html:158
+#: .\orders\templates\orders\checkout.html:175
 msgid "المحافظة"
 msgstr "Governorate"
 
-#: .\orders\templates\orders\checkout.html:162
+#: .\orders\templates\orders\checkout.html:179
 msgid "اختر المحافظة"
 msgstr "Select Governorate"
 
-#: .\orders\templates\orders\checkout.html:165
+#: .\orders\templates\orders\checkout.html:182
 msgid "القاهرة"
 msgstr "Cairo"
 
-#: .\orders\templates\orders\checkout.html:168
+#: .\orders\templates\orders\checkout.html:185
 msgid "الجيزة"
 msgstr "Giza"
 
-#: .\orders\templates\orders\checkout.html:171
+#: .\orders\templates\orders\checkout.html:188
 msgid "الإسكندرية"
 msgstr "Alexandria"
 
-#: .\orders\templates\orders\checkout.html:174
+#: .\orders\templates\orders\checkout.html:191
 msgid "الدقهلية"
 msgstr "Dakahlia"
 
-#: .\orders\templates\orders\checkout.html:177
+#: .\orders\templates\orders\checkout.html:194
 msgid "الشرقية"
 msgstr "Sharqia"
 
-#: .\orders\templates\orders\checkout.html:180
+#: .\orders\templates\orders\checkout.html:197
 msgid "القليوبية"
 msgstr "Qalyubia"
 
-#: .\orders\templates\orders\checkout.html:183
+#: .\orders\templates\orders\checkout.html:200
 msgid "الغربية"
 msgstr "Gharbia"
 
-#: .\orders\templates\orders\checkout.html:186
+#: .\orders\templates\orders\checkout.html:203
 msgid "المنوفية"
 msgstr "Menofia"
 
-#: .\orders\templates\orders\checkout.html:189
+#: .\orders\templates\orders\checkout.html:206
 msgid "البحيرة"
 msgstr "Beheira"
 
-#: .\orders\templates\orders\checkout.html:192
+#: .\orders\templates\orders\checkout.html:209
 msgid "الفيوم"
 msgstr "Fayoum"
 
-#: .\orders\templates\orders\checkout.html:200
-#: .\orders\templates\orders\checkout.html:202
+#: .\orders\templates\orders\checkout.html:217
+#: .\orders\templates\orders\checkout.html:219
 msgid "المدينة"
 msgstr "City"
 
-#: .\orders\templates\orders\checkout.html:209
+#: .\orders\templates\orders\checkout.html:226
 msgid "ملاحظات إضافية (اختياري)"
 msgstr "Additional Notes (Optional)"
 
-#: .\orders\templates\orders\checkout.html:211
+#: .\orders\templates\orders\checkout.html:228
 msgid "أي ملاحظات أو تعليمات خاصة بالتوصيل"
 msgstr "Any notes or special delivery instructions"
 
-#: .\orders\templates\orders\checkout.html:216
+#: .\orders\templates\orders\checkout.html:233
 msgid "تأكيد الطلب"
 msgstr "Confirm Order"
 
-#: .\orders\templates\orders\checkout.html:228
+#: .\orders\templates\orders\checkout.html:245
 #: .\orders\templates\orders\order_success.html:255
 msgid "ملخص الطلب"
 msgstr "Order Summary"
 
-#: .\orders\templates\orders\checkout.html:235
+#: .\orders\templates\orders\checkout.html:252
 #: .\orders\templates\orders\my_orders.html:260
 #: .\orders\templates\orders\order_detail.html:385
 #: .\orders\templates\orders\order_detail.html:392
@@ -1236,58 +1324,63 @@ msgstr "Order Summary"
 #: .\orders\templates\orders\order_detail.html:413
 #: .\orders\templates\orders\order_detail.html:422
 #: .\orders\templates\orders\order_detail.html:431
-#: .\products\templates\products\product_detail.html:174
+#: .\products\templates\products\product_detail.html:144
+#: .\products\templates\products\product_detail.html:147
+#: .\products\templates\products\product_detail.html:149
+#: .\products\templates\products\product_detail.html:306
+#: .\products\templates\products\product_detail.html:308
+#: .\products\templates\products\product_detail.html:341
 #: .\products\templates\products\product_list.html:227
 msgid "جنيه"
 msgstr "EGP"
 
-#: .\orders\templates\orders\checkout.html:240
+#: .\orders\templates\orders\checkout.html:257
 msgid "رسوم الشحن:"
 msgstr "Shipping Fee:"
 
-#: .\orders\templates\orders\checkout.html:244
+#: .\orders\templates\orders\checkout.html:261
 msgid "مجاناً"
 msgstr "Free"
 
-#: .\orders\templates\orders\checkout.html:258
-#: .\orders\templates\orders\checkout.html:394
+#: .\orders\templates\orders\checkout.html:275
+#: .\orders\templates\orders\checkout.html:411
 msgid "لا يوجد منتجات"
 msgstr "No items"
 
-#: .\orders\templates\orders\checkout.html:262
+#: .\orders\templates\orders\checkout.html:279
 #: .\orders\templates\orders\my_orders.html:272
 msgid "منتج"
 msgstr "Item"
 
-#: .\orders\templates\orders\checkout.html:266
+#: .\orders\templates\orders\checkout.html:283
 msgid "منتجات"
 msgstr "Items"
 
-#: .\orders\templates\orders\checkout.html:280
+#: .\orders\templates\orders\checkout.html:297
 msgid "(شامل جميع الرسوم)"
 msgstr "(Inclusive of all fees)"
 
-#: .\orders\templates\orders\checkout.html:287
+#: .\orders\templates\orders\checkout.html:304
 msgid "ملحوظة هامة:"
 msgstr "Important Note:"
 
-#: .\orders\templates\orders\checkout.html:290
+#: .\orders\templates\orders\checkout.html:307
 msgid "سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب وموعد التوصيل"
 msgstr ""
 "We will contact you within 24 hours to confirm the order and delivery time"
 
-#: .\orders\templates\orders\checkout.html:297
+#: .\orders\templates\orders\checkout.html:314
 #: .\orders\templates\orders\order_success.html:309
 msgid "متابعة التسوق"
 msgstr "Continue Shopping"
 
-#: .\orders\templates\orders\checkout.html:396
+#: .\orders\templates\orders\checkout.html:413
 #, fuzzy
 #| msgid "منتج"
 msgid "1 منتج"
 msgstr "Item"
 
-#: .\orders\templates\orders\checkout.html:398
+#: .\orders\templates\orders\checkout.html:415
 #, fuzzy
 #| msgid "منتجات"
 msgid " منتجات"
@@ -1402,118 +1495,187 @@ msgstr "Cash on Delivery Only"
 #| msgid "الرئيسية"
 msgid "العودة للرئيسية"
 msgstr "Home"
+#: .\orders\views.py:197
+msgid "⚠️ لا يوجد ألوان متاحة لهذا المنتج."
+msgstr "⚠️ No colors are available for this product."
 
-#: .\products\templates\products\product_detail.html:104
+#: .\orders\views.py:206
+msgid "❌ اللون المحدد غير موجود لهذا المنتج."
+msgstr "❌ The selected color does not exist for this product."
+
+#: .\orders\views.py:227
+msgid "⚠️ كمية غير متاحة"
+msgstr "⚠️ Quantity not available."
+
+#: .\orders\views.py:254
+#: .\orders\views.py:258
+msgid "⚠️ كمية غير متاحة لهذا اللون"
+msgstr "⚠️ Quantity not available for this color."
+
+#: .\orders\views.py:282
+msgid "❌ السلة فارغة."
+msgstr "❌ The cart is empty."
+
+#: .\orders\views.py:286
+msgid "❌ السلة غير موجودة."
+msgstr "❌ The cart does not exist."
+
+#: .\orders\views.py:300
+msgid "❌ يرجى ملء جميع الحقول المطلوبة."
+msgstr "❌ Please fill in all required fields."
+
+#: .\orders\views.py:309
+msgid "يرجى تعديل الكمية في السلة."
+msgstr "Please adjust the quantity in the cart."
+
+#: .\products\templates\products\product_detail.html:58
 msgid "breadcrumb"
 msgstr "Breadcrumb"
 
-#: .\products\templates\products\product_detail.html:134
-msgid "متوفر"
-msgstr "In Stock"
+#: .\products\templates\products\product_detail.html:84
+#, fuzzy
+#| msgid "رمز التحقق"
+msgid "التحقق..."
+msgstr "Verification Code"
 
-#: .\products\templates\products\product_detail.html:138
-#: .\products\templates\products\product_detail.html:221
-msgid "غير متوفر"
-msgstr "Out of Stock"
+#: .\products\templates\products\product_detail.html:133
+msgid "كود المنتج:"
+msgstr "Product code:"
 
-#: .\products\templates\products\product_detail.html:180
+#: .\products\templates\products\product_detail.html:160
+msgid "اللون المتاح:"
+msgstr "Available Color:"
+
+#: .\products\templates\products\product_detail.html:161
+#: .\products\templates\products\product_detail.html:349
+#, fuzzy
+#| msgid "اختر المحافظة"
+msgid "اختر اللون"
+msgstr "Select Governorate"
+
+#: .\products\templates\products\product_detail.html:185
+#, fuzzy
+#| msgid "متجر الأدوات الكهربائية - السلة"
+msgid "لا توجد خيارات ألوان لهذا المنتج"
+msgstr "Electrical Tools Store - Cart"
+
+#: .\products\templates\products\product_detail.html:191
 msgid "وصف المنتج:"
 msgstr "Product Description:"
 
-#: .\products\templates\products\product_detail.html:189
+#: .\products\templates\products\product_detail.html:200
 msgid "الكمية:"
 msgstr "Quantity"
 
-#: .\products\templates\products\product_detail.html:203
-#, python-format
-msgid "متوفر في المخزون (%(q)s قطعة)"
-msgstr "In stock (%(q)s items)"
-
-#: .\products\templates\products\product_detail.html:205
-msgid "غير متوفر حالياً"
-msgstr "Currently unavailable"
-
-#: .\products\templates\products\product_detail.html:215
-#: .\products\templates\products\product_list.html:235
+#: .\products\templates\products\product_detail.html:222
+#: .\products\templates\products\product_list.html:241
 msgid "أضف إلى السلة"
 msgstr "Add to Cart"
 
-#: .\products\templates\products\product_detail.html:228
-msgid "معرف المنتج:"
-msgstr "Product ID:"
+#: .\products\templates\products\product_detail.html:237
+msgid "الوصف الكامل"
+msgstr "Full Description"
 
-#: .\products\templates\products\product_detail.html:236
-msgid "الفئة:"
-msgstr "Category:"
-
-#: .\products\templates\products\product_detail.html:245
-msgid "العلامة التجارية:"
-msgstr "Brand:"
-
-#: .\products\templates\products\product_detail.html:271
+#: .\products\templates\products\product_detail.html:243
 msgid "الشحن والإرجاع"
 msgstr "Shipping & Returns"
 
-#: .\products\templates\products\product_detail.html:287
-#, fuzzy
-#| msgid "رسوم الشحن:"
+#: .\products\templates\products\product_detail.html:256
 msgid "سياسة الشحن"
-msgstr "Shipping Fee:"
+msgstr "Shipping Policy"
 
-#: .\products\templates\products\product_detail.html:293
+#: .\products\templates\products\product_detail.html:259
 msgid "شحن مجاني للطلبات فوق 500 جنيه داخل القاهرة"
 msgstr "Free shipping for orders over 500 EGP within Cairo"
 
-#: .\products\templates\products\product_detail.html:298
+#: .\products\templates\products\product_detail.html:260
 msgid "التوصيل خلال 2-4 أيام عمل داخل القاهرة والجيزة"
 msgstr "Delivery within 2–4 business days in Cairo and Giza"
 
-#: .\products\templates\products\product_detail.html:303
+#: .\products\templates\products\product_detail.html:261
 msgid "التوصيل خلال 5-7 أيام عمل للمحافظات الأخرى"
 msgstr "Delivery within 5–7 business days for other governorates"
 
-#: .\products\templates\products\product_detail.html:308
+#: .\products\templates\products\product_detail.html:262
 msgid "تغليف آمن ومحترف لحماية المنتج أثناء الشحن"
 msgstr ""
 "Secure and professional packaging to protect the product during shipping"
 
-#: .\products\templates\products\product_detail.html:314
+#: .\products\templates\products\product_detail.html:266
 msgid "سياسة الإرجاع والاستبدال"
 msgstr "Return & Exchange Policy"
 
-#: .\products\templates\products\product_detail.html:320
+#: .\products\templates\products\product_detail.html:269
 msgid "إمكانية الإرجاع خلال 14 يوم من تاريخ الاستلام"
 msgstr "Returns are accepted within 14 days from the date of receipt"
 
-#: .\products\templates\products\product_detail.html:325
+#: .\products\templates\products\product_detail.html:270
 msgid "ضمان استرجاع المال كاملاً في حالة وجود عيب في المنتج"
 msgstr "Full refund guarantee in case of a product defect"
 
-#: .\products\templates\products\product_detail.html:330
+#: .\products\templates\products\product_detail.html:271
 msgid "استبدال مجاني في حالة وجود عيب صناعي"
 msgstr "Free replacement in case of a manufacturing defect"
 
-#: .\products\templates\products\product_detail.html:335
+#: .\products\templates\products\product_detail.html:272
 msgid "يجب أن يكون المنتج في حالته الأصلية مع التغليف"
 msgstr "The product must be in its original condition with packaging"
 
-#: .\products\templates\products\product_detail.html:340
+#: .\products\templates\products\product_detail.html:273
 msgid "فريق خدمة العملاء متاح للمساعدة على مدار الساعة"
 msgstr "Our customer service team is available 24/7 to assist you"
 
-#: .\products\templates\products\product_detail.html:347
+#: .\products\templates\products\product_detail.html:276
 msgid "ملاحظة:"
 msgstr "Note:"
 
-#: .\products\templates\products\product_detail.html:349
+#: .\products\templates\products\product_detail.html:277
 msgid ""
-"للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 "
-"2455 أو عبر البريد"
+"للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 "
+"2455 أو عبر البريد الإلكتروني info@elwsam.com"
 msgstr ""
+"For returns or exchanges, please contact customer service at +20 106 269 "
+"2455 or via email at info@elwsam.com"
 
-#: .\products\templates\products\product_detail.html:364
+#: .\products\templates\products\product_detail.html:292
 msgid "منتجات ذات صلة"
 msgstr "Related Products"
+
+#: .\products\templates\products\product_detail.html:371
+#, fuzzy
+#| msgid "متوفر في المخزون (%(q)s قطعة)"
+msgid "متوفر في المخزون"
+msgstr "In stock (%(q)s items)"
+
+#: .\products\templates\products\product_detail.html:371
+msgid "قطعة"
+msgstr ""
+
+#: .\products\templates\products\product_detail.html:374
+msgid "متوفر"
+msgstr "In Stock"
+
+#: .\products\templates\products\product_detail.html:377
+msgid "غير متوفر حالياً"
+msgstr "Currently unavailable"
+
+#: .\products\templates\products\product_detail.html:380
+msgid "غير متوفر"
+msgstr "Out of Stock"
+
+#: .\products\templates\products\product_detail.html:456
+msgid "يرجى اختيار اللون أولاً"
+msgstr ""
+
+#: .\products\templates\products\product_detail.html:461
+msgid "الكمية المطلوبة تفوق المتاح"
+msgstr ""
+
+#: .\products\templates\products\product_detail.html:484
+#, fuzzy
+#| msgid "تسجيل الخروج"
+msgid "تمت الإضافة بنجاح"
+msgstr "Logout"
 
 #: .\products\templates\products\product_list.html:8
 #, fuzzy
@@ -1596,7 +1758,7 @@ msgid "تصفية"
 msgstr "Filter"
 
 #: .\products\templates\products\product_list.html:133
-#: .\products\templates\products\product_list.html:255
+#: .\products\templates\products\product_list.html:261
 msgid "مسح الفلاتر"
 msgstr "Clear Filters"
 
@@ -1635,7 +1797,7 @@ msgstr "Out of Stock"
 msgid "الكمية محدودة"
 msgstr "Limited Stock"
 
-#: .\products\templates\products\product_list.html:250
+#: .\products\templates\products\product_list.html:256
 msgid "لم يتم العثور على منتجات تطابق معايير البحث"
 msgstr "No products match the search criteria"
 
@@ -1688,6 +1850,24 @@ msgstr "Saturday - Thursday: 9 AM - 6 PM"
 #: .\templates\base.html:251
 msgid "جميع الحقوق محفوظة © 2025 متجر الأدوات الكهربائية"
 msgstr "All rights reserved © 2025 Electrical Tools Store"
+
+#~ msgid "السعر *"
+#~ msgstr "Price *"
+
+#~ msgid "الكمية *"
+#~ msgstr "Quantity *"
+
+#~ msgid "حفظ"
+#~ msgstr "Save"
+
+#~ msgid "معرف المنتج:"
+#~ msgstr "Product ID:"
+
+#~ msgid "الفئة:"
+#~ msgstr "Category:"
+
+#~ msgid "العلامة التجارية:"
+#~ msgstr "Brand:"
 
 #~ msgid "مرحباً بكم في متجر الأدوات الكهربائية"
 #~ msgstr "Welcome to the Electrical Tools Store"

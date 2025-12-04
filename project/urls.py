@@ -46,7 +46,7 @@ urlpatterns = [
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('', include('home.urls')),
     path('products/', include('products.urls')),
-    path('orders/', include('orders.urls')),
+    path('orders/', include(('orders.urls', 'orders'), namespace='orders')),
     path('admin-panel/', include('admin_panel.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
 

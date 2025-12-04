@@ -161,20 +161,21 @@
                             </div>
                             <div class="color-options" id="colorOptions">
                                 {% for pc in product_colors %}
-                                <div class="color-option"
-                                     data-pc-id="{{ pc.id }}"
-                                     data-color-id="{{ pc.color.id }}"
-                                     data-color-name="{{ pc.color.name|escapejs }}"
-                                     data-color-hex="{{ pc.color.hex_code|default:'#cccccc' }}"
-                                     data-color-price="{{ pc.price }}"
-                                     data-color-quantity="{{ pc.quantity }}"
-                                     data-color-code="{{ pc.code|default:'' }}"
-                                     onclick="selectColor(this)">
-                                    <div class="color-circle"
-                                         style="background-color: {{ pc.color.hex_code|default:'#cccccc' }};"></div>
-                                    <span class="color-name">{{ pc.color.name }}</span>
-                                    <span class="color-price">{{ pc.price }} {% trans "ج" %}</span>
-                                </div>
+                                    <div class="color-option"
+                                        data-pc-id="{{ pc.id }}"
+                                        data-color-id="{{ pc.color.id }}"
+                                        data-color-name="{{ pc.color.name|escapejs }}"
+                                        data-color-hex="{{ pc.color.hex_code|default:'#cccccc' }}"
+                                        data-color-price="{{ pc.price|floatformat:2 }}"
+                                        data-color-quantity="{{ pc.quantity }}"
+                                        data-color-code="{{ pc.code|default:'' }}"
+                                        onclick="selectColor(this)">
+                                        <div class="color-circle"
+                                            style="background-color: {{ pc.color.hex_code|default:'#cccccc' }};"></div>
+                                        <span class="color-name">{{ pc.color.name }}</span>
+                                        <span class="color-price">{{ pc.price }} {% trans "ج" %}</span>
+                                    </div>
+
                                 {% endfor %}
                             </div>
                         </div>
@@ -209,6 +210,9 @@
                                 </span>
                             </div>
                         </div>
+                        <input type="hidden" id="selectedColorInput" value="">
+                        <input type="hidden" id="selectedColorId" value="">
+                        <input type="hidden" id="selectedProductColorId" value="">
 
                         <!-- Action Buttons -->
                         <div class="action-buttons">
@@ -269,8 +273,8 @@
                     </ul>
                     <div class="alert alert-info mt-4">
                         <strong><i class="fas fa-info-circle"></i>{% trans "ملاحظة:" %}</strong>
-                        {% trans "للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو عبر البريد" %}
-                        الإلكتروني info@elwsam.com
+                       {% trans "للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو عبر البريد الإلكتروني info@elwsam.com" %}
+
                     </div>
                 </div>
             </div>
@@ -316,39 +320,54 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    let selectedProductColorId = null; // ProductColor.id
-    let selectedColorId = null; // Color.id
-    let selectedColorPrice = null;
-    let selectedColorQuantity = 0;
 
-    // Helper to update UI when a product color is selected
+    const ADD_TO_CART_URL = "{% url 'orders:add-to-cart' %}";
+
+    let selectedProductColorId = null;
+    let selectedColorId = null;
+    let selectedColorPrice = 0;
+    let selectedColorQuantity = 0;
+    let productColorId = $("#selectedProductColorId").val();  // ← يجب التأكد أنه موجود
+
+
+    /*----------------------------------------------------
+     |  تحديث واجهة المستخدم عند اختيار اللون
+     ----------------------------------------------------*/
     function updateUIForSelection(data) {
-        // price
+
+        // السعر
         const priceEl = document.getElementById('productPrice');
         const currency = '{% trans "جنيه" %}';
         priceEl.innerHTML = `${data.price} <span class="currency">${currency}</span>`;
 
-        // code
+        // الكود
         document.getElementById('productCode').textContent = data.code || '-';
 
-        // selected color name
-        document.getElementById('selectedColorName').textContent = data.name || '{% trans "اختر اللون" %}';
+        // اسم اللون
+        document.getElementById('selectedColorName').textContent =
+            data.name || '{% trans "اختر اللون" %}';
 
-        // quantity input max and value
+        // تحديث الحقول المخفية
+        document.getElementById("selectedColorInput").value = data.name;
+        document.getElementById("selectedColorId").value = data.color_id;
+        document.getElementById("selectedProductColorId").value = data.pc_id;
+
+        // الكمية
         const qtyInput = document.getElementById('productQuantity');
         qtyInput.max = parseInt(data.quantity || 0);
+
         if (parseInt(qtyInput.value) > parseInt(qtyInput.max)) {
             qtyInput.value = qtyInput.max > 0 ? qtyInput.max : 1;
         }
 
-        // stock status
-        const stockStatus = document.getElementById('stockStatus');
+        // حالة المخزون
         const stockIcon = document.getElementById('stockIcon');
         const stockText = document.getElementById('stockText');
 
         if (parseInt(data.quantity) > 0) {
             stockIcon.className = 'fas fa-check';
-            stockText.textContent = "{{ _('متوفر في المخزون') }}" + " (" + data.quantity + " " + "{{ _('قطعة') }}" + ")";
+            stockText.textContent =
+                "{{ _('متوفر في المخزون') }}" + " (" + data.quantity + " {{ _('قطعة') }})";
             document.getElementById('addToCartBtn').disabled = false;
             document.getElementById('addToCartBtn').style.opacity = 1;
             document.getElementById('productBadge').textContent = '{% trans "متوفر" %}';
@@ -360,149 +379,139 @@
             document.getElementById('productBadge').textContent = '{% trans "غير متوفر" %}';
         }
 
-        // set globals
+        // حفظ البيانات
         selectedProductColorId = data.pc_id;
         selectedColorId = data.color_id;
+        
         selectedColorPrice = parseFloat(data.price || 0);
         selectedColorQuantity = parseInt(data.quantity || 0);
     }
 
-    // Called when user clicks a color-option
+
+    /*----------------------------------------------------
+     |  عند اختيار لون
+     ----------------------------------------------------*/
     function selectColor(element) {
-        // toggle active class
-        document.querySelectorAll('.color-option').forEach(function(opt) {
-            opt.classList.remove('active');
+
+        // إلغاء active من الجميع
+        document.querySelectorAll('.color-option').forEach(el => {
+            el.classList.remove('active');
         });
+
+        // إضافة active للعنصر المختار
         element.classList.add('active');
 
-        // read data attributes
+        // جمع البيانات
         const data = {
-            pc_id: element.getAttribute('data-pc-id'),
-            color_id: element.getAttribute('data-color-id'),
-            name: element.getAttribute('data-color-name'),
-            hex: element.getAttribute('data-color-hex'),
-            price: element.getAttribute('data-color-price'),
-            quantity: element.getAttribute('data-color-quantity'),
-            code: element.getAttribute('data-color-code')
+            pc_id: element.dataset.pcId,
+            color_id: element.dataset.colorId,
+            name: element.dataset.colorName,
+            hex: element.dataset.colorHex,
+            price: element.dataset.colorPrice,
+            quantity: element.dataset.colorQuantity,
+            code: element.dataset.colorCode
         };
 
-        // update UI
+        // التحديث
         updateUIForSelection(data);
     }
 
-    // Quantity Controls
+
+    /*----------------------------------------------------
+     |  التحكم في الكمية
+     ----------------------------------------------------*/
     function increaseQuantity() {
-        var input = document.getElementById('productQuantity');
-        var max = parseInt(input.max) || 1;
-        var current = parseInt(input.value) || 1;
-        if (current < max) {
-            input.value = current + 1;
-        }
+        const input = document.getElementById('productQuantity');
+        const max = parseInt(input.max) || 1;
+        if (parseInt(input.value) < max) input.value++;
     }
 
     function decreaseQuantity() {
-        var input = document.getElementById('productQuantity');
-        var min = parseInt(input.min) || 1;
-        var current = parseInt(input.value) || 1;
-        if (current > min) {
-            input.value = current - 1;
-        }
+        const input = document.getElementById('productQuantity');
+        const min = parseInt(input.min) || 1;
+        if (parseInt(input.value) > min) input.value--;
     }
 
-    // Change Main Image
+
+    /*----------------------------------------------------
+     |  تغيير الصورة الرئيسية
+     ----------------------------------------------------*/
     function changeImage(imageUrl, element) {
-        if (!imageUrl) return;
         document.getElementById('mainImage').src = imageUrl;
-        var thumbnails = document.querySelectorAll('.thumbnail');
-        thumbnails.forEach(function(thumb) {
-            thumb.classList.remove('active');
-        });
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
         element.classList.add('active');
     }
 
-    // Add to Cart Function
+
+    /*----------------------------------------------------
+     |  إضافة للسلة
+     ----------------------------------------------------*/
     function addToCart() {
-        var quantity = parseInt(document.getElementById('productQuantity').value) || 1;
-        var productId = '{{ object.id }}';
+
+        const quantity = parseInt(document.getElementById('productQuantity').value) || 1;
+        const productId = '{{ object.id }}';
 
         if (!selectedProductColorId) {
             showToast('{% trans "يرجى اختيار اللون أولاً" %}', 'cart-warning-toast');
             return;
         }
 
-        // validate quantity
-        if (quantity <= 0) {
-            showToast('{% trans "الكمية غير صحيحة" %}', 'cart-warning-toast');
-            return;
-        }
-        if (selectedColorQuantity && quantity > selectedColorQuantity) {
+        if (quantity > selectedColorQuantity) {
             showToast('{% trans "الكمية المطلوبة تفوق المتاح" %}', 'cart-warning-toast');
             return;
         }
 
+        console.log("SEND:", {
+            product_id: productId,
+            product_color_id: document.getElementById('selectedProductColorId').value,
+            color_id: document.getElementById('selectedColorId').value,
+            quantity: quantity
+        });
+
         $.ajax({
-            type: 'POST',
-            url: '/orders/add-to-cart',
+            url: "/orders/add-to-cart/",
+            method: "POST",
             data: {
-                'product_id': productId,
-                'product_color_id': selectedProductColorId,
-                'color_id': selectedColorId,
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
-                'quantity': quantity
+                product_id: productId,
+                product_color_id: document.getElementById('selectedProductColorId').value,
+                color_id: document.getElementById('selectedColorId').value,
+                quantity: quantity,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
             },
-            success: function(response) {
-                if (response.success) {
-                    $('#cart-count').text(response.cart_count);
-                    var messageClass = response.already_exists ? 'cart-update-toast' : 'cart-success-toast';
-                    showToast(response.message, messageClass);
-                } else if (response.out_of_stock) {
-                    showToast(response.message, 'cart-error-toast');
-                } else if (response.insufficient) {
-                    showToast(response.message, 'cart-warning-toast');
-                } else {
-                    showToast(response.message || '{% trans "حدث خطأ غير متوقع" %}', 'cart-error-toast');
-                }
+            success: function (response) {
+                console.log("SUCCESS:", response);
+                showToast('{% trans "تمت الإضافة بنجاح" %}', 'cart-success-toast');
             },
-            error: function(xhr) {
-                if (xhr.status === 401) {
-                    try {
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.login_required && response.login_url) {
-                            window.location.href = response.login_url;
-                            return;
-                        }
-                    } catch(e) {
-                        window.location.href = '/accounts/login/?next=' + window.location.pathname;
-                        return;
-                    }
-                }
-                showToast('{% trans "حدث خطأ أثناء إضافة المنتج للسلة" %} ❌', 'cart-error-toast');
+            error: function (xhr) {
+                console.log("ERROR RESPONSE:", xhr.responseText);
+                showToast("Server Error: " + xhr.responseText, 'cart-error-toast');
             }
         });
+
     }
 
+    /*----------------------------------------------------
+     |  الرسائل Toast
+     ----------------------------------------------------*/
     function showToast(message, className) {
-        var existingToast = $('.' + className);
-        if (existingToast.length) {
-            existingToast.remove();
-        }
-        var messageDiv = $('<div class="' + className + '"></div>').text(message);
-        $('body').append(messageDiv);
-        messageDiv.fadeIn(200).delay(3000).fadeOut(500, function() {
+        var el = $('<div class="' + className + '"></div>').text(message);
+        $('body').append(el);
+        el.fadeIn(200).delay(3000).fadeOut(500, function() {
             $(this).remove();
         });
     }
 
-    // On page load: auto-select the first color (if exists)
+
+    /*----------------------------------------------------
+     |  عند تحميل الصفحة: اختيار أول لون تلقائياً
+     ----------------------------------------------------*/
     document.addEventListener('DOMContentLoaded', function() {
-        const first = document.querySelector('.color-option');
 
-        if (first) {
-            // يوجد ألوان → اختر أول لون
-            selectColor(first);
+        const firstColor = document.querySelector('.color-option');
 
+        if (firstColor) {
+            selectColor(firstColor);
         } else {
-            // لا توجد ألوان → استخدم quantity من المنتج نفسه
             const qtyInput = document.getElementById('productQuantity');
 
             {% if object.quantity > 0 %}
@@ -511,16 +520,13 @@
                     "متوفر في المخزون ({{ object.quantity }} قطعة)";
                 document.getElementById('stockIcon').className = 'fas fa-check';
                 document.getElementById('productBadge').textContent = "متوفر";
-
             {% else %}
                 qtyInput.max = 1;
                 document.getElementById('stockText').textContent = "غير متوفر حالياً";
                 document.getElementById('stockIcon').className = 'fas fa-times';
                 document.getElementById('productBadge').textContent = "غير متوفر";
-
-                const addBtn = document.getElementById('addToCartBtn');
-                addBtn.disabled = true;
-                addBtn.style.opacity = 0.5;
+                document.getElementById('addToCartBtn').disabled = true;
+                document.getElementById('addToCartBtn').style.opacity = 0.5;
             {% endif %}
         }
     });

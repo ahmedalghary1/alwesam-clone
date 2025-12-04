@@ -52,6 +52,9 @@ class Product(models.Model):
 
     slug = models.SlugField(blank=True, null=True, unique=True)
 
+    def get_default_color(self):
+        return self.color.order_by('id').first()
+
     def get_min_price(self):
         color = self.color.order_by('price').first()
         return color.price if color else None

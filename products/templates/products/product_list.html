@@ -226,9 +226,15 @@
        </span>
        {% trans "جنيه" %}
       </div>
-      <form action="/orders/add-to-cart" class="add-to-cart-form" method="post">
+      <form action="{% url 'orders:add-to-cart' %}" class="add-to-cart-form" method="post">
        {% csrf_token %}
        <input name="product_id" type="hidden" value="{{ product.id }}"/>
+        {% with default_color=product.productcolor_set.first %}
+            {% if default_color %}
+                <input type="hidden" name="product_color_id" value="{{ default_color.id }}">
+            {% endif %}
+        {% endwith %}
+
        <button class="btn btn-add-cart" type="submit">
         <i class="fas fa-shopping-cart">
         </i>

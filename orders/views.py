@@ -11,6 +11,7 @@ from products.models import Product ,ProductColor
 from .models import DeliveryFee
 from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
+from django.utils.translation import gettext as _
 
 
 def checkout(request, item_id=None):
@@ -168,32 +169,62 @@ def checkout(request, item_id=None):
 def add_to_cart(request):
 
     product_id = request.POST.get('product_id')
-    color_id = request.POST.get('color_id')   # اللون المختار
+    product_color_id = request.POST.get('product_color_id')
+    color_id = request.POST.get('color_id')   # اختياري فقط لعرض اللون
     quantity = int(request.POST.get('quantity', 1))
 
-    # التحقق من وجود اللون
-    product_color = get_object_or_404(ProductColor, id=color_id)
+    # 1) تحقق من المنتج
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'message': _(f"❌ المنتج رقم {product_id} غير موجود.")
+        }, status=400)
 
-    # ---------------------------------------------------------
-    # 1) المستخدم غير مسجل دخول → Session Cart
-    # ---------------------------------------------------------
+
+    # -------------------------------------------------
+    # 🔥 لو product_color_id فارغ → اختر أول لون تلقائي
+    # -------------------------------------------------
+    if not product_color_id or not str(product_color_id).isdigit():
+        default_color = ProductColor.objects.filter(product=product).first()
+        if default_color:
+            product_color = default_color
+            product_color_id = default_color.id
+        else:
+            return JsonResponse({
+                'success': False,
+                'message': _("⚠️ لا يوجد ألوان متاحة لهذا المنتج.")
+            }, status=400)
+    else:
+        # 2) لو موجود → حاول جلبه
+        try:
+            product_color = ProductColor.objects.get(id=product_color_id, product=product)
+        except ProductColor.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': _("❌ اللون المحدد غير موجود لهذا المنتج.")
+            }, status=400)
+    # ---------------------------------------------
+    # 3) المستخدم غير مسجل دخول → Session Cart
+    # ---------------------------------------------
     if not request.user.is_authenticated:
-        session_cart = request.session.get('cart', {})
 
-        key = f"{product_id}-{color_id}"
+        session_cart = request.session.get('cart', {})
+        key = f"{product_id}-{product_color_id}"
 
         # تحقق من المخزون
         if quantity > product_color.quantity:
             return JsonResponse({
                 'success': False,
-                'message': f"⚠️ الكمية المتوفرة من اللون {product_color.color.name} هي {product_color.quantity}",
+                'message': _(f"⚠️ الكمية المتاحة فقط هي {product_color.quantity}")
             })
 
         # تحديث السلة
         if key in session_cart:
             new_qty = session_cart[key] + quantity
             if new_qty > product_color.quantity:
-                return JsonResponse({'success': False, 'message': '⚠️ كمية غير متاحة'})
+                return JsonResponse({'success': False, 'message': _('⚠️ كمية غير متاحة')})
             session_cart[key] = new_qty
         else:
             session_cart[key] = quantity
@@ -202,48 +233,39 @@ def add_to_cart(request):
 
         return JsonResponse({
             'success': True,
-            'message': f"🛒 تم إضافة المنتج بلون {product_color.color.name} إلى السلة",
+            'message': _(f"🛒 تم إضافة المنتج بلون {product_color.color.name} إلى السلة"),
             'cart_count': len(session_cart),
         })
 
+    # ---------------------------------------------
+    # 4) مسجل دخول → Database Cart
+    # ---------------------------------------------
+    cart, _ = Cart.objects.get_or_create(user=request.user, status='Inprogress')
 
-    # ---------------------------------------------------------
-    # 2) المستخدم مسجل دخول
-    # ---------------------------------------------------------
-    if request.method == 'POST':
-        product = get_object_or_404(Product, id=product_id)
+    cart_detail, created = CartDetail.objects.get_or_create(
+        cart=cart,
+        product=product,
+        color=product_color
+    )
 
-        cart, _ = Cart.objects.get_or_create(user=request.user, status='Inprogress')
+    if not created:
+        new_qty = cart_detail.quantity + quantity
+        if new_qty > product_color.quantity:
+            return JsonResponse({'success': False, 'message': _('⚠️ كمية غير متاحة لهذا اللون')})
+        cart_detail.quantity = new_qty
+    else:
+        if quantity > product_color.quantity:
+            return JsonResponse({'success': False, 'message': _('⚠️ كمية غير متاحة لهذا اللون')})
+        cart_detail.quantity = quantity
 
-        # كل عنصر بالسلة مرتبط بمنتج ولون
-        cart_detail, created = CartDetail.objects.get_or_create(
-            cart=cart,
-            product=product,
-            color=product_color
-        )
+    cart_detail.total = round(product_color.price * cart_detail.quantity, 2)
+    cart_detail.save()
 
-        # التحقق من المخزون
-        if not created:
-            new_qty = cart_detail.quantity + quantity
-            if new_qty > product_color.quantity:
-                return JsonResponse({'success': False, 'message': '⚠️ كمية غير متاحة لهذا اللون'})
-            cart_detail.quantity = new_qty
-        else:
-            if quantity > product_color.quantity:
-                return JsonResponse({'success': False, 'message': '⚠️ كمية غير متاحة لهذا اللون'})
-            cart_detail.quantity = quantity
-
-        # الحساب الجديد
-        cart_detail.total = round(product_color.price * cart_detail.quantity, 2)
-        cart_detail.save()
-
-        return JsonResponse({
-            'success': True,
-            'message': f"🛒 تمت إضافة المنتج بلون {product_color.color.name} إلى السلة",
-            'cart_count': CartDetail.objects.filter(cart=cart).count(),
-        })
-
-    return JsonResponse({'success': False})
+    return JsonResponse({
+        'success': True,
+        'message': _(f"🛒 تمت إضافة المنتج بلون {product_color.color.name} إلى السلة"),
+        'cart_count': CartDetail.objects.filter(cart=cart).count(),
+    })
 
 @login_required
 def create_order(request):
@@ -257,11 +279,11 @@ def create_order(request):
             cart_detail = CartDetail.objects.filter(cart=cart)
             
             if not cart_detail.exists():
-                messages.error(request, '❌ السلة فارغة.')
+                messages.error(request, _('❌ السلة فارغة.'))
                 return redirect('checkout')
             
         except Cart.DoesNotExist:
-            messages.error(request, '❌ السلة غير موجودة.')
+            messages.error(request, _('❌ السلة غير موجودة.'))
             return redirect('checkout')
         
         # Get form data
@@ -275,16 +297,16 @@ def create_order(request):
         
         # Validation
         if not all([customer_name, customer_phone, governorate, address_line]):
-            messages.error(request, '❌ يرجى ملء جميع الحقول المطلوبة.')
+            messages.error(request, _('❌ يرجى ملء جميع الحقول المطلوبة.'))
             return redirect('orders:checkout')
         
         # التحقق من توفر الكمية لجميع المنتجات في السلة
         for cart_item in cart_detail:
-            if cart_item.quantity > cart_item.product.quantity:
+            if cart_item.quantity > cart_item.color.quantity:
                 messages.error(
                     request, 
-                    f'❌ عذراً، الكمية المتوفرة من "{cart_item.product.name}" هي {cart_item.product.quantity} فقط. '
-                    f'يرجى تعديل الكمية في السلة.'
+                    _(f'❌ عذراً، الكمية المتوفرة من "{cart_item.product.name}" هي {cart_item.color.quantity} فقط. '),
+                    _(f'يرجى تعديل الكمية في السلة.')
                 )
                 return redirect('orders:checkout')
         
@@ -315,24 +337,22 @@ def create_order(request):
             # Create order details from cart
             for cart_item in cart_detail:
 
+                quantity = cart_item.quantity  # ← الكمية التي اختارها المستخدم
 
+                # إنشاء تفاصيل الطلب
                 OrderDetail.objects.create(
                     order=order,
                     product=cart_item.product,
-                    quantity=cart_item.quantity,
-                    price=cart_item.product.price,
-                    total=cart_item.total
+                    quantity=quantity,
+                    price=cart_item.color.price,
+                    total=cart_item.color.price * quantity
                 )
-                
-                print(order,
-                    cart_item.product,
-                    cart_item.quantity,
-                    cart_item.product.price,
-                    cart_item.total)
+
                 # إنقاص الكمية من المخزون
-                product = cart_item.product
-                product.quantity -= cart_item.quantity
-                product.save()
+                cart_item.color.quantity -= quantity
+                cart_item.color.save()
+
+
             
             # Calculate and save order total
             order.calculate_total()
