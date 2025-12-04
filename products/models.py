@@ -10,11 +10,11 @@ class Category(models.Model):
     """
     Product categories for filtering and organization.
     """
-    name = models.CharField('اسم الفئة', max_length=100)
-    slug = models.SlugField(blank=True, null=True, unique=True)
+    name = models.CharField('اسم الفئة', max_length=100 , db_index=True)
+    slug = models.SlugField(blank=True, null=True, unique=True, db_index=True)
     description = models.TextField('الوصف', max_length=500, blank=True)
     icon = models.CharField('أيقونة', max_length=50, blank=True, help_text='Font Awesome icon class')
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now, db_index=True)
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -48,19 +48,19 @@ class Color(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField('name', max_length=120,blank=True,null=True)
-    category = models.ForeignKey(Category, verbose_name='الفئة', related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField('name', max_length=120,blank=True,null=True, db_index=True)
+    category = models.ForeignKey(Category, verbose_name='الفئة', related_name='products', on_delete=models.SET_NULL, null=True, blank=True, db_index=True)
     subtitle = models.TextField('subtitle', max_length=500, blank=True, null=True)
     image = models.ImageField(upload_to='product_colors', blank=True, null=True)
 
     description = models.TextField('description', max_length=50000, blank=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now, db_index=True)
     tags = TaggableManager()
     brand = models.CharField('العلامة التجارية', max_length=100, blank=True)  # Optional brand field
     is_featured = models.BooleanField('مميز', default=False)  # Featured products
     is_active = models.BooleanField('نشط', default=True)  # Active/inactive products
 
-    slug = models.SlugField(blank=True, null=True, unique=True)
+    slug = models.SlugField(blank=True, null=True, unique=True, db_index=True)
 
     def get_default_color(self):
         return self.color.order_by('id').first()

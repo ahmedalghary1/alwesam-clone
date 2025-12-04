@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "sorl.thumbnail",   # مكتبة الصور المصغرة
+
 
     'taggit',
 
@@ -68,6 +70,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+    }
+}
+# إعدادات sorl (افتراضية جيدة)
+THUMBNAIL_DEBUG = False
+THUMBNAIL_DEFAULT_STORAGE = "django.core.files.storage.FileSystemStorage"
+# إن أردت حفظ المصغرات في S3 أو غيره ضع storage مناسب هنا
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
