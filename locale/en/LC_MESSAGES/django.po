@@ -1122,7 +1122,7 @@ msgstr ""
 
 #: .\home\templates\home\home.html:73
 msgid "لماذا نحن؟"
-msgstr "Why Choose Us?"
+msgstr"? Why Choose Us"
 
 #: .\home\templates\home\home.html:84
 msgid "جودة عالية"
@@ -1468,33 +1468,25 @@ msgid "✅ تم تأكيد طلبك بنجاح!"
 msgstr "✅ Your order has been successfully confirmed!"
 
 #: .\orders\templates\orders\order_success.html:204
-#, fuzzy
-#| msgid "سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب وموعد التوصيل"
 msgid "شكراً لك، سنتواصل معك قريباً لتأكيد موعد التوصيل"
 msgstr ""
 "We will contact you within 24 hours to confirm the order and delivery time"
 
 #: .\orders\templates\orders\order_success.html:207
-#, fuzzy
-#| msgid "تأكيد الطلب"
 msgid "رقم الطلب:"
-msgstr "Confirm Order"
+msgstr "Order Namber:"
 
 #: .\orders\templates\orders\order_success.html:296
 msgid "طريقة الدفع:"
 msgstr "Payment Method"
 
 #: .\orders\templates\orders\order_success.html:298
-#, fuzzy
-#| msgid "الدفع عند الاستلام فقط"
-msgid "الدفع عند الاستلام (نقداً عند استلام المنتج)"
+msgid"الدفع عند الاستلام (نقداً عند استلام المنتج)"
 msgstr "Cash on Delivery Only"
 
 #: .\orders\templates\orders\order_success.html:314
-#, fuzzy
-#| msgid "الرئيسية"
-msgid "العودة للرئيسية"
-msgstr "Home"
+msgid"العودة للرئيسية"
+msgstr "Back To Home"
 
 #: .\orders\views.py:182
 msgid "❌ المنتج رقم %(id)s غير موجود."
