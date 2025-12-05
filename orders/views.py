@@ -282,11 +282,11 @@ def create_order(request):
             
             if not cart_detail.exists():
                 messages.error(request, _('❌ السلة فارغة.'))
-                return redirect('checkout')
+                return redirect('orders:checkout')
             
         except Cart.DoesNotExist:
             messages.error(request, _('❌ السلة غير موجودة.'))
-            return redirect('checkout')
+            return redirect('orders:checkout')
         
         # Get form data
         customer_name = request.POST.get('customer_name')
