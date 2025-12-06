@@ -289,3 +289,11 @@ body {
     margin-bottom: 15px;
 }
 
+.cart-header {
+    background-image: url('/static/images/cart-bg.jpg');
+    background-size: cover;          /* ← هذا يجعل الصورة تملأ العرض بالكامل */
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 70px 0;
+    color: #fff;
+}

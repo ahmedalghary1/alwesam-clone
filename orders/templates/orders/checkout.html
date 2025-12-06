@@ -13,19 +13,18 @@
 {% endblock style %}
 
 {% block content %}
-<!-- Page Header -->
-<div class="page-header">
- <div class="container text-center">
-  <h1 class="page-title">
-   <i class="fas fa-shopping-cart">
-   </i>
-   {% trans "سلة التسوق" %}
-  </h1>
-  <p class="lead">
-   {% trans "راجع طلبك قبل التأكيد" %}
-  </p>
- </div>
+<div class="page-header cart-header">
+    <div class="container text-center">
+        <h1 class="page-title">
+            <i class="fas fa-shopping-cart"></i>
+            {% trans "سلة التسوق" %}
+        </h1>
+        <p class="lead">
+            {% trans "راجع طلبك قبل التأكيد" %}
+        </p>
+    </div>
 </div>
+
 <!-- Cart Section -->
 <section class="cart-section">
  <div class="container">

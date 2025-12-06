@@ -1,25 +1,22 @@
 /* Hero Section */
-.hero-section {
+/* .hero-section {
     background: linear-gradient(180deg, #000000 0%, #4d4d4d 100%);
     color: var(--secondary-white);
     position: relative;
     padding-top: 20px;
     overflow: hidden;
 
+} */
 
-}
-
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".1" fill="%23FFD700"/></svg>') no-repeat bottom;
+.hero-section {
+    background-image: url('/static/images/cart-bg.jpg'); /* نفس الخلفية */
     background-size: cover;
-    opacity: 0.1;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 40px 0;     /* تحكم في الارتفاع */
+    color: #fff;         /* اجعل النص ظاهر على الخلفية */
 }
+
 
 .hero-content {
     position: relative;
@@ -60,6 +57,18 @@
     color: var(--primary-black);
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+}
+.hero-image {
+    max-width: 100%;   /* الحجم الطبيعي لجميع الشاشات */
+    width: 100%;
+}
+
+/* الشاشات الكبيرة (أكبر من 1200px مثلاً) */
+@media (min-width: 1200px) {
+    .hero-image {
+        width: 120%;       /* تكبير الصورة فقط على الشاشات الكبيرة */
+        max-width: none;   /* إزالة التقييد حتى يمكن تكبيرها */
+    }
 }
 
 /* About Section */
