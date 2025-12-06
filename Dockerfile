@@ -7,7 +7,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y curl libpq-dev
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-COPY src/requirements.txt .
+COPY requirements.txt .
 RUN uv pip install -r requirements.txt --system
 
 COPY . . 
