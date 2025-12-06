@@ -5,6 +5,7 @@ from accounts.models import CustomUser
 from django.utils import timezone
 from django.utils.text import slugify
 
+from utils.compriss_image import convert_to_webp_and_delete_original
 
 class Category(models.Model):
     """
@@ -68,11 +69,29 @@ class Product(models.Model):
     def get_min_price(self):
         color = self.color.order_by('price').first()
         return color.price if color else None
+
     def save(self, *args, **kwargs):
+        is_new_image = False
+
+        if self.image:  
+            if self.pk:
+                old = Product.objects.filter(pk=self.pk).first()
+                if old and old.image.name != self.image.name:
+                    is_new_image = True
+            else:
+                is_new_image = True
+
+        super().save(*args, **kwargs)
+
+        # معالجة الصورة إن كانت جديدة
+        if self.image and is_new_image:
+            convert_to_webp_and_delete_original(self.image)
+            super().save(update_fields=['image'])
+
+        # إنشاء slug إذا لم يوجد
         if not self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
-        super().save(*args, **kwargs)
-        
+            super().save(update_fields=['slug'])
     def __str__(self) :
         return self.name
 
@@ -106,6 +125,22 @@ class ProductImages(models.Model):
     product = models.ForeignKey(Product,verbose_name=('product'),related_name='product_image',on_delete=models.CASCADE)
     image = models.ImageField(('image'),upload_to='productimages')
 
+    def save(self, *args, **kwargs):
+        is_new_image = False
+
+        if self.image:
+            if self.pk:
+                old = ProductImages.objects.filter(pk=self.pk).first()
+                if old and old.image.name != self.image.name:
+                    is_new_image = True
+            else:
+                is_new_image = True
+
+        super().save(*args, **kwargs)
+
+        if self.image and is_new_image:
+            convert_to_webp_and_delete_original(self.image)
+            super().save(update_fields=['image'])
 class Review(models.Model):
     user = models.ForeignKey(CustomUser,related_name='review_user',on_delete=models.SET_NULL,null=True)
     product = models.ForeignKey(Product,related_name='Review_product',on_delete=models.CASCADE)

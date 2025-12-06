@@ -1765,16 +1765,12 @@ msgid "السعر: من الأعلى للأقل"
 msgstr "Price: High to Low"
 
 #: .\products\templates\products\product_list.html:118
-#, fuzzy
-#| msgid "الاسم بالكامل"
 msgid "الاسم: أ-ي"
-msgstr "Full Name"
+msgstr "Name: A-Z"
 
 #: .\products\templates\products\product_list.html:121
-#, fuzzy
-#| msgid "الاسم بالكامل"
 msgid "الاسم: ي-أ"
-msgstr "Full Name"
+msgstr "Name: Z-A"
 
 #: .\products\templates\products\product_list.html:128
 msgid "تصفية"
