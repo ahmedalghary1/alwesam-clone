@@ -121,6 +121,7 @@ class ProductColor(models.Model):
     def __str__(self):
         return f"{self.product.name} - {self.color.name}"
 
+
 class ProductImages(models.Model):
     product = models.ForeignKey(Product,verbose_name=('product'),related_name='product_image',on_delete=models.CASCADE)
     image = models.ImageField(('image'),upload_to='productimages')
@@ -141,6 +142,8 @@ class ProductImages(models.Model):
         if self.image and is_new_image:
             convert_to_webp_and_delete_original(self.image)
             super().save(update_fields=['image'])
+
+
 class Review(models.Model):
     user = models.ForeignKey(CustomUser,related_name='review_user',on_delete=models.SET_NULL,null=True)
     product = models.ForeignKey(Product,related_name='Review_product',on_delete=models.CASCADE)
