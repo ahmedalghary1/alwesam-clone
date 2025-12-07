@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Min
 from django.utils import timezone
 
 from .decorators import admin_required
@@ -50,25 +50,32 @@ def admin_dashboard(request):
 
 @admin_required
 def admin_products_list(request):
-
-    products = Product.objects.all().order_by("-id")
+    # قاعدة: جلب كل المنتجات (يمكن تضيف .filter(is_active=True) لو أردت)
+    products_qs = Product.objects.all().order_by("-id")
 
     # Search
     search = request.GET.get("search", "")
     if search:
-        products = products.filter(name__icontains=search)
+        products_qs = products_qs.filter(name__icontains=search)
 
     # Filter by category
     category_id = request.GET.get("category", "")
     if category_id:
-        products = products.filter(category_id=category_id)
+        products_qs = products_qs.filter(category_id=category_id)
 
     # Filter by status
     status = request.GET.get("status", "")
     if status == "active":
-        products = products.filter(is_active=True)
+        products_qs = products_qs.filter(is_active=True)
     elif status == "inactive":
-        products = products.filter(is_active=False)
+        products_qs = products_qs.filter(is_active=False)
+
+    # Annotate: مجموع الكمية (sum of variant.quantity) وأقل سعر (min of variant.price)
+    # استخدم distinct() فقط إذا أردت تجنّب مكررات عند وجود علاقات متعددة، لكن هنا annotate على علاقة FK يكفي
+    products = products_qs.annotate(
+        total_quantity=Sum('variants__quantity'),
+        min_price=Min('variants__price'),
+    )
 
     categories = Category.objects.all()
 
@@ -79,6 +86,7 @@ def admin_products_list(request):
     }
 
     return render(request, "admin_panel/products_list.html", context)
+
 
 @admin_required
 def admin_product_create(request):
