@@ -2,42 +2,39 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db.models import Count, Sum
 from django.utils import timezone
-from datetime import timedelta
-from django.db import transaction
 
 from .decorators import admin_required
-from .forms import ProductForm, ProductImageFormSet, OrderStatusForm, CategoryForm
-from products.models import Product, Category ,ProductColor,ProductImages
+from .forms import ProductForm, OrderStatusForm, CategoryForm, ProductVariantFormSet, VariantImageFormSet
+from products.models import Product, Category ,ProductVariant , ProductVariantImage
 from orders.models import Order, OrderDetail
 from accounts.models import CustomUser
-from .forms import ProductColorFormSet
-
+from .forms import ProductVariantFormSet
 
 @admin_required
 def admin_dashboard(request):
-    """
-    Admin dashboard with statistics.
-    """
-    # Get statistics
+
     total_products = Product.objects.filter(is_active=True).count()
     total_orders = Order.objects.count()
     pending_orders = Order.objects.filter(status='Received').count()
     total_users = CustomUser.objects.count()
-    
-    # Recent orders
+
     recent_orders = Order.objects.all().order_by('-order_time')[:10]
-    
-    # Low stock products (quantity < 10)
-    low_stock_products = ProductColor.objects.filter(quantity__lt=10).order_by('quantity')[:5]
-    
-    # Revenue this month
+
+    # 🔵 عرض المنتجات التي لها كميات منخفضة
+    low_stock_products = (
+        Product.objects
+        .filter(variants__quantity__lt=10)
+        .distinct()
+        .order_by('variants__quantity')[:5]
+    )
+
     current_month = timezone.now().month
     current_year = timezone.now().year
     monthly_revenue = Order.objects.filter(
         order_time__month=current_month,
         order_time__year=current_year
     ).aggregate(total=Sum('total'))['total'] or 0
-    
+
     context = {
         'total_products': total_products,
         'total_orders': total_orders,
@@ -47,138 +44,192 @@ def admin_dashboard(request):
         'low_stock_products': low_stock_products,
         'monthly_revenue': monthly_revenue,
     }
-    
+
     return render(request, 'admin_panel/dashboard.html', context)
 
 
 @admin_required
 def admin_products_list(request):
-    """
-    List all products with search and filter.
-    """
-    products = Product.objects.all().order_by('-created_at')
-    products_color= ProductColor.objects.all()
-    
+
+    products = Product.objects.all().order_by("-id")
+
     # Search
-    search = request.GET.get('search', '')
+    search = request.GET.get("search", "")
     if search:
         products = products.filter(name__icontains=search)
-    
+
     # Filter by category
-    category_id = request.GET.get('category', '')
+    category_id = request.GET.get("category", "")
     if category_id:
         products = products.filter(category_id=category_id)
-    
-    # Filter by status
-    status = request.GET.get('status', '')
-    if status == 'active':
-        products = products.filter(is_active=True)
-    elif status == 'inactive':
-        products = products.filter(is_active=False)
-    
-    categories = Category.objects.all()
-    
-    context = {
-        'products_color':products_color,
-        'products': products,
-        'categories': categories,
-        'search': search,
-    }
-    
-    return render(request, 'admin_panel/products_list.html', context)
 
+    # Filter by status
+    status = request.GET.get("status", "")
+    if status == "active":
+        products = products.filter(is_active=True)
+    elif status == "inactive":
+        products = products.filter(is_active=False)
+
+    categories = Category.objects.all()
+
+    context = {
+        "products": products,
+        "categories": categories,
+        "search": search,
+    }
+
+    return render(request, "admin_panel/products_list.html", context)
 
 @admin_required
 def admin_product_create(request):
-    if request.method == "POST":
-        form = ProductForm(request.POST, request.FILES)
-        color_formset = ProductColorFormSet(request.POST, prefix='colors')
-        image_formset = ProductImageFormSet(request.POST, request.FILES, prefix='images')
-
-        if form.is_valid() and color_formset.is_valid() and image_formset.is_valid():
-            product = form.save()
-
-            # حفظ ألوان المنتج
-            color_forms = color_formset.save(commit=False)
-            for color_item in color_forms:
-                color_item.product = product
-                color_item.save()
-
-            # حفظ الصور الإضافية
-            image_forms = image_formset.save(commit=False)
-            for img in image_forms:
-                img.product = product
-                img.save()
-
-            return redirect("admin_panel:products-list")
-
-    else:
-        form = ProductForm()
-        color_formset = ProductColorFormSet(prefix='colors')
-        image_formset = ProductImageFormSet(prefix='images')
-
-    return render(request, "admin_panel/product_form.html", {
-        "form": form,
-        "color_formset": color_formset,
-        "image_formset": image_formset,
-        "action": "create",
-    })
-
-
-@admin_required
-def admin_product_edit(request, product_id):
-    product = Product.objects.get(id=product_id)
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES, instance=product)
-        image_formset = ProductImageFormSet(request.POST, request.FILES, instance=product, prefix='images')
-        color_formset = ProductColorFormSet(request.POST, request.FILES, instance=product, prefix='colors')
+        form = ProductForm(request.POST, request.FILES)
+        variant_formset = ProductVariantFormSet(request.POST, request.FILES)
 
-        if form.is_valid() and image_formset.is_valid() and color_formset.is_valid():
-            form.save()
-            image_formset.save()
+        if form.is_valid() and variant_formset.is_valid():
 
-            # حفظ الألوان
-            color_forms = color_formset.save(commit=False)
-            for item in color_forms:
-                item.product = product
-                item.save()
+            # 1) حفظ المنتج
+            product = form.save()
 
-            # حذف الألوان المحذوفة
-            for obj in color_formset.deleted_objects:
-                obj.delete()
+            # 2) احفظ المتغيرات
+            variants = variant_formset.save(commit=False)
 
-            messages.success(request, f'تم تحديث المنتج "{product.name}" بنجاح.')
+            for index, variant in enumerate(variants):
+                variant.product = product
+                variant.save()
+
+                # -----------------------------
+                # 🔥 حفظ صور المتغير بدون formset
+                # -----------------------------
+                images = request.FILES.getlist(f"variant_{index}_images")
+
+                for img in images:
+                    ProductVariantImage.objects.create(
+                        variant=variant,
+                        image=img
+                    )
+
             return redirect('admin_panel:products-list')
 
     else:
-        form = ProductForm(instance=product)
-        image_formset = ProductImageFormSet(instance=product, prefix='images')
-        color_formset = ProductColorFormSet(instance=product, prefix='colors')
+        form = ProductForm()
+        variant_formset = ProductVariantFormSet()
 
-    return render(request, 'admin_panel/product_form.html', {
+    # لا نستخدم image_formsets لأننا لا نحتاجها في هذا النظام
+    context = {
         'form': form,
-        'image_formset': image_formset,     # ✔ نفس اسم create
-        'color_formset': color_formset,     # ✔ نفس اسم create
-        'product': product,
-        'action': 'edit',
-    })
+        'variant_formset': variant_formset,
+    }
+    return render(request, 'admin_panel/product_form.html', context)
 
+@admin_required
+def admin_product_edit(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        # لا تعيّن prefix إلا إذا كنت تستخدم نفس الـ prefix في القالب/JS
+        variant_formset = ProductVariantFormSet(
+            request.POST,
+            request.FILES,
+            instance=product
+        )
+
+        if form.is_valid() and variant_formset.is_valid():
+            # حفظ بيانات المنتج
+            product = form.save()
+
+            saved_variants = []
+
+            # معالجة كل نموذج داخل الـ formset واحداً-واحد
+            for i, vform in enumerate(variant_formset.forms):
+                # إذا النموذج معلم للحذف وحالته موجودة في DB -> احذف
+                if vform.cleaned_data.get('DELETE') and vform.instance.pk:
+                    vform.instance.delete()
+                    continue
+
+                # حفظ المتغير (لم يتم ربطه بعد بالمنتج)
+                variant = vform.save(commit=False)
+                variant.product = product
+                variant.save()
+                saved_variants.append(variant)
+
+                # الآن نحاول إيجاد أي ملفات صور أُرسلت لهذا الـ form
+                # نجرّب عدة مفاتيح لأن الـ template أو JS قد يستخدم أحدها:
+                # 1) vform.prefix + '_images'  (مثال: productvariant_set-0_images أو variants-0_images)
+                # 2) 'variant_{index}_images' (مثال: variant_0_images) — حسب JS الذي يعيد الفهرسة
+                # 3) fallback بسيط: نفس index في حالة عدم وجود prefix متوقع
+                tried_keys = []
+                keys_to_try = []
+
+                # 1) prefix-based
+                if hasattr(vform, 'prefix'):
+                    keys_to_try.append(f"{vform.prefix}_images")
+
+                # 2) index-based from prefix (أحياناً prefix يكون like 'form-0')
+                if hasattr(vform, 'prefix'):
+                    # خذ آخر رقم بعد '-'
+                    parts = vform.prefix.split('-')
+                    if parts:
+                        idx_part = parts[-1]
+                        if idx_part.isdigit():
+                            keys_to_try.append(f"variant_{idx_part}_images")
+
+                # 3) direct index i (forloop index fallback)
+                keys_to_try.append(f"variant_{i}_images")
+
+                # تخلّص التكرارات
+                keys_to_try = [k for k in dict.fromkeys(keys_to_try) if k]
+
+                # اجلب الملفات إذا وجدت تحت أي اسم من الأسماء
+                for key in keys_to_try:
+                    tried_keys.append(key)
+                    images = request.FILES.getlist(key)
+                    if images:
+                        for img in images:
+                            ProductVariantImage.objects.create(variant=variant, image=img)
+                        # إذا وجدت صوراً تحت هذا المفتاح فلا نبحث في المفاتيح الأخرى
+                        break
+
+            # بعد حفظ/حذف المتغيرات، أخيراً استخدم save() للـ formset لإتمام حالات m2m إن وُجدت
+            variant_formset.save()
+
+            messages.success(request, "تم تحديث المنتج بنجاح.")
+            return redirect("admin_panel:products-list")
+
+        else:
+            # أخطاء في الفورم أو الفورمسِت: اختياري إرسال رسالة خطأ
+            messages.error(request, "هناك أخطاء في النموذج، رجاءً راجع البيانات.")
+
+    else:
+        form = ProductForm(instance=product)
+        variant_formset = ProductVariantFormSet(instance=product)
+
+    return render(request, "admin_panel/product_form.html", {
+        "form": form,
+        "variant_formset": variant_formset,
+        "product": product,
+        "action": "edit",
+    })
 
 @admin_required
 def admin_product_delete(request, product_id):
-    """
-    Delete product.
-    """
 
     product = get_object_or_404(Product, id=product_id)
-    porduct_color = ProductColor.objects.filter(product=product)
-    porduct_color.delete()
-    product_name = product.name
-    product.delete()
-    messages.success(request, f'✅ تم حذف المنتج "{product_name}" بنجاح.')
-    return redirect('admin_panel:products-list')
+    name = product.name
 
+    # حذف صور المتغيرات أولاً (احتياطي)
+    for variant in product.variants.all():
+        for img in variant.images.all():
+            img.image.delete()  # حذف من media
+            img.delete()
+
+    # حذف المنتج وكل المتغيرات التابعة له
+    product.delete()
+
+    messages.success(request, f"تم حذف المنتج {name} بنجاح.")
+    return redirect("admin_panel:products-list")
 
 @admin_required
 def admin_orders_list(request):
