@@ -163,11 +163,16 @@
         {{ pc.quantity }}
         </span>
         </td>
-        <td>
-        <a class="btn btn-sm btn-admin-primary" href="{% url 'admin_panel:product-edit' pc.product.id %}">
-        <i class="fas fa-edit"></i>
-        </a>
-        </td>
+            <td>
+                {% if pc.product and pc.product.id %}
+                    <a class="btn btn-sm btn-admin-primary"
+                    href="{% url 'admin_panel:product-edit' pc.product.id %}">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                {% else %}
+                    <span class="text-muted">لا يمكن التعديل</span>
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
 

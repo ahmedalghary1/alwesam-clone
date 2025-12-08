@@ -1,55 +1,66 @@
 from django import forms
-from products.models import Product, Category, ProductVariant, ProductVariantImage
+from django.forms import inlineformset_factory
+
+from products.models import (
+    Product, Category,
+    ProductVariant, ProductVariantImage, Color, VariantColor
+)
 from orders.models import Order
 
-from django import forms
-from products.models import Product, Category, ProductVariant, ProductVariantImage
-from orders.models import Order
 
+# ======================================================
+# 🔵 Product Form
+# ======================================================
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
-            'name_ar', 'name_en','main_image',
-            'subtitle_ar', 'subtitle_en',
-            'description_ar', 'description_en',
+            'name',
+            'subtitle',
+            'description',
+            'main_image',
             'category', 'brand',
             'is_featured', 'is_active'
         ]
+
         widgets = {
-            'name_ar': forms.TextInput(attrs={'class': 'form-control'}),
-            'name_en': forms.TextInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            
+            'subtitle': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+
             'main_image': forms.FileInput(attrs={'class': 'form-control'}),
-            'subtitle_ar': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'subtitle_en': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'description_ar': forms.Textarea(attrs={'class': 'form-control', 'rows': 6}),
-            'description_en': forms.Textarea(attrs={'class': 'form-control', 'rows': 6}),
-            'category': forms.Select(attrs={'class': 'form-control'}),
+
+            'category': forms.Select(attrs={'class': 'form-select'}),
             'brand': forms.TextInput(attrs={'class': 'form-control'}),
+
             'is_featured': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
 
-# ================================
-# Variant Form + Image FormSet
-# ================================
+# ======================================================
+# 🔵 Variant Form
+# ======================================================
 
 class VariantForm(forms.ModelForm):
     class Meta:
         model = ProductVariant
-        fields = ['name', 'price', 'quantity', 'code', 'color']
+        fields = ['name', 'code']
+
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control'}),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'code': forms.TextInput(attrs={'class': 'form-control'}),
-            'color': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
-ProductVariantFormSet = forms.inlineformset_factory(
+# ------------------------------------------------------
+# Inline formset: Product -> Variants
+# ------------------------------------------------------
+
+ProductVariantFormSet = inlineformset_factory(
     Product,
     ProductVariant,
     form=VariantForm,
@@ -57,6 +68,10 @@ ProductVariantFormSet = forms.inlineformset_factory(
     can_delete=True
 )
 
+
+# ======================================================
+# 🔵 Variant Image Form
+# ======================================================
 
 class VariantImageForm(forms.ModelForm):
     class Meta:
@@ -67,7 +82,11 @@ class VariantImageForm(forms.ModelForm):
         }
 
 
-VariantImageFormSet = forms.inlineformset_factory(
+# ------------------------------------------------------
+# Inline formset: Variant -> Images
+# ------------------------------------------------------
+
+VariantImageFormSet = inlineformset_factory(
     ProductVariant,
     ProductVariantImage,
     form=VariantImageForm,
@@ -76,47 +95,83 @@ VariantImageFormSet = forms.inlineformset_factory(
 )
 
 
+# ======================================================
+# 🔵 Order Status Form
+# ======================================================
+
 class OrderStatusForm(forms.ModelForm):
-    """
-    Form for updating order status and delivery time.
-    """
     class Meta:
         model = Order
         fields = ['status', 'delivery_time']
+
         widgets = {
-            'status': forms.Select(attrs={'class': 'form-control'}),
-            'delivery_time': forms.DateTimeInput(attrs={
-                'class': 'form-control',
-                'type': 'datetime-local'
-            }),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'delivery_time': forms.DateTimeInput(
+                attrs={'class': 'form-control', 'type': 'datetime-local'}
+            ),
         }
 
+
+# ======================================================
+# 🔵 Category Form
+# ======================================================
 
 class CategoryForm(forms.ModelForm):
+
     class Meta:
         model = Category
-        fields = ['name_ar', 'name_en', 'description', 'icon']
+        fields = [
+            'name',
+            'description',
+            'icon'
+        ]
+
         widgets = {
-            'name_ar': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'اسم الفئة بالعربية'}),
-            'name_en': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'اسم الفئة بالإنجليزية'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'وصف الفئة', 'rows': 3}),
-            'icon': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'fa-icon-name (اختياري)'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'icon': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'fa-star مثلاً'}),
         }
 
+    # 🔍 التحقق من تكرار اسم الفئة
     def clean(self):
-        cleaned_data = super().clean()
-        name_ar = cleaned_data.get("name_ar")
-        name_en = cleaned_data.get("name_en")
+        cleaned = super().clean()
+        name = cleaned.get("name")
 
-        # تجاهل نفس العنصر عند التعديل
         qs = Category.objects.all()
         if self.instance.pk:
             qs = qs.exclude(pk=self.instance.pk)
 
-        if name_ar and qs.filter(name_ar__iexact=name_ar).exists():
-            self.add_error("name_ar", "⚠️ هذه الفئة موجودة بالفعل باللغة العربية.")
+        if name and qs.filter(name__iexact=name).exists():
+            self.add_error("name", "⚠️ هذه الفئة موجودة بالفعل.")
 
-        if name_en and qs.filter(name_en__iexact=name_en).exists():
-            self.add_error("name_en", "⚠️ هذه الفئة موجودة بالفعل باللغة الإنجليزية.")
+        return cleaned
 
-        return cleaned_data
+
+# ======================================================
+# 🔵 Variant Color Form (لون النمط)
+# ======================================================
+
+class VariantColorForm(forms.ModelForm):
+    class Meta:
+        model = VariantColor
+        fields = ['color', 'price', 'quantity', 'sku']
+        
+        widgets = {
+            'color': forms.Select(attrs={'class': 'form-select'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': 'السعر'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'الكمية'}),
+            'sku': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'SKU (اختياري)'}),
+        }
+
+
+# ------------------------------------------------------
+# Inline formset: Variant -> Colors
+# ------------------------------------------------------
+
+VariantColorFormSet = inlineformset_factory(
+    ProductVariant,
+    VariantColor,
+    form=VariantColorForm,
+    extra=1,
+    can_delete=True
+)

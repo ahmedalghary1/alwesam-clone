@@ -1,11 +1,11 @@
-from products.models import Product, ProductVariant
+from products.models import Product, ProductVariant, VariantColor
 from .models import Cart, CartDetail
 
 
 def get_cart_data(request):
     """
     Returns cart data for navbar for both authenticated & anonymous users.
-    Now uses ProductVariant instead of ProductColor.
+    Now uses VariantColor instead of ProductVariant.
     """
 
     # ================================================
@@ -13,7 +13,7 @@ def get_cart_data(request):
     # ================================================
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user, status='Inprogress')
-        cart_detail = CartDetail.objects.filter(cart=cart).select_related("variant", "product")
+        cart_detail = CartDetail.objects.filter(cart=cart).select_related("variant_color", "variant_color__variant", "variant_color__color", "product")
 
         return {
             'cart_data': cart,
@@ -30,24 +30,24 @@ def get_cart_data(request):
 
     for key, qty in session_cart.items():
         try:
-            product_id, variant_id = key.split('-')
+            product_id, variant_color_id = key.split('-')
         except ValueError:
             continue  # تجاهل أي مفتاح غير صالح
 
         # جلب المنتج والمتغير
         try:
-            variant = ProductVariant.objects.select_related("product").get(id=variant_id)
-            product = variant.product
-        except ProductVariant.DoesNotExist:
+            variant_color = VariantColor.objects.select_related("variant", "color", "variant__product").get(id=variant_color_id)
+            product = variant_color.variant.product
+        except VariantColor.DoesNotExist:
             continue  # تجاهل العناصر التالفة
 
         # حساب الإجمالي
-        item_total = variant.price * qty
+        item_total = variant_color.price * qty
         total_price += item_total
 
         cart_items.append({
             "product": product,
-            "variant": variant,
+            "variant_color": variant_color,
             "quantity": qty,
             "total": item_total,
         })

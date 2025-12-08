@@ -186,13 +186,13 @@
     <div class="product-card">
      <div class="product-image">
       <a href="{% url 'products:product_detail' product.slug %}">
-       <img alt="{{ product.name }}" src="{% if product.image %}{{ product.image.url }}{% else %}{% endif %}" loading="lazy" />
+       <img alt="{{ product.name }}" src="{% if product.main_image %}{{ product.main_image.url }}{% else %}{% endif %}" loading="lazy" />
       </a>
-      {% if product.quantity == 0 %}
+      {% if product.get_total_quantity == 0 %}
       <span class="product-badge out-of-stock">
        {% trans "منتهي الكمية" %}
       </span>
-      {% elif product.quantity < 5 %}
+      {% elif product.get_total_quantity < 5 %}
       <span class="product-badge low-stock">
        {% trans "الكمية محدودة" %}
       </span>
@@ -207,25 +207,18 @@
       </p>
       <div class="product-price">
        <span>
-        {{product.get_min_price }}
+        {% if product.get_min_price %}
+         {{product.get_min_price }}
+        {% else %}
+         -
+        {% endif %}
        </span>
        {% trans "جنيه" %}
       </div>
-      <form action="{% url 'orders:add-to-cart' %}" class="add-to-cart-form" method="post">
-       {% csrf_token %}
-       <input name="product_id" type="hidden" value="{{ product.id }}"/>
-        {% with default_color=product.productcolor_set.first %}
-            {% if default_color %}
-                <input type="hidden" name="product_color_id" value="{{ default_color.id }}">
-            {% endif %}
-        {% endwith %}
-
-       <button class="btn btn-add-cart" type="submit">
-        <i class="fas fa-shopping-cart">
-        </i>
-        {% trans "أضف إلى السلة" %}
-       </button>
-      </form>
+      <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-add-cart">
+       <i class="fas fa-shopping-cart"></i>
+       {% trans "عرض التفاصيل" %}
+      </a>
      </div>
     </div>
    </div>

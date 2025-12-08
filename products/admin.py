@@ -1,121 +1,387 @@
 from django.contrib import admin
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from .models import (
-    Category, Color, Product,
-    ProductVariant, ProductVariantImage,
+    Category, 
+    Color, 
+    Product, 
+    ProductVariant,
+    VariantColor, 
+    ProductVariantImage, 
     Review
 )
 
 
-# ---------------------------------------------------------
-# 🔵 Inline: صور الـ Variant
-# ---------------------------------------------------------
+# ====================================
+# CATEGORY ADMIN
+# ====================================
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'icon', 'created_at', 'product_count']
+    search_fields = ['name', 'description']
+    list_filter = ['created_at']
+    prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['created_at']
+    
+    def product_count(self, obj):
+        count = obj.products.count()
+        return format_html(
+            '<span style="background-color: #fed72b; color: #292222; padding: 3px 10px; border-radius: 5px; font-weight: bold;">{}</span>',
+            count
+        )
+    product_count.short_description = 'عدد المنتجات'
+
+    fieldsets = (
+        ('المعلومات الأساسية', {
+            'fields': ('name', 'slug', 'description', 'icon')
+        }),
+        ('معلومات إضافية', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+# ====================================
+# COLOR ADMIN
+# ====================================
+
+@admin.register(Color)
+class ColorAdmin(admin.ModelAdmin):
+    list_display = ['name', 'color_preview', 'hex_code']
+    search_fields = ['name', 'hex_code']
+    
+    def color_preview(self, obj):
+        if obj.hex_code:
+            return format_html(
+                '<div style="width: 50px; height: 25px; background-color: {}; border: 1px solid #ddd; border-radius: 5px;"></div>',
+                obj.hex_code
+            )
+        return '-'
+    color_preview.short_description = 'معاينة اللون'
+
+
+# ====================================
+# VARIANT IMAGE INLINE
+# ====================================
+
 class ProductVariantImageInline(admin.TabularInline):
     model = ProductVariantImage
     extra = 1
-    readonly_fields = ('image_preview',)
-
+    fields = ['image', 'color', 'image_preview']
+    readonly_fields = ['image_preview']
+    verbose_name = 'صورة'
+    verbose_name_plural = 'صور النمط'
+    
     def image_preview(self, obj):
         if obj.image:
-            return mark_safe(
-                f"""
-                <a href="{obj.image.url}" target="_blank">
-                    <img src="{obj.image.url}" width="80" style="border-radius:6px;" />
-                </a>
-                """
+            return format_html(
+                '<img src="{}" style="max-width: 100px; max-height: 100px; border-radius: 8px;" />',
+                obj.image.url
             )
-        return "No Image"
+        return '-'
+    image_preview.short_description = 'معاينة'
 
-    image_preview.short_description = "Image"
 
+# ====================================
+# VARIANT COLOR INLINE
+# ====================================
 
-# ---------------------------------------------------------
-# 🔵 Inline: الـ Variants الخاصة بالمنتج (عرض كل الصور)
-# ---------------------------------------------------------
-class ProductVariantInline(admin.TabularInline):
-    model = ProductVariant
+class VariantColorInline(admin.TabularInline):
+    model = VariantColor
     extra = 1
-    show_change_link = True
-    readonly_fields = ('variant_preview',)
-
-    def variant_preview(self, obj):
-        images = obj.images.all()
-        if not images:
-            return "No Images"
-
-        html = ""
-        for img in images:
-            html += f"""
-                <a href="{img.image.url}" target="_blank" style="margin-right:5px;">
-                    <img src="{img.image.url}" width="80" style="border-radius:6px; margin:2px; border:1px solid #ddd;" />
-                </a>
-            """
-
-        return mark_safe(html)
-
-    variant_preview.short_description = "Variant Images"
+    fields = ['color', 'price', 'quantity', 'sku']
+    verbose_name = 'لون النمط'
+    verbose_name_plural = 'ألوان النمط'
+    autocomplete_fields = ['color']
 
 
-# ---------------------------------------------------------
-# 🔵 ModelAdmin: Categories
-# ---------------------------------------------------------
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'created_at')
-    search_fields = ('name',)
-    list_filter = ('created_at',)
-    prepopulated_fields = {'slug': ('name',)}
+# ====================================
+# PRODUCT VARIANT INLINE
+# ====================================
+
+class ProductVariantInline(admin.StackedInline):
+    model = ProductVariant
+    extra = 0
+    fields = [
+        'name', 
+        'code',
+    ]
+    verbose_name = 'نمط المنتج'
+    verbose_name_plural = 'أنماط المنتج (Variants)'
 
 
-# ---------------------------------------------------------
-# 🔵 ModelAdmin: Colors
-# ---------------------------------------------------------
-@admin.register(Color)
-class ColorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'hex_code')
-    search_fields = ('name',)
+# ====================================
+# PRODUCT VARIANT ADMIN
+# ====================================
 
-
-# ---------------------------------------------------------
-# 🔵 ModelAdmin: Product
-# ---------------------------------------------------------
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'get_min_price', 'is_featured', 'is_active')
-    list_filter = ('category', 'is_featured', 'is_active')
-    search_fields = ('name', 'brand', 'subtitle')
-    inlines = [ProductVariantInline]
-
-    readonly_fields = ('image_preview',)
-
-    def image_preview(self, obj):
-        if obj.main_image:
-            return mark_safe(
-                f"<a href='{obj.main_image.url}' target='_blank'>"
-                f"<img src='{obj.main_image.url}' width='120' style='border-radius:6px;'/>"
-                f"</a>"
-            )
-        return "No Image"
-
-    image_preview.short_description = "Main Image"
-
-
-# ---------------------------------------------------------
-# 🔵 ModelAdmin: Variant (منفصل)
-# ---------------------------------------------------------
 @admin.register(ProductVariant)
 class ProductVariantAdmin(admin.ModelAdmin):
-    list_display = ('product', 'name', 'price', 'quantity', 'color')
-    list_filter = ('product', 'color')
-    search_fields = ('name', 'product__name')
-    inlines = [ProductVariantImageInline]
+    list_display = [
+        'get_product_name',
+        'name',
+        'code',
+        'color_count',
+        'image_count'
+    ]
+    list_filter = ['product__category', 'product__brand']
+    search_fields = ['name', 'code', 'product__name']
+    autocomplete_fields = ['product']
+    inlines = [VariantColorInline, ProductVariantImageInline]
+    
+    fieldsets = (
+        ('معلومات النمط', {
+            'fields': ('product', 'name', 'code')
+        }),
+    )
+    
+    def get_product_name(self, obj):
+        return obj.product.name
+    get_product_name.short_description = 'المنتج'
+    get_product_name.admin_order_field = 'product__name'
+    
+    def color_count(self, obj):
+        count = obj.colors.count()
+        return format_html(
+            '<span style="background-color: #3498db; color: white; padding: 3px 10px; border-radius: 5px;">{} لون</span>',
+            count
+        )
+    color_count.short_description = 'الألوان'
+    
+    def image_count(self, obj):
+        count = obj.images.count()
+        return format_html(
+            '<span style="background-color: #9b59b6; color: white; padding: 3px 10px; border-radius: 5px;">{} صورة</span>',
+            count
+        )
+    image_count.short_description = 'الصور'
 
 
-# ---------------------------------------------------------
-# 🔵 ModelAdmin: Reviews
-# ---------------------------------------------------------
+# ====================================
+# PRODUCT ADMIN
+# ====================================
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = [
+        'image_preview',
+        'name',
+        'category',
+        'brand',
+        'variant_count',
+        'price_range',
+        'stock_status',
+        'is_featured',
+        'is_active'
+    ]
+    list_filter = ['is_active', 'is_featured', 'category', 'brand']
+    search_fields = ['name', 'subtitle', 'description', 'brand']
+    prepopulated_fields = {'slug': ('name',)}
+    autocomplete_fields = ['category']
+    readonly_fields = ['image_preview_large']
+    inlines = [ProductVariantInline]
+    
+    list_editable = ['is_featured', 'is_active']
+    
+    fieldsets = (
+        ('المعلومات الأساسية', {
+            'fields': ('name', 'slug', 'category', 'brand', 'subtitle')
+        }),
+        ('الصور', {
+            'fields': ('main_image', 'image_preview_large')
+        }),
+        ('الوصف', {
+            'fields': ('description',)
+        }),
+        ('الإعدادات', {
+            'fields': ('is_featured', 'is_active')
+        }),
+    )
+    
+    def image_preview(self, obj):
+        if obj.main_image:
+            return format_html(
+                '<img src="{}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" />',
+                obj.main_image.url
+            )
+        return '-'
+    image_preview.short_description = 'الصورة'
+    
+    def image_preview_large(self, obj):
+        if obj.main_image:
+            return format_html(
+                '<img src="{}" style="max-width: 300px; max-height: 300px; border-radius: 12px;" />',
+                obj.main_image.url
+            )
+        return '-'
+    image_preview_large.short_description = 'معاينة الصورة'
+    
+    def variant_count(self, obj):
+        count = obj.variants.count()
+        return format_html(
+            '<span style="background-color: #fed72b; color: #292222; padding: 3px 10px; border-radius: 5px; font-weight: bold;">{}</span>',
+            count
+        )
+    variant_count.short_description = 'الأنماط'
+    
+    def price_range(self, obj):
+        min_price = obj.get_min_price()
+        
+        if not min_price:
+            return '-'
+        
+        # جمع كل الأسعار من جميع الألوان
+        all_prices = []
+        for variant in obj.variants.all():
+            for vc in variant.colors.all():
+                all_prices.append(vc.price)
+        
+        if not all_prices:
+            return '-'
+        
+        min_p = min(all_prices)
+        max_p = max(all_prices)
+        
+        if min_p == max_p:
+            return format_html(
+                '<span style="color: #fed72b; font-weight: bold;">{} جنيه</span>',
+                min_p
+            )
+        else:
+            return format_html(
+                '<span style="color: #fed72b; font-weight: bold;">{} - {} جنيه</span>',
+                min_p, max_p
+            )
+    price_range.short_description = 'نطاق السعر'
+    
+    def stock_status(self, obj):
+        # استخدام دالة get_total_quantity من النموذج
+        total_quantity = obj.get_total_quantity()
+        
+        if total_quantity > 50:
+            color = '#27ae60'
+            icon = '✓'
+            text = 'متوفر'
+        elif total_quantity > 0:
+            color = '#f39c12'
+            icon = '!'
+            text = f'{total_quantity} فقط'
+        else:
+            color = '#e74c3c'
+            icon = '✗'
+            text = 'نفذ'
+        
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 3px 10px; border-radius: 5px; font-weight: bold;">{} {}</span>',
+            color, icon, text
+        )
+    stock_status.short_description = 'حالة المخزون'
+
+
+# ====================================
+
+@admin.register(VariantColor)
+class VariantColorAdmin(admin.ModelAdmin):
+    list_display = ['get_product', 'get_variant', 'color', 'color_preview', 'price_display', 'quantity_display']
+    list_filter = ['variant__product__category']
+    search_fields = ['variant__name', 'color__name', 'variant__product__name']
+    autocomplete_fields = ['variant', 'color']
+    
+    fieldsets = (
+        ('المعلومات الأساسية', {
+            'fields': ('variant', 'color')
+        }),
+        ('السعر والمخزون', {
+            'fields': ('price', 'quantity', 'sku')
+        }),
+    )
+    
+    def get_product(self, obj):
+        return obj.variant.product.name
+    get_product.short_description = 'المنتج'
+    
+    def get_variant(self, obj):
+        return obj.variant.name
+    get_variant.short_description = 'النمط'
+    
+    def color_preview(self, obj):
+        if obj.color.hex_code:
+            return format_html(
+                '<div style="width: 40px; height: 25px; background-color: {}; border: 1px solid #ddd; border-radius: 5px;"></div>',
+                obj.color.hex_code
+            )
+        return '-'
+    color_preview.short_description = 'معاينة'
+    
+    def price_display(self, obj):
+        return format_html(
+            '<span style="color: #fed72b; font-weight: bold;">{} جنيه</span>',
+            obj.price
+        )
+    price_display.short_description = 'السعر'
+    
+    def quantity_display(self, obj):
+        color = '#27ae60' if obj.quantity > 10 else ('#f39c12' if obj.quantity > 0 else '#e74c3c')
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 3px 10px; border-radius: 5px; font-weight: bold;">{}</span>',
+            color, obj.quantity
+        )
+    quantity_display.short_description = 'الكمية'
+
+
+# ====================================
+# PRODUCT VARIANT IMAGE ADMIN
+# ====================================
+
+@admin.register(ProductVariantImage)
+class ProductVariantImageAdmin(admin.ModelAdmin):
+    list_display = ['get_product', 'get_variant', 'image_preview']
+    list_filter = ['variant__product__category']
+    search_fields = ['variant__name', 'variant__product__name']
+    autocomplete_fields = ['variant']
+    
+    def get_product(self, obj):
+        return obj.variant.product.name
+    get_product.short_description = 'المنتج'
+    
+    def get_variant(self, obj):
+        return obj.variant.name
+    get_variant.short_description = 'النمط'
+    
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;" />',
+                obj.image.url
+            )
+        return '-'
+    image_preview.short_description = 'الصورة'
+
+
+# ====================================
+# REVIEW ADMIN
+# ====================================
+
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product', 'rate', 'created_at')
-    list_filter = ('rate', 'created_at')
-    search_fields = ('user__username', 'product__name', 'review')
+    list_display = ['user', 'product', 'rate_display', 'created_at']
+    list_filter = ['rate', 'created_at']
+    search_fields = ['user__username', 'product__name', 'review']
+    readonly_fields = ['created_at']
+    
+    def rate_display(self, obj):
+        stars = '⭐' * obj.rate
+        return format_html(
+            '<span style="font-size: 18px;">{}</span>',
+            stars
+        )
+    rate_display.short_description = 'التقييم'
+
+
+# ====================================
+# تخصيص عنوان لوحة التحكم
+# ====================================
+
+admin.site.site_header = "لوحة تحكم متجر الوسام"
+admin.site.site_title = "متجر الوسام"
+admin.site.index_title = "مرحباً بك في لوحة التحكم"

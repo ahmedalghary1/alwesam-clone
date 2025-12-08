@@ -37,7 +37,7 @@
       <!-- صورة المنتج -->
       <div class="col-md-2">
        <div class="cart-item-image">
-        <img alt="" src="{{item.product.image.url}}"/>
+        <img alt="" src="{{item.product.main_image.url}}"/>
        </div>
       </div>
       <!-- اسم المنتج و الوصف -->
@@ -54,12 +54,12 @@
         <!-- لون المنتج المختار - عرض احترافي -->
         <div class="selected-color-box d-flex align-items-center mt-2">
             <div class="color-circle"
-                style="background-color: {{ item.color.color.hex_code|default:'#ccc' }};">
+                style="background-color: {{ item.variant_color.color.hex_code|default:'#ccc' }};">
             </div>
 
             <div class="ms-2">
                 <span class="color-label">{% trans "اللون:" %}</span>
-                <strong class="color-name">{{ item.color.color.name }}</strong>
+                <strong class="color-name">{{ item.variant_color.color.name }}</strong>
             
             </div>
         </div>
@@ -68,7 +68,7 @@
       <!-- السعر -->
       <div class="col-md-2">
        <div class="cart-item-price" data-id="{{ item.id }}">
-        {{item.color.price}}
+        {{item.variant_color.price|floatformat:0}}
          {% trans "ج" %}
        </div>
       </div>

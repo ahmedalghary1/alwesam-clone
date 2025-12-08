@@ -3,7 +3,7 @@ from accounts.models import CustomUser
 from django.utils import timezone
 import datetime
 
-from products.models import Product, ProductVariant
+from products.models import Product, ProductVariant, VariantColor
 from utils.generate_code import generate_code
 
 
@@ -85,17 +85,18 @@ class OrderDetail(models.Model):
     product = models.ForeignKey(Product, related_name='orderdetail_product',
                                 on_delete=models.SET_NULL, blank=True, null=True)
 
-    # المهم: الآن الطلب يعتمد على ProductVariant
-    variant = models.ForeignKey(ProductVariant, related_name='order_variant',
-                                on_delete=models.SET_NULL, blank=True, null=True)
+    # UPDATED: الآن يستخدم VariantColor بدلاً من ProductVariant
+    variant_color = models.ForeignKey(VariantColor, related_name='order_variant_color',
+                                      on_delete=models.SET_NULL, blank=True, null=True)
 
     quantity = models.IntegerField()
-    price = models.FloatField()  # سعر قطعة الوحدة من الـ variant
+    price = models.FloatField()  # سعر قطعة الوحدة من الـ variant_color
     total = models.FloatField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        self.price = self.variant.price
-        self.total = self.quantity * self.variant.price
+        if self.variant_color:
+            self.price = self.variant_color.price
+            self.total = self.quantity * self.variant_color.price
         super().save(*args, **kwargs)
 
 
@@ -124,7 +125,7 @@ class Cart(models.Model):
 
 
 # ============================
-#         Cart Detail
+#         Cartمخ Detail
 # ============================
 
 class CartDetail(models.Model):
@@ -132,35 +133,41 @@ class CartDetail(models.Model):
     product = models.ForeignKey(Product, related_name='cartdetail_product',
                                 on_delete=models.SET_NULL, blank=True, null=True)
 
-    # المهم: هنا نستبدل ProductColor → ProductVariant
-    variant = models.ForeignKey(ProductVariant, related_name="cart_variant",
-                                on_delete=models.SET_NULL, blank=True, null=True)
+    # UPDATED: الآن يستخدم VariantColor بدلاً من ProductVariant
+    variant_color = models.ForeignKey(VariantColor, related_name="cart_variant_color",
+                                      on_delete=models.SET_NULL, blank=True, null=True)
 
     quantity = models.IntegerField(default=1)
     total = models.FloatField(blank=True, null=True)
 
     @property
     def price(self):
-        return self.variant.price
+        if self.variant_color:
+            return self.variant_color.price
+        return 0
 
     @property
     def total_price(self):
-        return round(self.quantity * self.variant.price, 2)
+        if self.variant_color:
+            return round(self.quantity * self.variant_color.price, 2)
+        return 0
 
     def to_dict(self):
         return {
             'id': self.id,
-            'product_id': self.product.id,
-            'product_name': self.product.name,
-            'product_image': self.product.main_image.url if self.product.main_image else None,
+            'product_id': self.product.id if self.product else None,
+            'product_name': self.product.name if self.product else '',
+            'product_image': self.product.main_image.url if self.product and self.product.main_image else None,
 
-            'variant_id': self.variant.id,
-            'variant_name': self.variant.name,
-            'variant_color': self.variant.color.name if self.variant.color else None,
+            'variant_color_id': self.variant_color.id if self.variant_color else None,
+            'variant_id': self.variant_color.variant.id if self.variant_color else None,
+            'variant_name': self.variant_color.variant.name if self.variant_color else '',
+            'color_name': self.variant_color.color.name if self.variant_color else '',
+            'color_hex': self.variant_color.color.hex_code if self.variant_color else '',
 
             'quantity': self.quantity,
             'total': str(self.total_price),
-            'product_price': str(self.variant.price),
+            'product_price': str(self.variant_color.price) if self.variant_color else '0',
         }
 
 

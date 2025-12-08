@@ -10,13 +10,12 @@
 {% block style %}
 <link href="{% static 'css/product_detail.css' %}" rel="stylesheet"/>
 <style>
-    /* رسالة النجاح */
-    .cart-success-toast {
+    /* رسائل Toast */
+    .cart-success-toast, .cart-warning-toast, .cart-error-toast {
         position: fixed;
         top: 100px;
         left: 50%;
         transform: translateX(-50%);
-        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
         color: white;
         padding: 15px 30px;
         border-radius: 10px;
@@ -27,28 +26,265 @@
         font-weight: 600;
         animation: slideDown 0.3s ease;
     }
-
-    .cart-update-toast { /* ... kept same styles ... */ }
-    .cart-warning-toast { /* ... kept same styles ... */ }
-    .cart-error-toast { /* ... kept same styles ... */ }
+    
+    .cart-success-toast {
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    }
+    
+    .cart-warning-toast {
+        background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+    }
+    
+    .cart-error-toast {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    }
 
     @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translate(-50%, -20px);
+        from { opacity: 0; transform: translate(-50%, -20px); }
+        to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* تصميم اختيار الأنماط */
+    .selection-section {
+        margin: 25px 0;
+        padding: 20px;
+        background: #f5f5f5;
+        border-radius: 12px;
+    }
+
+    .selection-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 16px;
+        color: #292222;
+        margin-bottom: 15px;
+    }
+
+    .selection-label i {
+        color: #fed72b;
+        font-size: 18px;
+    }
+
+    .selected-option-name {
+        color: #fed72b;
+        font-weight: 900;
+    }
+
+    /* اختيار النمط */
+    .variant-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .variant-option {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        position: relative;
+    }
+
+    .variant-option:hover {
+        border-color: #fed72b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(254, 215, 43, 0.2);
+    }
+
+    .variant-option.active {
+        border-color: #fed72b;
+        background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+        box-shadow: 0 4px 15px rgba(254, 215, 43, 0.3);
+    }
+
+    .variant-option.active::before {
+        content: "\f00c";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        width: 22px;
+        height: 22px;
+        background: #fed72b;
+        color: #292222;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+    }
+
+    .variant-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #292222;
+        margin-bottom: 8px;
+    }
+
+    .variant-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .variant-colors-count {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .variant-price-range {
+        font-weight: 700;
+        color: #fed72b;
+    }
+
+    /* اختيار الألوان */
+    .color-options {
+        display: none; /* مخفية بشكل افتراضي */
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 10px;
+        padding-top: 15px;
+        border-top: 2px dashed #ddd;
+    }
+
+    .color-options.show {
+        display: grid;
+    }
+
+    .color-option {
+        background: white;
+        padding: 12px;
+        border-radius: 10px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+    }
+
+    .color-option:hover {
+        border-color: #fed72b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(254, 215, 43, 0.2);
+    }
+
+    .color-option.active {
+        border-color: #fed72b;
+        background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+        box-shadow: 0 4px 15px rgba(254, 215, 43, 0.3);
+    }
+
+    .color-option.active::after {
+        content: "\f00c";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 18px;
+        height: 18px;
+        background: #fed72b;
+        color: #292222;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+    }
+
+    .color-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        flex-shrink: 0;
+    }
+
+    .color-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .color-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #292222;
+    }
+
+    .color-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .color-price {
+        font-size: 14px;
+        font-weight: 900;
+        color: #fed72b;
+    }
+
+    .color-stock {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 6px;
+        border-radius: 8px;
+    }
+
+    .color-stock.in-stock {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .color-stock.low-stock {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .color-stock.out-of-stock {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .color-option.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .variant-options {
+            grid-template-columns: repeat(2, 1fr);
         }
-        to {
-            opacity: 1;
-            transform: translate(-50%, 0);
+        
+        .color-options {
+            grid-template-columns: 1fr;
         }
     }
 
-    /* Small styles to mark active color (not changing your design) */
-    .color-option { cursor: pointer; display: inline-flex; align-items: center; gap:8px; padding:6px 8px; border-radius:6px; margin:6px; border:1px solid transparent; }
-    .color-option.active { border-color: rgba(0,0,0,0.12); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
-    .color-circle { width:22px; height:22px; border-radius:50%; border:1px solid #ddd; display:inline-block; vertical-align:middle; }
-    .color-name { margin-left:6px; font-weight:600; }
-    .color-price { margin-left:8px; font-size:0.95rem; color:#333; }
+    @media (max-width: 576px) {
+        .variant-options {
+            grid-template-columns: 1fr;
+        }
+        
+        .variant-option, .color-option {
+            padding: 10px;
+        }
+    }
 </style>
 {% endblock style %}
 
@@ -82,23 +318,24 @@
                 <div class="col-lg-6">
                     <div class="product-gallery">
                         <span id="productBadge" class="product-badge">{% trans "التحقق..." %}</span>
-
                         <img alt="{{ object.name }}" class="product-main-image" id="mainImage"
-                             src="{{ object.image.url }}"/>
+                             src="{{ object.main_image.url }}"/>
                     </div>
 
-                    <div class="thumbnail-gallery">
-                        {% if object.image %}
-                        <div class="thumbnail active" onclick="changeImage('{{ object.image.url }}', this)">
-                            <img alt="{{ object.name }}" src="{{ object.image.url }}"/>
+                    <div class="thumbnail-gallery" id="thumbnailGallery">
+                        {% if object.main_image %}
+                        <div class="thumbnail active" onclick="changeImage('{{ object.main_image.url }}', this)">
+                            <img alt="{{ object.name }}" src="{{ object.main_image.url }}"/>
                         </div>
                         {% endif %}
 
-                        {% for image in images %}
-                        <div class="thumbnail" onclick="changeImage('{{ image.image.url }}', this)">
-                            <img alt="{{ object.name }}" src="{{ image.image.url }}"/>
-                        </div>
-                        {% endfor %}
+                        {% if images %}
+                            {% for image in images %}
+                            <div class="thumbnail" onclick="changeImage('{{ image.image.url }}', this)">
+                                <img alt="{{ object.name }}" src="{{ image.image.url }}"/>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
 
@@ -126,7 +363,7 @@
                         <p class="product-subtitle">{{ object.subtitle }}</p>
                         {% endif %}
 
-                        <!-- Product Code (يتحدّث بحسب اللون المحدد) -->
+                        <!-- Product Code -->
                         <div class="product-code-wrapper">
                             <span class="product-code-label">
                                 <i class="fas fa-barcode"></i>
@@ -135,53 +372,53 @@
                             <span class="product-code-value" id="productCode">-</span>
                         </div>
 
-                        <!-- Price (يتحدّث بحسب اللون المحدد) -->
+                        <!-- Price -->
                         <div class="price-wrapper">
                             <div class="product-price" id="productPrice">
-                                {% comment %} show price of first product_color if exists, else fallback to object.quantity or '-' {% endcomment %}
-                                {% if product_colors and product_colors|length > 0 %}
-                                    {{ product_colors.0.price }} <span class="currency">{% trans "جنيه" %}</span>
+                                {% if object.get_min_price %}
+                                    {{ object.get_min_price }} <span class="currency">{% trans "جنيه" %}</span>
                                 {% else %}
-                                    {% if object.price %}
-                                        {{ object.price }} <span class="currency">{% trans "جنيه" %}</span>
-                                    {% else %}
-                                        - <span class="currency">{% trans "جنيه" %}</span>
-                                    {% endif %}
+                                    - <span class="currency">{% trans "جنيه" %}</span>
                                 {% endif %}
                             </div>
                         </div>
 
-                        <!-- Color Selection (as option circles) -->
-                        {% if product_colors and product_colors|length > 0 %}
-                        <div class="color-selection-section">
-                            <div class="color-label">
-                                <i class="fas fa-palette"></i>
-                                {% trans "اللون المتاح:" %}
-                                <span class="selected-color-name" id="selectedColorName">{% trans "اختر اللون" %}</span>
+                        <!-- Variant and Color Selection -->
+                        {% if variants and variants|length > 0 %}
+                        <div class="selection-section">
+                            <!-- اختيار النمط -->
+                            <div class="selection-label">
+                                <i class="fas fa-boxes"></i>
+                                {% trans "اختر النمط:" %}
+                                <span class="selected-option-name" id="selectedVariantName">{% trans "اختر النمط" %}</span>
                             </div>
-                            <div class="color-options" id="colorOptions">
-                                {% for pc in product_colors %}
-                                    <div class="color-option"
-                                        data-pc-id="{{ pc.id }}"
-                                        data-color-id="{{ pc.color.id }}"
-                                        data-color-name="{{ pc.color.name|escapejs }}"
-                                        data-color-hex="{{ pc.color.hex_code|default:'#cccccc' }}"
-                                        data-color-price="{{ pc.price|floatformat:2 }}"
-                                        data-color-quantity="{{ pc.quantity }}"
-                                        data-color-code="{{ pc.code|default:'' }}"
-                                        onclick="selectColor(this)">
-                                        <div class="color-circle"
-                                            style="background-color: {{ pc.color.hex_code|default:'#cccccc' }};"></div>
-                                        <span class="color-name">{{ pc.color.name }}</span>
-                                        <span class="color-price">{{ pc.price }} {% trans "ج" %}</span>
+                            
+                            <div class="variant-options" id="variantOptions">
+                                {% for variant in variants %}
+                                    <div class="variant-option"
+                                        data-variant-id="{{ variant.id }}"
+                                        data-variant-name="{{ variant.name|escapejs }}"
+                                        data-variant-code="{{ variant.code|default:'' }}"
+                                        onclick="selectVariant(this, {{ variant.id }})">
+                                        <div class="variant-name">{{ variant.name }}</div>
+                                        <div class="variant-meta">
+                                            <span class="variant-colors-count" id="variant-colors-{{ variant.id }}">
+                                                <i class="fas fa-palette"></i> -
+                                            </span>
+                                            <span class="variant-price-range" id="variant-price-{{ variant.id }}">
+                                                - جنيه
+                                            </span>
+                                        </div>
                                     </div>
-
                                 {% endfor %}
                             </div>
+
+                            <!-- اختيار اللون (سيظهر بعد اختيار النمط) -->
+                            <div id="colorOptionsContainer"></div>
                         </div>
                         {% else %}
                         <div class="alert alert-secondary">
-                            {% trans "لا توجد خيارات ألوان لهذا المنتج" %}
+                            {% trans "لا توجد أنماط متاحة لهذا المنتج" %}
                         </div>
                         {% endif %}
 
@@ -200,7 +437,6 @@
                             </div>
                             <div class="quantity-control">
                                 <button class="quantity-btn" type="button" onclick="decreaseQuantity()">-</button>
-                                {# max ستحدَّث ديناميكياً بحسب اللون المحدد أو object.quantity إذا لا توجد ألوان #}
                                 <input class="quantity-input" id="productQuantity" max="1" min="1" type="number" value="1"/>
                                 <button class="quantity-btn" type="button" onclick="increaseQuantity()">+</button>
 
@@ -210,13 +446,15 @@
                                 </span>
                             </div>
                         </div>
-                        <input type="hidden" id="selectedColorInput" value="">
+
+                        <!-- Hidden Inputs -->
+                        <input type="hidden" id="selectedVariantId" value="">
                         <input type="hidden" id="selectedColorId" value="">
-                        <input type="hidden" id="selectedProductColorId" value="">
+                        <input type="hidden" id="selectedVariantColorId" value="">
 
                         <!-- Action Buttons -->
                         <div class="action-buttons">
-                            <button class="btn-add-to-cart" id="addToCartBtn" onclick="addToCart()">
+                            <button class="btn-add-to-cart" id="addToCartBtn" onclick="addToCart()" disabled style="opacity: 0.5;">
                                 <i class="fas fa-shopping-cart"></i>
                                 {% trans "أضف إلى السلة" %}
                             </button>
@@ -250,31 +488,32 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="shipping">
-                    <h4 class="mb-4">
-                        <i class="fas fa-truck"></i>
-                        {% trans "سياسة الشحن" %}
-                    </h4>
-                    <ul class="product-features">
-                        <li><i class="fas fa-shipping-fast"></i>{% trans "شحن مجاني للطلبات فوق 500 جنيه داخل القاهرة" %}</li>
-                        <li><i class="fas fa-clock"></i>{% trans "التوصيل خلال 2-4 أيام عمل داخل القاهرة والجيزة" %}</li>
-                        <li><i class="fas fa-map-marked-alt"></i>{% trans "التوصيل خلال 5-7 أيام عمل للمحافظات الأخرى" %}</li>
-                        <li><i class="fas fa-box"></i>{% trans "تغليف آمن ومحترف لحماية المنتج أثناء الشحن" %}</li>
-                    </ul>
-                    <h4 class="mb-4 mt-5">
-                        <i class="fas fa-undo-alt"></i>
-                        {% trans "سياسة الإرجاع والاستبدال" %}
-                    </h4>
-                    <ul class="product-features">
-                        <li><i class="fas fa-calendar-check"></i>{% trans "إمكانية الإرجاع خلال 14 يوم من تاريخ الاستلام" %}</li>
-                        <li><i class="fas fa-shield-alt"></i>{% trans "ضمان استرجاع المال كاملاً في حالة وجود عيب في المنتج" %}</li>
-                        <li><i class="fas fa-exchange-alt"></i>{% trans "استبدال مجاني في حالة وجود عيب صناعي" %}</li>
-                        <li><i class="fas fa-check-circle"></i>{% trans "يجب أن يكون المنتج في حالته الأصلية مع التغليف" %}</li>
-                        <li><i class="fas fa-headset"></i>{% trans "فريق خدمة العملاء متاح للمساعدة على مدار الساعة" %}</li>
-                    </ul>
-                    <div class="alert alert-info mt-4">
-                        <strong><i class="fas fa-info-circle"></i>{% trans "ملاحظة:" %}</strong>
-                       {% trans "للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو عبر البريد الإلكتروني info@elwsam.com" %}
-
+                    <div class="p-4">
+                        <h4 class="mb-4">
+                            <i class="fas fa-truck"></i>
+                            {% trans "سياسة الشحن" %}
+                        </h4>
+                        <ul class="product-features">
+                            <li><i class="fas fa-shipping-fast"></i>{% trans "شحن مجاني للطلبات فوق 500 جنيه داخل القاهرة" %}</li>
+                            <li><i class="fas fa-clock"></i>{% trans "التوصيل خلال 2-4 أيام عمل داخل القاهرة والجيزة" %}</li>
+                            <li><i class="fas fa-map-marked-alt"></i>{% trans "التوصيل خلال 5-7 أيام عمل للمحافظات الأخرى" %}</li>
+                            <li><i class="fas fa-box"></i>{% trans "تغليف آمن ومحترف لحماية المنتج أثناء الشحن" %}</li>
+                        </ul>
+                        <h4 class="mb-4 mt-5">
+                            <i class="fas fa-undo-alt"></i>
+                            {% trans "سياسة الإرجاع والاستبدال" %}
+                        </h4>
+                        <ul class="product-features">
+                            <li><i class="fas fa-calendar-check"></i>{% trans "إمكانية الإرجاع خلال 14 يوم من تاريخ الاستلام" %}</li>
+                            <li><i class="fas fa-shield-alt"></i>{% trans "ضمان استرجاع المال كاملاً في حالة وجود عيب في المنتج" %}</li>
+                            <li><i class="fas fa-exchange-alt"></i>{% trans "استبدال مجاني في حالة وجود عيب صناعي" %}</li>
+                            <li><i class="fas fa-check-circle"></i>{% trans "يجب أن يكون المنتج في حالته الأصلية مع التغليف" %}</li>
+                            <li><i class="fas fa-headset"></i>{% trans "فريق خدمة العملاء متاح للمساعدة على مدار الساعة" %}</li>
+                        </ul>
+                        <div class="alert alert-info mt-4">
+                            <strong><i class="fas fa-info-circle"></i>{% trans "ملاحظة:" %}</strong>
+                            {% trans "للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو عبر البريد الإلكتروني info@elwsam.com" %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -296,17 +535,11 @@
                 <div class="related-product-card">
                     <a href="{% url 'products:product_detail' product.slug %}">
                         <div class="related-product-image">
-                            <img alt="{{ product.name }}" src="{{ product.image.url|default:default_image }}"/>
+                            <img alt="{{ product.name }}" src="{{ product.main_image.url }}"/>
                         </div>
                         <div class="related-product-body">
                             <h5 class="related-product-title">{{ product.name }}</h5>
-                            {% with first_pc=product.colors.all|first %}
-                                {% if first_pc %}
-                                    <div class="related-product-price">{{ first_pc.price }} {% trans "جنيه" %}</div>
-                                {% else %}
-                                    <div class="related-product-price">{{ product.price|default:"-" }} {% trans "جنيه" %}</div>
-                                {% endif %}
-                            {% endwith %}
+                            <div class="related-product-price">{{ product.get_min_price|default:"-" }} {% trans "جنيه" %}</div>
                         </div>
                     </a>
                 </div>
@@ -320,221 +553,597 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+<!-- بيانات الأنماط والألوان -->
+    const variantsData = {{ variants_json|safe }};
 
-    const ADD_TO_CART_URL = "{% url 'orders:add-to-cart' %}";
-
-    let selectedProductColorId = null;
+    let selectedVariantId = null;
     let selectedColorId = null;
-    let selectedColorPrice = 0;
-    let selectedColorQuantity = 0;
-    let productColorId = $("#selectedProductColorId").val();  // ← يجب التأكد أنه موجود
-
+    let selectedVariantColorId = null;
+    let selectedPrice = 0;
+    let selectedQuantity = 0;
 
     /*----------------------------------------------------
-     |  تحديث واجهة المستخدم عند اختيار اللون
+     |  اختيار النمط
      ----------------------------------------------------*/
-    function updateUIForSelection(data) {
-
-        // السعر
-        const priceEl = document.getElementById('productPrice');
-        const currency = '{% trans "جنيه" %}';
-        priceEl.innerHTML = `${data.price} <span class="currency">${currency}</span>`;
-
-        // الكود
-        document.getElementById('productCode').textContent = data.code || '-';
-
-        // اسم اللون
-        document.getElementById('selectedColorName').textContent =
-            data.name || '{% trans "اختر اللون" %}';
-
-        // تحديث الحقول المخفية
-        document.getElementById("selectedColorInput").value = data.name;
-        document.getElementById("selectedColorId").value = data.color_id;
-        document.getElementById("selectedProductColorId").value = data.pc_id;
-
-        // الكمية
-        const qtyInput = document.getElementById('productQuantity');
-        qtyInput.max = parseInt(data.quantity || 0);
-
-        if (parseInt(qtyInput.value) > parseInt(qtyInput.max)) {
-            qtyInput.value = qtyInput.max > 0 ? qtyInput.max : 1;
-        }
-        // حالة المخزون
-        const stockIcon = document.getElementById('stockIcon');
-        const stockText = document.getElementById('stockText');
-
-        if (parseInt(data.quantity) > 0) {
-            stockIcon.className = 'fas fa-check';
-            
-            var availableText = "{{ _('متوفر في المخزون') }}";
-            var pieceText = "{{ _('قطعة') }}";
-
-            stockText.innerHTML = availableText + " (" + data.quantity + " " + pieceText + ")";
-
-            document.getElementById('addToCartBtn').disabled = false;
-            document.getElementById('addToCartBtn').style.opacity = 1;
-            document.getElementById('productBadge').textContent = '{% trans "متوفر" %}';
-        } else {
-            stockIcon.className = 'fas fa-times';
-            stockText.textContent = '{% trans "غير متوفر حالياً" %}';
-            document.getElementById('addToCartBtn').disabled = true;
-            document.getElementById('addToCartBtn').style.opacity = 0.5;
-            document.getElementById('productBadge').textContent = '{% trans "غير متوفر" %}';
-        }
-
-
-        // حفظ البيانات
-        selectedProductColorId = data.pc_id;
-        selectedColorId = data.color_id;
+    function selectVariant(element, variantId) {
+        console.log('Selecting variant:', variantId);
         
-        selectedColorPrice = parseFloat(data.price || 0);
-        selectedColorQuantity = parseInt(data.quantity || 0);
+        // إلغاء active من جميع الأنماط
+        document.querySelectorAll('.variant-option').forEach(el => {
+            el.classList.remove('active');
+        });
+        element.classList.add('active');
+
+        selectedVariantId = variantId;
+        
+        // البحث عن النمط بـ id
+        const variant = variantsData.find(v => v.id === variantId);
+        
+        if (!variant) {
+            console.error('Variant not found:', variantId);
+            return;
+        }
+        
+        console.log('Variant found:', variant);
+        
+        // تحديث اسم النمط
+        document.getElementById('selectedVariantName').textContent = variant.name;
+        document.getElementById('productCode').textContent = variant.code || '-';
+
+        // حساب نطاق السعر للنمط
+        if (variant.colors && variant.colors.length > 0) {
+            const prices = variant.colors.map(c => c.price);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            
+            console.log('Price range:', minPrice, '-', maxPrice);
+            
+            // عرض نطاق السعر
+            if (minPrice === maxPrice) {
+                document.getElementById('productPrice').innerHTML = 
+                    `${minPrice} <span class="currency">{% trans "جنيه" %}</span>`;
+            } else {
+                document.getElementById('productPrice').innerHTML = 
+                    `${minPrice} - ${maxPrice} <span class="currency">{% trans "جنيه" %}</span>`;
+            }
+        } else {
+            document.getElementById('productPrice').innerHTML = 
+                '- <span class="currency">{% trans "جنيه" %}</span>';
+        }
+
+        // إعادة تعيين اللون المحدد
+        selectedColorId = null;
+        selectedVariantColorId = null;
+
+        // عرض خيارات الألوان
+        showColorOptions(variant);
+
+        // تحديث الصور
+        updateVariantImages(variant);
+
+        // إخفاء زر الإضافة للسلة حتى يتم اختيار اللون
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        if (addToCartBtn) {
+            addToCartBtn.disabled = true;
+            addToCartBtn.style.opacity = 0.5;
+        }
     }
 
+    /*----------------------------------------------------
+     |  عرض خيارات الألوان
+     ----------------------------------------------------*/
+    function showColorOptions(variant) {
+        const container = document.getElementById('colorOptionsContainer');
+        
+        if (!variant.colors || variant.colors.length === 0) {
+            container.innerHTML = '<div class="alert alert-warning mt-3">{% trans "لا توجد ألوان متاحة لهذا النمط" %}</div>';
+            // تحديث حالة المخزون
+            updateProductAvailability(0);
+            return;
+        }
+
+        let html = `
+            <div class="selection-label mt-3">
+                <i class="fas fa-palette"></i>
+                {% trans "اختر اللون:" %}
+                <span class="selected-option-name" id="selectedColorName">{% trans "اختر اللون" %}</span>
+            </div>
+            <div class="color-options show" id="colorOptions">
+        `;
+
+        variant.colors.forEach(color => {
+            const isAvailable = color.quantity > 0;
+            const stockClass = color.quantity > 10 ? 'in-stock' : (color.quantity > 0 ? 'low-stock' : 'out-of-stock');
+            const stockText = color.quantity > 10 ? 
+                '<i class="fas fa-check"></i> متوفر' : 
+                (color.quantity > 0 ? 
+                    `<i class="fas fa-exclamation"></i> ${color.quantity} فقط` : 
+                    '<i class="fas fa-times"></i> نفذ');
+
+            html += `
+                <div class="color-option ${isAvailable ? '' : 'disabled'}"
+                    data-variant-color-id="${color.variant_color_id}"
+                    data-color-id="${color.color_id}"
+                    data-color-name="${color.name}"
+                    data-color-hex="${color.hex}"
+                    data-color-price="${color.price}"
+                    data-color-quantity="${color.quantity}"
+                    data-color-sku="${color.sku}"
+                    ${isAvailable ? `onclick="selectColor(this)"` : ''}>
+                    
+                    <div class="color-circle" style="background-color: ${color.hex};"></div>
+                    
+                    <div class="color-info">
+                        <div class="color-name">${color.name}</div>
+                        <div class="color-details">
+                            <span class="color-price">${color.price} ج</span>
+                            <span class="color-stock ${stockClass}">${stockText}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += '</div>';
+        container.innerHTML = html;
+        
+        // حساب إجمالي الكمية المتاحة
+        const totalQuantity = variant.colors.reduce((sum, color) => sum + color.quantity, 0);
+        updateProductAvailability(totalQuantity);
+    }
 
     /*----------------------------------------------------
-     |  عند اختيار لون
+     |  اختيار اللون
      ----------------------------------------------------*/
     function selectColor(element) {
-
-        // إلغاء active من الجميع
+        // إلغاء active من جميع الألوان
         document.querySelectorAll('.color-option').forEach(el => {
             el.classList.remove('active');
         });
-
-        // إضافة active للعنصر المختار
         element.classList.add('active');
 
         // جمع البيانات
-        const data = {
-            pc_id: element.dataset.pcId,
-            color_id: element.dataset.colorId,
-            name: element.dataset.colorName,
-            hex: element.dataset.colorHex,
-            price: element.dataset.colorPrice,
-            quantity: element.dataset.colorQuantity,
-            code: element.dataset.colorCode
-        };
+        selectedVariantColorId = element.dataset.variantColorId;
+        selectedColorId = element.dataset.colorId;
+        selectedPrice = parseFloat(element.dataset.colorPrice);
+        selectedQuantity = parseInt(element.dataset.colorQuantity);
 
-        // التحديث
-        updateUIForSelection(data);
+        const colorName = element.dataset.colorName;
+        const sku = element.dataset.colorSku;
+
+        // تحديث الواجهة
+        document.getElementById('selectedColorName').textContent = colorName;
+        document.getElementById('productPrice').innerHTML = 
+            `${selectedPrice} <span class="currency">{% trans "جنيه" %}</span>`;
+        
+        if (sku) {
+            document.getElementById('productCode').textContent = sku;
+        }
+
+        // تحديث الكمية
+        const qtyInput = document.getElementById('productQuantity');
+        qtyInput.max = selectedQuantity;
+        if (parseInt(qtyInput.value) > selectedQuantity) {
+            qtyInput.value = selectedQuantity > 0 ? selectedQuantity : 1;
+        }
+
+        // تحديث حالة المخزون
+        updateStockStatus();
+
+        // تفعيل زر الإضافة للسلة
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        if (selectedQuantity > 0) {
+            addToCartBtn.disabled = false;
+            addToCartBtn.style.opacity = 1;
+        }
+
+        // تحديث الصور حسب اللون (إن وجدت)
+        updateColorImages(selectedColorId);
+
+        // تحديث الحقول المخفية
+        document.getElementById('selectedVariantId').value = selectedVariantId;
+        document.getElementById('selectedColorId').value = selectedColorId;
+        document.getElementById('selectedVariantColorId').value = selectedVariantColorId;
     }
-
 
     /*----------------------------------------------------
-     |  التحكم في الكمية
+     |  تحديث حالة المخزون
      ----------------------------------------------------*/
-    function increaseQuantity() {
-        const input = document.getElementById('productQuantity');
-        const max = parseInt(input.max) || 1;
-        if (parseInt(input.value) < max) input.value++;
+    function updateStockStatus() {
+        const stockIcon = document.getElementById('stockIcon');
+        const stockText = document.getElementById('stockText');
+        const productBadge = document.getElementById('productBadge');
+
+        if (selectedQuantity > 0) {
+            stockIcon.className = 'fas fa-check';
+            stockText.innerHTML = `{% trans "متوفر في المخزون" %} (${selectedQuantity} {% trans "قطعة" %})`;
+            productBadge.textContent = '{% trans "متوفر" %}';
+            productBadge.classList.remove('out-of-stock-badge');
+        } else {
+            stockIcon.className = 'fas fa-times';
+            stockText.textContent = '{% trans "غير متوفر حالياً" %}';
+            productBadge.textContent = '{% trans "غير متوفر" %}';
+            productBadge.classList.add('out-of-stock-badge');
+        }
     }
 
-    function decreaseQuantity() {
-        const input = document.getElementById('productQuantity');
-        const min = parseInt(input.min) || 1;
-        if (parseInt(input.value) > min) input.value--;
+    /*----------------------------------------------------
+     |  تحديث توفر المنتج (للاستخدام من showColorOptions)
+     ----------------------------------------------------*/
+    function updateProductAvailability(quantity) {
+        console.log('updateProductAvailability called with quantity:', quantity);
+        
+        const stockIcon = document.getElementById('stockIcon');
+        const stockText = document.getElementById('stockText');
+        const productBadge = document.getElementById('productBadge');
+        const qtyInput = document.getElementById('productQuantity');
+
+        if (quantity > 0) {
+            stockIcon.className = 'fas fa-check';
+            stockText.innerHTML = `{% trans "متوفر في المخزون" %} (${quantity} {% trans "قطعة" %})`;
+            productBadge.textContent = '{% trans "متوفر" %}';
+            productBadge.classList.remove('out-of-stock-badge');
+            productBadge.classList.add('in-stock-badge');
+            
+            // تحديث max للكمية
+            if (qtyInput) {
+                qtyInput.max = quantity;
+                // تعديل القيمة إذا كانت أكبر من المتاح
+                if (parseInt(qtyInput.value) > quantity) {
+                    qtyInput.value = Math.min(quantity, 1);
+                }
+            }
+        } else {
+            stockIcon.className = 'fas fa-times';
+            stockText.textContent = '{% trans "غير متوفر حالياً" %}';
+            productBadge.textContent = '{% trans "غير متوفر" %}';
+            productBadge.classList.remove('in-stock-badge');
+            productBadge.classList.add('out-of-stock-badge');
+            
+            if (qtyInput) {
+                qtyInput.max = 0;
+                qtyInput.value = 0;
+            }
+        }
     }
 
+    /*----------------------------------------------------
+     |  تحديث صور النمط
+     ----------------------------------------------------*/
+    function updateVariantImages(variant) {
+        console.log('Updating variant images for:', variant.name);
+        console.log('Total images:', variant.images ? variant.images.length : 0);
+        
+        if (!variant.images || variant.images.length === 0) {
+            console.warn('No images available for this variant');
+            return;
+        }
+
+        // جلب جميع الصور
+        const generalImages = variant.images.filter(img => img.color_id === null);
+        const colorImages = variant.images.filter(img => img.color_id !== null);
+        
+        console.log('General images:', generalImages.length);
+        console.log('Color images:', colorImages.length);
+        
+        // اختيار الصور للعرض
+        let imagesToShow = [];
+        
+        if (generalImages.length > 0) {
+            imagesToShow = generalImages;
+            console.log('Showing general images');
+        } else if (colorImages.length > 0) {
+            // عرض أول صورة من الصور الملونة
+            imagesToShow = [colorImages[0]];
+            console.log('Showing first color image');
+        } else {
+            imagesToShow = variant.images;
+            console.log('Showing all images');
+        }
+        
+        if (imagesToShow.length > 0) {
+            console.log('Setting main image to:', imagesToShow[0].url);
+            
+            // تحديث الصورة الرئيسية
+            const mainImg = document.getElementById('mainImage');
+            if (mainImg) {
+                mainImg.src = imagesToShow[0].url;
+            }
+            
+            // تحديث معرض الصور المصغرة
+            updateThumbnails(imagesToShow);
+        }
+    }
+
+    /*----------------------------------------------------
+     |  تحديث صور اللون
+     ----------------------------------------------------*/
+    function updateColorImages(colorId) {
+        const variant = variantsData.find(v => v.id === selectedVariantId);
+        if (!variant || !variant.images) return;
+
+        // الصور الخاصة باللون المحدد
+        const colorImages = variant.images.filter(img => img.color_id === colorId);
+        
+        if (colorImages.length > 0) {
+            document.getElementById('mainImage').src = colorImages[0].url;
+            updateThumbnails(colorImages);
+        }
+    }
+
+    /*----------------------------------------------------
+     |  تحديث معرض الصور المصغرة
+     ----------------------------------------------------*/
+    function updateThumbnails(images) {
+        const gallery = document.getElementById('thumbnailGallery');
+        let html = '';
+
+        images.forEach((img, index) => {
+            html += `
+                <div class="thumbnail ${index === 0 ?
+
+'active' : ''}" onclick="changeImage('${img.url}', this)">
+                    <img alt="Product Image" src="${img.url}"/>
+                </div>
+            `;
+        });
+
+        gallery.innerHTML = html;
+    }
 
     /*----------------------------------------------------
      |  تغيير الصورة الرئيسية
      ----------------------------------------------------*/
     function changeImage(imageUrl, element) {
         document.getElementById('mainImage').src = imageUrl;
-        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        
+        // إزالة active من جميع الصور المصغرة
+        document.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.classList.remove('active');
+        });
+        
+        // إضافة active للصورة المختارة
         element.classList.add('active');
     }
 
+    /*----------------------------------------------------
+     |  التحكم في الكمية
+     ----------------------------------------------------*/
+    function increaseQuantity() {
+        const input = document.getElementById('productQuantity');
+        const max = parseInt(input.max);
+        const current = parseInt(input.value);
+        
+        if (current < max) {
+            input.value = current + 1;
+        }
+    }
+
+    function decreaseQuantity() {
+        const input = document.getElementById('productQuantity');
+        const min = parseInt(input.min);
+        const current = parseInt(input.value);
+        
+        if (current > min) {
+            input.value = current - 1;
+        }
+    }
 
     /*----------------------------------------------------
-     |  إضافة للسلة
+     |  إضافة المنتج للسلة
      ----------------------------------------------------*/
     function addToCart() {
-
-        const quantity = parseInt(document.getElementById('productQuantity').value) || 1;
-        const productId = '{{ object.id }}';
-
-        if (!selectedProductColorId) {
-            showToast('{% trans "يرجى اختيار اللون أولاً" %}', 'cart-warning-toast');
+        // التحقق من اختيار النمط واللون
+        if (!selectedVariantId) {
+            showToast('warning', 'يرجى اختيار النمط أولاً');
             return;
         }
 
-        if (quantity > selectedColorQuantity) {
-            showToast('{% trans "الكمية المطلوبة تفوق المتاح" %}', 'cart-warning-toast');
+        if (!selectedVariantColorId) {
+            showToast('warning', 'يرجى اختيار اللون أولاً');
             return;
         }
 
-        console.log("SEND:", {
-            product_id: productId,
-            product_color_id: document.getElementById('selectedProductColorId').value,
-            color_id: document.getElementById('selectedColorId').value,
-            quantity: quantity
-        });
+        const quantity = parseInt(document.getElementById('productQuantity').value);
 
+        // التحقق من توفر الكمية
+        if (quantity > selectedQuantity) {
+            showToast('warning', `الكمية المتاحة فقط ${selectedQuantity} قطعة`);
+            return;
+        }
+
+        // إرسال البيانات للسيرفر
         $.ajax({
-            url: "/orders/add-to-cart/",
-            method: "POST",
+            url: '{% url "orders:add-to-cart" %}',
+            method: 'POST',
             data: {
-                product_id: productId,
-                product_color_id: document.getElementById('selectedProductColorId').value,
-                color_id: document.getElementById('selectedColorId').value,
-                quantity: quantity,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
+                'variant_color_id': selectedVariantColorId,
+                'quantity': quantity,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
-            success: function (response) {
-                console.log("SUCCESS:", response);
-                showToast('{% trans "تمت الإضافة بنجاح" %}', 'cart-success-toast');
+            success: function(response) {
+                if (response.success) {
+                    showToast('success', 'تمت إضافة المنتج إلى السلة بنجاح');
+                    
+                    // تحديث عداد السلة إن وجد
+                    if (response.cart_count) {
+                        const cartCounter = document.querySelector('.cart-count');
+                        if (cartCounter) {
+                            cartCounter.textContent = response.cart_count;
+                        }
+                    }
+                } else {
+                    showToast('error', response.message || 'حدث خطأ أثناء إضافة المنتج');
+                }
             },
-            error: function (xhr) {
-                console.log("ERROR RESPONSE:", xhr.responseText);
-                showToast("Server Error: " + xhr.responseText, 'cart-error-toast');
+            error: function(xhr) {
+                let errorMsg = 'حدث خطأ أثناء إضافة المنتج للسلة';
+                
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                
+                showToast('error', errorMsg);
             }
         });
-
     }
 
     /*----------------------------------------------------
-     |  الرسائل Toast
+     |  عرض رسائل Toast
      ----------------------------------------------------*/
-    function showToast(message, className) {
-        var el = $('<div class="' + className + '"></div>').text(message);
-        $('body').append(el);
-        el.fadeIn(200).delay(3000).fadeOut(500, function() {
-            $(this).remove();
+    function showToast(type, message) {
+        // إزالة أي toast موجود
+        const existingToasts = document.querySelectorAll('[class*="cart-"][class*="-toast"]');
+        existingToasts.forEach(toast => toast.remove());
+
+        // إنشاء toast جديد
+        const toast = document.createElement('div');
+        toast.className = `cart-${type}-toast`;
+        toast.textContent = message;
+        
+        document.body.appendChild(toast);
+        
+        // عرض الـ toast
+        setTimeout(() => {
+            toast.style.display = 'block';
+        }, 10);
+
+        // إخفاء الـ toast بعد 3 ثواني
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    }
+
+    /*----------------------------------------------------
+     |  تحديث معلومات الأنماط (الأسعار والألوان)
+     ----------------------------------------------------*/
+    function updateVariantsMeta() {
+        variantsData.forEach(variant => {
+            // تحديث عدد الألوان
+            const colorsCountEl = document.getElementById(`variant-colors-${variant.id}`);
+            if (colorsCountEl && variant.colors) {
+                colorsCountEl.innerHTML = `<i class="fas fa-palette"></i> ${variant.colors.length} لون`;
+            }
+
+            // تحديث نطاق السعر
+            const priceRangeEl = document.getElementById(`variant-price-${variant.id}`);
+            if (priceRangeEl && variant.colors && variant.colors.length > 0) {
+                const prices = variant.colors.map(c => c.price);
+                const minPrice = Math.min(...prices);
+                const maxPrice = Math.max(...prices);
+
+                if (minPrice === maxPrice) {
+                    priceRangeEl.textContent = `${minPrice} جنيه`;
+                } else {
+                    priceRangeEl.textContent = `${minPrice} - ${maxPrice} جنيه`;
+                }
+            }
         });
     }
 
+    /*----------------------------------------------------
+     |  إضافة المنتج للسلة
+     ----------------------------------------------------*/
+    function addToCart() {
+        // التحقق من اختيار نمط ولون
+        const variantColorId = document.getElementById('selectedVariantColorId').value;
+        
+        if (!variantColorId) {
+            showToast('error', '{% trans "يرجى اختيار نمط ولون أولاً" %}');
+            return;
+        }
+
+        // الحصول على الكمية
+        const quantity = parseInt(document.getElementById('productQuantity').value) || 1;
+        
+        // الحصول على CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // إرسال الطلب
+        const formData = new FormData();
+        formData.append('product_id', '{{ object.id }}');
+        formData.append('variant_color_id', variantColorId);
+        formData.append('quantity', quantity);
+        formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+
+        // تعطيل الزر مؤقتاً
+        const addBtn = document.getElementById('addToCartBtn');
+        addBtn.disabled = true;
+        addBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ الإضافة...';
+
+        fetch('{% url "orders:add-to-cart" %}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', data.message);
+                // تحديث عداد السلة إذا كان موجوداً
+                const cartCountEl = document.querySelector('.cart-count');
+                if (cartCountEl && data.cart_count) {
+                    cartCountEl.textContent = data.cart_count;
+                }
+            } else {
+                showToast('error', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', '{% trans "حدث خطأ، يرجى المحاولة مرة أخرى" %}');
+        })
+        .finally(() => {
+            // إعادة تفعيل الزر
+            addBtn.disabled = false;
+            addBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> {% trans "أضف إلى السلة" %}';
+        });
+    }
 
     /*----------------------------------------------------
-     |  عند تحميل الصفحة: اختيار أول لون تلقائياً
+     |  تهيئة الصفحة عند التحميل
      ----------------------------------------------------*/
     document.addEventListener('DOMContentLoaded', function() {
+        // تحديث معلومات الأنماط
+        updateVariantsMeta();
 
-        const firstColor = document.querySelector('.color-option');
-
-        if (firstColor) {
-            selectColor(firstColor);
-        } else {
-            const qtyInput = document.getElementById('productQuantity');
-
-            {% if object.quantity > 0 %}
-                qtyInput.max = {{ object.quantity }};
-                document.getElementById('stockText').textContent =
-                    "متوفر في المخزون ({{ object.quantity }} قطعة)";
-                document.getElementById('stockIcon').className = 'fas fa-check';
-                document.getElementById('productBadge').textContent = "متوفر";
-            {% else %}
-                qtyInput.max = 1;
-                document.getElementById('stockText').textContent = "غير متوفر حالياً";
-                document.getElementById('stockIcon').className = 'fas fa-times';
-                document.getElementById('productBadge').textContent = "غير متوفر";
-                document.getElementById('addToCartBtn').disabled = true;
-                document.getElementById('addToCartBtn').style.opacity = 0.5;
-            {% endif %}
+        // إذا كان هناك نمط واحد فقط، اختره تلقائياً
+        const variantOptions = document.querySelectorAll('.variant-option');
+        if (variantOptions.length === 1) {
+            const firstVariant = variantOptions[0];
+            const variantId = parseInt(firstVariant.dataset.variantId);
+            selectVariant(firstVariant, variantId);
         }
-    });
 
+        // منع إدخال قيم غير صحيحة في حقل الكمية
+        const qtyInput = document.getElementById('productQuantity');
+        qtyInput.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            const min = parseInt(this.min);
+            const max = parseInt(this.max);
+
+            if (value < min) {
+                this.value = min;
+            } else if (value > max) {
+                this.value = max;
+            }
+        });
+    });
 </script>
 
 {% endblock content %}

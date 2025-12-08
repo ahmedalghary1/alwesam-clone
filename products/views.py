@@ -1,7 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q, Min, Max
-from .models import Product, ProductVariant, ProductVariantImage, Category
-
+from .models import Product, ProductVariant, Category
 
 # ==========================================================
 #              PRODUCT LIST VIEW (مع الفلاتر الجديدة)
@@ -14,7 +13,9 @@ class ProductListView(ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        queryset = Product.objects.filter(is_active=True).distinct()
+        queryset = Product.objects.filter(is_active=True) \
+            .prefetch_related('variants')  \
+            .distinct()
 
         # --- Search ---------------------------
         search_query = self.request.GET.get('search', '')
@@ -35,45 +36,10 @@ class ProductListView(ListView):
         if brand:
             queryset = queryset.filter(brand__iexact=brand)
 
-        # --- Price Filter (Now uses ProductVariant) ----
-        price_range = self.request.GET.get('price_range', '')
-
-        if price_range == '0-1000':
-            queryset = queryset.filter(variants__price__lt=1000)
-
-        elif price_range == '1000-5000':
-            queryset = queryset.filter(
-                variants__price__gte=1000,
-                variants__price__lt=5000
-            )
-
-        elif price_range == '5000-10000':
-            queryset = queryset.filter(
-                variants__price__gte=5000,
-                variants__price__lt=10000
-            )
-
-        elif price_range == '10000-plus':
-            queryset = queryset.filter(variants__price__gte=10000)
-
-        # --- Availability Filter ---------------
-        availability = self.request.GET.get('availability', '')
-        if availability == 'in_stock':
-            queryset = queryset.filter(variants__quantity__gt=0)
-
-        elif availability == 'out_of_stock':
-            queryset = queryset.filter(variants__quantity=0)
-
         # --- Sorting ---------------------------
         sort_by = self.request.GET.get('sort', '')
 
-        if sort_by == 'price_asc':
-            queryset = queryset.order_by('variants__price')
-
-        elif sort_by == 'price_desc':
-            queryset = queryset.order_by('-variants__price')
-
-        elif sort_by == 'name_asc':
+        if sort_by == 'name_asc':
             queryset = queryset.order_by('name')
 
         elif sort_by == 'name_desc':
@@ -82,14 +48,12 @@ class ProductListView(ListView):
         elif sort_by == 'newest':
             queryset = queryset.order_by('-id')
 
-        return queryset.distinct()
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context['categories'] = Category.objects.all()
-
-        # All unique brands
         context['brands'] = Product.objects.filter(is_active=True) \
             .values_list('brand', flat=True).distinct().exclude(brand='')
 
@@ -98,35 +62,61 @@ class ProductListView(ListView):
         return context
 
 
-
-# ==========================================================
-#              PRODUCT DETAIL VIEW (معلومات المنتج)
-# ==========================================================
-
 class ProductDetail(DetailView):
     model = Product
-    template_name = "product_detail.html"
+    template_name = "products/product_detail.html"
+    context_object_name = "object"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        product = self.get_object()
 
-        # --- صور المنتج: من أول Variant
-        first_variant = product.variants.first()
-        if first_variant:
-            context["images"] = ProductVariantImage.objects.filter(
-                variant=first_variant
-            )
-        else:
-            context["images"] = []
+        product = self.object
 
-        # --- جميع المتغيرات (الألوان – الأسعار – الكميات)
-        context["variants"] = product.variants.select_related("color")
+        # ---- جلب الأنماط مع الألوان والصور ----
+        variants = ProductVariant.objects.filter(product=product).prefetch_related(
+            'colors__color',  # جلب الألوان
+            'images__color'   # جلب الصور
+        )
 
-        # --- منتجات مشابهة (حسب الاسم أو الوصف)
+        # تجهيز البيانات لإرسالها كـ JSON للقالب
+        variants_data = []
+
+        for variant in variants:
+            # جلب جميع الألوان الخاصة بهذا النمط
+            colors_list = []
+            for variant_color in variant.colors.all():
+                colors_list.append({
+                    "id": variant_color.id,
+                    "variant_color_id": variant_color.id,
+                    "color_id": variant_color.color.id,
+                    "name": variant_color.color.name,
+                    "hex": variant_color.color.hex_code or "",
+                    "price": variant_color.price,
+                    "quantity": variant_color.quantity,
+                    "sku": variant_color.sku or "",
+                })
+
+            # جلب جميع الصور الخاصة بهذا النمط
+            images_list = []
+            for img in variant.images.all():
+                images_list.append({
+                    "url": img.image.url,
+                    "color_id": img.color.id if img.color else None
+                })
+
+            variants_data.append({
+                "id": variant.id,
+                "name": variant.name,
+                "code": variant.code or "",
+                "colors": colors_list,
+                "images": images_list,
+            })
+
+        # ---- إضافة البيانات للكونتكس ----
+        context["variants"] = variants
+        context["variants_json"] = variants_data
         context["products"] = Product.objects.filter(
-            Q(category=product.category) |
-            Q(brand=product.brand)
-        ).exclude(id=product.id).distinct()[:10]
+            category=product.category
+        ).exclude(id=product.id)[:4]
 
         return context

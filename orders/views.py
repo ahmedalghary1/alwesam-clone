@@ -22,117 +22,110 @@ def _session_key_for(product_id, variant_id):
     """مفتاح تخزين العنصر في الجلسة: 'productId-variantId'"""
     return f"{product_id}-{variant_id}"
 
-
 def checkout(request, item_id=None):
-    """
-    Checkout page and AJAX handlers for updating cart quantities.
-    Uses ProductVariant for price/quantity.
-    """
 
-    # ==========================
-    #  تحميل السلة (مستخدم مسجل)
-    # ==========================
+    # ========== مستخدم مسجل ==========
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user, status="Inprogress")
-        cart_detail_qs = CartDetail.objects.filter(cart=cart).select_related("variant", "product")
+        cart_items_raw = CartDetail.objects.filter(cart=cart).select_related(
+            "variant_color", "variant_color__variant", "variant_color__color", "product"
+        )
 
-        # تجاهل العناصر التي ليس لديها variant
-        valid_items = [item for item in cart_detail_qs if item.variant]
-        subtotal = sum(item.variant.price * item.quantity for item in valid_items)
-
-        cart_detail_data = cart_detail_qs
-
-    else:
-        # ==========================
-        #  Session cart للزائر
-        # ==========================
-        session_cart = request.session.get("cart", {})
-        cart = None
         cart_detail_data = []
+        subtotal = 0
 
-        for key, qty in session_cart.items():
-            try:
-                product_id, variant_id = key.split("-")
-            except ValueError:
-                continue
-
-            # الحصول على الـ variant
-            variant = ProductVariant.objects.filter(id=variant_id).select_related("product").first()
-            if not variant:
+        for item in cart_items_raw:
+            if not item.variant_color:
                 continue
 
             cart_detail_data.append({
-                "id": key,
-                "product": variant.product,
-                "variant": variant,
-                "quantity": qty,
-                "total": variant.price * qty
+                "id": item.id,
+                "product": item.product,
+                "variant_color": item.variant_color,
+                "quantity": item.quantity,
+                "price": item.variant_color.price,
+                "total": item.variant_color.price * item.quantity
             })
 
-        subtotal = sum(item["total"] for item in cart_detail_data)
+            subtotal += item.variant_color.price * item.quantity
 
-    # ==========================
-    # رسوم التوصيل
-    # ==========================
+    # ========== زائر (سلة Session) ==========
+    else:
+        from products.models import VariantColor
+        session_cart = request.session.get("cart", {})
+        cart_detail_data = []
+        subtotal = 0
+
+        for key, qty in session_cart.items():
+            try:
+                product_id, variant_color_id = key.split("-")
+            except ValueError:
+                continue
+
+            variant_color = VariantColor.objects.select_related("variant", "color", "variant__product").filter(id=variant_color_id).first()
+            if not variant_color:
+                continue
+
+            total_price = variant_color.price * qty
+
+            cart_detail_data.append({
+                "id": key,
+                "product": variant_color.variant.product,
+                "variant_color": variant_color,
+                "quantity": qty,
+                "price": variant_color.price,
+                "total": total_price
+            })
+
+            subtotal += total_price
+
+    # ========== رسوم الشحن ==========
     delivery_fee = _get_delivery_fee_value()
     total = subtotal + delivery_fee
 
-    # ==========================
-    # عمليات تعديل السلة (AJAX)
-    # ==========================
+    # ========== عمليات AJAX ==========
     action = request.GET.get("action")
 
     if action:
 
-        # --------------------------
-        # تعديل السلة للمستخدم المسجل
-        # --------------------------
+        # ------- مستخدم مسجل -------
         if request.user.is_authenticated and item_id:
             try:
-                item = CartDetail.objects.get(id=int(item_id), cart=cart)
-            except (CartDetail.DoesNotExist, ValueError):
+                item = CartDetail.objects.select_related("variant_color").get(id=int(item_id), cart=cart)
+            except:
                 return JsonResponse({"success": False})
 
             if action == "increase":
-                # تحقق من المخزون
-                if item.variant and item.quantity + 1 > item.variant.quantity:
+                if item.quantity + 1 > item.variant_color.quantity:
                     return JsonResponse({"success": False, "error": _("⚠️ كمية غير متاحة")})
                 item.quantity += 1
 
-            elif action == "decrease":
-                if item.quantity > 1:
-                    item.quantity -= 1
+            elif action == "decrease" and item.quantity > 1:
+                item.quantity -= 1
 
             elif action == "delete":
                 item.delete()
-                item = None
+                deleted = True
+            else:
+                deleted = False
 
-            if item:
-                # لو اختفى الـ variant → احذف العنصر
-                if not item.variant:
-                    item.delete()
-                    return JsonResponse({"success": True, "deleted": True})
-
-                item.total = round(item.variant.price * item.quantity, 2)
+            if action != "delete":
                 item.save()
+                deleted = False
 
-            # إعادة حساب الإجمالي
-            cart_detail_qs = CartDetail.objects.filter(cart=cart).select_related("variant")
-            subtotal = sum(i.variant.price * i.quantity for i in cart_detail_qs)
-            total = subtotal + delivery_fee
+            subtotal = sum(i.variant_color.price * i.quantity for i in CartDetail.objects.filter(cart=cart) if i.variant_color)
 
             return JsonResponse({
                 "success": True,
-                "quantity": item.quantity if item else 0,
-                "item_total": item.total if item else 0,
-                "sub_total": round(subtotal, 2),
+                "deleted": deleted,
+                "quantity": item.quantity if action != "delete" else 0,
+                "item_total": item.variant_color.price * item.quantity if action != "delete" else 0,
+                "sub_total": subtotal,
                 "deliveryFee": delivery_fee,
-                "total": round(total, 2)
+                "total": subtotal + delivery_fee
             })
 
-        # --------------------------------
-        # تعديل Session cart للزائر
-        # --------------------------------
+        # ------- زائر -------
         else:
             session_cart = request.session.get("cart", {})
 
@@ -140,13 +133,10 @@ def checkout(request, item_id=None):
                 return JsonResponse({"success": False})
 
             if action == "increase":
-                # فحص المخزون قبل الزيادة
-                key = item_id
-                product_id, variant_id = key.split("-")
-                variant = ProductVariant.objects.filter(id=variant_id).first()
-                if not variant:
-                    return JsonResponse({"success": False})
-                if session_cart[item_id] + 1 > variant.quantity:
+                product_id, variant_color_id = item_id.split("-")
+                from products.models import VariantColor
+                variant_color = VariantColor.objects.filter(id=variant_color_id).first()
+                if session_cart[item_id] + 1 > variant_color.quantity:
                     return JsonResponse({"success": False, "error": _("⚠️ كمية غير متاحة")})
                 session_cart[item_id] += 1
 
@@ -158,43 +148,34 @@ def checkout(request, item_id=None):
 
             request.session["cart"] = session_cart
 
-            # إعادة الحساب
             subtotal = 0
             item_total = 0
 
             for key, qty in session_cart.items():
-                product_id, variant_id = key.split("-")
-                variant = ProductVariant.objects.filter(id=variant_id).first()
-                if not variant:
-                    continue
-                item_total_current = variant.price * qty
-                subtotal += item_total_current
-
+                product_id, variant_color_id = key.split("-")
+                variant_color = VariantColor.objects.filter(id=variant_color_id).first()
+                subtotal += variant_color.price * qty
                 if key == item_id:
-                    item_total = item_total_current
-
-            total = subtotal + delivery_fee
+                    item_total = variant_color.price * qty
 
             return JsonResponse({
                 "success": True,
                 "quantity": session_cart.get(item_id, 0),
-                "item_total": round(item_total, 2),
-                "sub_total": round(subtotal, 2),
+                "item_total": item_total,
+                "sub_total": subtotal,
                 "deliveryFee": delivery_fee,
-                "total": round(total, 2)
+                "total": subtotal + delivery_fee
             })
 
-    # ==========================
-    # عرض صفحة Checkout
-    # ==========================
+    # ======= إرجاع الصفحة ========
     return render(request, "orders/checkout.html", {
-        "cart": cart,
         "cart_detail_data": cart_detail_data,
         "deliveryFee": delivery_fee,
-        "subtotal": round(subtotal, 2),
-        "total": round(total, 2),
+        "subtotal": subtotal,
+        "total": total,
         "is_guest": not request.user.is_authenticated
     })
+
 
 
 def add_to_cart(request):
@@ -202,12 +183,14 @@ def add_to_cart(request):
     إضافة عنصر إلى السلة (AJAX expected).
     Request POST fields:
      - product_id
-     - variant_id (optional; if not provided pick default)
+     - variant_color_id (required)
      - quantity
     """
+    
+    from products.models import VariantColor
 
     product_id = request.POST.get('product_id')
-    variant_id = request.POST.get('variant_id')
+    variant_color_id = request.POST.get('variant_color_id')
     quantity = int(request.POST.get('quantity', 1))
 
     # 1) تحقق من المنتج
@@ -219,31 +202,29 @@ def add_to_cart(request):
             'message': _('❌ المنتج غير موجود.')
         }, status=400)
 
-    # 2) اختيار الـ variant
-    if not variant_id or not str(variant_id).isdigit():
-        default_variant = ProductVariant.objects.filter(product=product).first()
-        if default_variant:
-            variant = default_variant
-            variant_id = default_variant.id
-        else:
-            return JsonResponse({
-                'success': False,
-                'message': _("⚠️ لا يوجد متغيرات (variants) متاحة لهذا المنتج.")
-            }, status=400)
-    else:
-        try:
-            variant = ProductVariant.objects.get(id=variant_id, product=product)
-        except ProductVariant.DoesNotExist:
-            return JsonResponse({
-                'success': False,
-                'message': _("❌ المتغير المحدد غير موجود لهذا المنتج.")
-            }, status=400)
-
-    # 3) التحقق من الكمية المتاحة
-    if quantity > variant.quantity:
+    # 2) اختيار الـ variant_color
+    if not variant_color_id or not str(variant_color_id).isdigit():
         return JsonResponse({
             'success': False,
-            'message': _('⚠️ الكمية المتاحة فقط هي %(qty)s') % {'qty': variant.quantity}
+            'message': _("⚠️ يجب اختيار نمط ولون.")
+        }, status=400)
+    
+    try:
+        variant_color = VariantColor.objects.select_related('variant', 'color').get(
+            id=variant_color_id,
+            variant__product=product
+        )
+    except VariantColor.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'message': _("❌ النمط أو اللون المحدد غير موجود.")
+        }, status=400)
+
+    # 3) التحقق من الكمية المتاحة
+    if quantity > variant_color.quantity:
+        return JsonResponse({
+            'success': False,
+            'message': _('⚠️ الكمية المتاحة فقط هي %(qty)s') % {'qty': variant_color.quantity}
         })
 
     # ====================================================
@@ -251,12 +232,12 @@ def add_to_cart(request):
     # ====================================================
     if not request.user.is_authenticated:
         session_cart = request.session.get('cart', {})
-        key = _session_key_for(product.id, variant.id)
+        key = f"{product.id}-{variant_color.id}"
 
         # تحديث السلة
         if key in session_cart:
             new_qty = session_cart[key] + quantity
-            if new_qty > variant.quantity:
+            if new_qty > variant_color.quantity:
                 return JsonResponse({'success': False, 'message': _('⚠️ كمية غير متاحة')})
             session_cart[key] = new_qty
         else:
@@ -278,20 +259,20 @@ def add_to_cart(request):
     cart_detail, created = CartDetail.objects.get_or_create(
         cart=cart,
         product=product,
-        variant=variant
+        variant_color=variant_color
     )
 
     if not created:
         new_qty = cart_detail.quantity + quantity
-        if new_qty > variant.quantity:
+        if new_qty > variant_color.quantity:
             return JsonResponse({'success': False, 'message': _('⚠️ كمية غير متاحة')})
         cart_detail.quantity = new_qty
     else:
-        if quantity > variant.quantity:
+        if quantity > variant_color.quantity:
             return JsonResponse({'success': False, 'message': _('⚠️ كمية غير متاحة')})
         cart_detail.quantity = quantity
 
-    cart_detail.total = round(variant.price * cart_detail.quantity, 2)
+    cart_detail.total = round(variant_color.price * cart_detail.quantity, 2)
     cart_detail.save()
 
     return JsonResponse({
@@ -313,7 +294,7 @@ def create_order(request):
     # Get cart and details
     try:
         cart = Cart.objects.get(user=request.user, status='Inprogress')
-        cart_items = CartDetail.objects.filter(cart=cart).select_related('variant', 'product')
+        cart_items = CartDetail.objects.filter(cart=cart).select_related('variant_color', 'variant_color__variant', 'variant_color__color', 'product')
         if not cart_items.exists():
             messages.error(request, _('❌ السلة فارغة.'))
             return redirect('orders:checkout')
@@ -337,13 +318,16 @@ def create_order(request):
 
     # Check stock for all items
     for item in cart_items:
-        if item.quantity > item.variant.quantity:
+        if not item.variant_color:
+            continue
+        if item.quantity > item.variant_color.quantity:
             messages.error(request, _(
-                '❌ عذراً، الكمية المتوفرة من "%(product)s" (المتغير: %(variant)s) هي %(qty)s فقط.'
+                '❌ عذراً، الكمية المتوفرة من "%(product)s" (%(variant)s - %(color)s) هي %(qty)s فقط.'
             ) % {
                 'product': item.product.name,
-                'variant': item.variant.name if item.variant else _('N/A'),
-                'qty': item.variant.quantity if item.variant else 0
+                'variant': item.variant_color.variant.name,
+                'color': item.variant_color.color.name,
+                'qty': item.variant_color.quantity
             })
             return redirect('orders:checkout')
 
@@ -372,21 +356,24 @@ def create_order(request):
 
         # create details and subtract stock
         for item in cart_items:
+            if not item.variant_color:
+                continue
+                
             quantity = item.quantity
-            variant = item.variant
+            variant_color = item.variant_color
 
             OrderDetail.objects.create(
                 order=order,
                 product=item.product,
-                variant=variant,
+                variant_color=variant_color,
                 quantity=quantity,
-                price=variant.price,
-                total=round(variant.price * quantity, 2)
+                price=variant_color.price,
+                total=round(variant_color.price * quantity, 2)
             )
 
             # reduce stock
-            variant.quantity = max(variant.quantity - quantity, 0)
-            variant.save()
+            variant_color.quantity = max(variant_color.quantity - quantity, 0)
+            variant_color.save()
 
         # calculate totals
         order.calculate_total()
@@ -406,7 +393,7 @@ def create_order(request):
 
 def order_success(request, order_code):
     order = get_object_or_404(Order, code=order_code)
-    order_details = OrderDetail.objects.filter(order=order).select_related('variant', 'product')
+    order_details = OrderDetail.objects.filter(order=order).select_related('variant_color', 'variant_color__variant', 'variant_color__color', 'product')
 
     return render(request, 'orders/order_success.html', {
         'order': order,
@@ -426,9 +413,30 @@ def my_orders(request):
 @login_required
 def order_detail_view(request, order_code):
     order = get_object_or_404(Order, code=order_code, user=request.user)
-    order_details = OrderDetail.objects.filter(order=order).select_related('variant', 'product')
+    order_details = OrderDetail.objects.filter(order=order).select_related('variant_color', 'variant_color__variant', 'variant_color__color', 'product')
 
     return render(request, 'orders/order_detail.html', {
         'order': order,
         'order_details': order_details
     })
+
+
+@login_required
+def delete_order(request, order_code):
+    """
+    حذف طلب (للعميل فقط - الطلبات التي لم يتم شحنها بعد)
+    """
+    order = get_object_or_404(Order, code=order_code, user=request.user)
+    
+    # السماح بالحذف فقط للطلبات التي لم يتم شحنها
+    if order.status in ['Shipped', 'Delivered']:
+        messages.error(request, _('❌ لا يمكن حذف الطلب بعد الشحن. يرجى التواصل مع خدمة العملاء.'))
+        return redirect('orders:my_orders')
+    
+    if request.method == 'POST':
+        order_code_display = order.code
+        order.delete()
+        messages.success(request, _('✅ تم حذف الطلب #%(code)s بنجاح') % {'code': order_code_display})
+        return redirect('orders:my_orders')
+    
+    return redirect('orders:my_orders')

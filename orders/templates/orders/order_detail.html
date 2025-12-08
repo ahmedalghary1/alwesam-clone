@@ -353,6 +353,12 @@
        {% trans "المنتج" %}
       </th>
       <th>
+       {% trans "النمط" %}
+      </th>
+      <th>
+       {% trans "اللون" %}
+      </th>
+      <th>
        {% trans "السعر" %}
       </th>
       <th>
@@ -368,8 +374,8 @@
      <tr>
       <td>
        <div style="display: flex; align-items: center; gap: 15px;">
-        {% if item.product.image %}
-        <img alt="{{ item.product.name }}" class="product-image" src="{{ item.product.image.url }}"/>
+        {% if item.product.main_image %}
+        <img alt="{{ item.product.name }}" class="product-image" src="{{ item.product.main_image.url }}"/>
         {% else %}
         <div class="product-image" style="background: var(--light-gray); display: flex; align-items: center; justify-content: center;">
          <i class="fas fa-box" style="color: #999;">
@@ -380,6 +386,24 @@
          {{ item.product.name }}
         </span>
        </div>
+      </td>
+      <td>
+       {% if item.variant_color and item.variant_color.variant %}
+         <strong>{{ item.variant_color.variant.name }}</strong>
+         <br><small style="color: #666;">{{ item.variant_color.variant.code }}</small>
+        {% else %}
+         -
+       {% endif %}
+      </td>
+      <td>
+       {% if item.variant_color and item.variant_color.color %}
+         <div style="display: flex; align-items: center; gap: 10px;">
+           <div style="width: 28px; height: 28px; background-color: {{ item.variant_color.color.hex_code|default:'#ccc' }}; border: 2px solid #ddd; border-radius: 6px;"></div>
+           <span style="font-weight: 600;">{{ item.variant_color.color.name }}</span>
+         </div>
+       {% else %}
+         -
+       {% endif %}
       </td>
       <td>
        {{ item.price }} {% trans "جنيه" %}
