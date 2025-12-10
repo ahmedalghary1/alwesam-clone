@@ -8,10 +8,12 @@
 {% endblock title %}
 
 {% block style %}
-<link href="{% static 'css/product_detail.css' %}" rel="stylesheet"/>
+<link href="{% static 'css/product_detail.css' %}" rel="stylesheet" />
 <style>
     /* رسائل Toast */
-    .cart-success-toast, .cart-warning-toast, .cart-error-toast {
+    .cart-success-toast,
+    .cart-warning-toast,
+    .cart-error-toast {
         position: fixed;
         top: 100px;
         left: 50%;
@@ -26,22 +28,29 @@
         font-weight: 600;
         animation: slideDown 0.3s ease;
     }
-    
+
     .cart-success-toast {
         background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
     }
-    
+
     .cart-warning-toast {
         background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
     }
-    
+
     .cart-error-toast {
         background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     }
 
     @keyframes slideDown {
-        from { opacity: 0; transform: translate(-50%, -20px); }
-        to { opacity: 1; transform: translate(-50%, 0); }
+        from {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
     }
 
     /* تصميم اختيار الأنماط */
@@ -151,7 +160,8 @@
 
     /* اختيار الألوان */
     .color-options {
-        display: none; /* مخفية بشكل افتراضي */
+        display: none;
+        /* مخفية بشكل افتراضي */
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 10px;
         padding-top: 15px;
@@ -270,7 +280,7 @@
         .variant-options {
             grid-template-columns: repeat(2, 1fr);
         }
-        
+
         .color-options {
             grid-template-columns: 1fr;
         }
@@ -280,9 +290,201 @@
         .variant-options {
             grid-template-columns: 1fr;
         }
-        
-        .variant-option, .color-option {
+
+        .variant-option,
+        .color-option {
             padding: 10px;
+        }
+    }
+
+    /* ============================== */
+    /*         REVIEWS STYLES         */
+    /* ============================== */
+
+    .reviews-summary {
+        background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+        padding: 20px;
+        border-radius: 12px;
+        border: 2px solid #fed72b;
+    }
+
+    .average-rating-display {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #292222;
+    }
+
+    .average-rating-display .rating-max {
+        font-size: 1.2rem;
+        color: #999;
+        font-weight: 400;
+    }
+
+    .rating-stars-display i.filled {
+        color: #fed72b;
+        font-size: 1.3rem;
+    }
+
+    .rating-stars-display i.empty {
+        color: #ddd;
+        font-size: 1.3rem;
+    }
+
+    .reviews-total {
+        color: #666;
+        font-size: 14px;
+    }
+
+    /* Star Rating Input */
+    .star-rating-input .star-input {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+
+    .star-input input[type="radio"] {
+        display: none;
+    }
+
+    .star-input label {
+        cursor: pointer;
+        font-size: 2rem;
+        color: #ddd;
+        transition: color 0.2s;
+    }
+
+    .star-input label:hover,
+    .star-input label:hover~label,
+    .star-input input:checked~label {
+        color: #fed72b;
+    }
+
+    /* Review Form */
+    .add-review-section {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+    }
+
+    .add-review-section h5 {
+        color: #292222;
+        font-weight: 700;
+    }
+
+    .add-review-section h5 i {
+        color: #fed72b;
+        margin-left: 8px;
+    }
+
+    .review-form .btn-primary {
+        background: linear-gradient(135deg, #fed72b 0%, #f5c800 100%);
+        border: none;
+        color: #292222;
+        font-weight: 700;
+        padding: 12px 25px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .review-form .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(254, 215, 43, 0.4);
+    }
+
+    /* Review Item */
+    .review-item {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #e9ecef;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .review-item:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .reviewer-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .reviewer-avatar {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #fed72b 0%, #f5c800 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        color: #292222;
+        font-size: 18px;
+    }
+
+    .reviewer-name {
+        font-weight: 700;
+        color: #292222;
+        display: block;
+        font-size: 15px;
+    }
+
+    .review-date {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .review-rating i.filled {
+        color: #fed72b;
+    }
+
+    .review-rating i.empty {
+        color: #ddd;
+    }
+
+    .review-content {
+        color: #555;
+        line-height: 1.7;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #eee;
+    }
+
+    .delete-review-btn {
+        margin-top: 10px;
+        font-size: 12px;
+    }
+
+    .no-reviews {
+        color: #999;
+    }
+
+    .no-reviews i {
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .review-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .average-rating-display {
+            font-size: 2rem;
         }
     }
 </style>
@@ -291,7 +493,7 @@
 {% block content %}
 <!-- Breadcrumb -->
 <div class="container">
-    <nav aria-label="{% trans "breadcrumb" %}">
+    <nav aria-label="{% trans " breadcrumb" %}">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="{% url 'home' %}">
@@ -319,22 +521,22 @@
                     <div class="product-gallery">
                         <span id="productBadge" class="product-badge">{% trans "التحقق..." %}</span>
                         <img alt="{{ object.name }}" class="product-main-image" id="mainImage"
-                             src="{{ object.main_image.url }}"/>
+                            src="{{ object.main_image.url }}" />
                     </div>
 
                     <div class="thumbnail-gallery" id="thumbnailGallery">
                         {% if object.main_image %}
                         <div class="thumbnail active" onclick="changeImage('{{ object.main_image.url }}', this)">
-                            <img alt="{{ object.name }}" src="{{ object.main_image.url }}"/>
+                            <img alt="{{ object.name }}" src="{{ object.main_image.url }}" />
                         </div>
                         {% endif %}
 
                         {% if images %}
-                            {% for image in images %}
-                            <div class="thumbnail" onclick="changeImage('{{ image.image.url }}', this)">
-                                <img alt="{{ object.name }}" src="{{ image.image.url }}"/>
-                            </div>
-                            {% endfor %}
+                        {% for image in images %}
+                        <div class="thumbnail" onclick="changeImage('{{ image.image.url }}', this)">
+                            <img alt="{{ object.name }}" src="{{ image.image.url }}" />
+                        </div>
+                        {% endfor %}
                         {% endif %}
                     </div>
                 </div>
@@ -376,9 +578,9 @@
                         <div class="price-wrapper">
                             <div class="product-price" id="productPrice">
                                 {% if object.get_min_price %}
-                                    {{ object.get_min_price }} <span class="currency">{% trans "جنيه" %}</span>
+                                {{ object.get_min_price }} <span class="currency">{% trans "جنيه" %}</span>
                                 {% else %}
-                                    - <span class="currency">{% trans "جنيه" %}</span>
+                                - <span class="currency">{% trans "جنيه" %}</span>
                                 {% endif %}
                             </div>
                         </div>
@@ -390,26 +592,26 @@
                             <div class="selection-label">
                                 <i class="fas fa-boxes"></i>
                                 {% trans "اختر النمط:" %}
-                                <span class="selected-option-name" id="selectedVariantName">{% trans "اختر النمط" %}</span>
+                                <span class="selected-option-name" id="selectedVariantName">{% trans "اختر النمط"
+                                    %}</span>
                             </div>
-                            
+
                             <div class="variant-options" id="variantOptions">
                                 {% for variant in variants %}
-                                    <div class="variant-option"
-                                        data-variant-id="{{ variant.id }}"
-                                        data-variant-name="{{ variant.name|escapejs }}"
-                                        data-variant-code="{{ variant.code|default:'' }}"
-                                        onclick="selectVariant(this, {{ variant.id }})">
-                                        <div class="variant-name">{{ variant.name }}</div>
-                                        <div class="variant-meta">
-                                            <span class="variant-colors-count" id="variant-colors-{{ variant.id }}">
-                                                <i class="fas fa-palette"></i> -
-                                            </span>
-                                            <span class="variant-price-range" id="variant-price-{{ variant.id }}">
-                                                - جنيه
-                                            </span>
-                                        </div>
+                                <div class="variant-option" data-variant-id="{{ variant.id }}"
+                                    data-variant-name="{{ variant.name|escapejs }}"
+                                    data-variant-code="{{ variant.code|default:'' }}"
+                                    onclick="selectVariant(this, {{ variant.id }})">
+                                    <div class="variant-name">{{ variant.name }}</div>
+                                    <div class="variant-meta">
+                                        <span class="variant-colors-count" id="variant-colors-{{ variant.id }}">
+                                            <i class="fas fa-palette"></i> -
+                                        </span>
+                                        <span class="variant-price-range" id="variant-price-{{ variant.id }}">
+                                            - جنيه
+                                        </span>
                                     </div>
+                                </div>
                                 {% endfor %}
                             </div>
 
@@ -425,7 +627,7 @@
                         <!-- Description -->
                         <div class="product-description">
                             <strong>{% trans "وصف المنتج:" %}</strong>
-                            <br/>
+                            <br />
                             {{ object.description|linebreaks }}
                         </div>
 
@@ -437,7 +639,8 @@
                             </div>
                             <div class="quantity-control">
                                 <button class="quantity-btn" type="button" onclick="decreaseQuantity()">-</button>
-                                <input class="quantity-input" id="productQuantity" max="1" min="1" type="number" value="1"/>
+                                <input class="quantity-input" id="productQuantity" max="1" min="1" type="number"
+                                    value="1" />
                                 <button class="quantity-btn" type="button" onclick="increaseQuantity()">+</button>
 
                                 <span id="stockStatus" class="stock-status">
@@ -454,7 +657,8 @@
 
                         <!-- Action Buttons -->
                         <div class="action-buttons">
-                            <button class="btn-add-to-cart" id="addToCartBtn" onclick="addToCart()" disabled style="opacity: 0.5;">
+                            <button class="btn-add-to-cart" id="addToCartBtn" onclick="addToCart()" disabled
+                                style="opacity: 0.5;">
                                 <i class="fas fa-shopping-cart"></i>
                                 {% trans "أضف إلى السلة" %}
                             </button>
@@ -469,13 +673,23 @@
         <div class="product-tabs">
             <ul class="nav nav-tabs" id="productTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-bs-target="#description" data-bs-toggle="tab" id="description-tab" type="button">
+                    <button class="nav-link active" data-bs-target="#description" data-bs-toggle="tab"
+                        id="description-tab" type="button">
                         <i class="fas fa-info-circle"></i>
                         {% trans "الوصف الكامل" %}
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-bs-target="#shipping" data-bs-toggle="tab" id="shipping-tab" type="button">
+                    <button class="nav-link" data-bs-target="#reviews" data-bs-toggle="tab" id="reviews-tab"
+                        type="button">
+                        <i class="fas fa-star"></i>
+                        {% trans "التقييمات" %}
+                        <span class="badge bg-warning text-dark ms-1" id="reviewsCountBadge">{{ reviews_count }}</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-target="#shipping" data-bs-toggle="tab" id="shipping-tab"
+                        type="button">
                         <i class="fas fa-truck"></i>
                         {% trans "الشحن والإرجاع" %}
                     </button>
@@ -487,6 +701,125 @@
                         {{ object.description|linebreaks }}
                     </div>
                 </div>
+
+                <!-- Reviews Tab -->
+                <div class="tab-pane fade" id="reviews">
+                    <div class="p-4">
+                        <!-- Average Rating -->
+                        <div class="reviews-summary mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="average-rating-display">
+                                    <span class="rating-value" id="averageRating">{{ average_rating }}</span>
+                                    <span class="rating-max">/5</span>
+                                </div>
+                                <div class="rating-stars-display">
+                                    {% for i in "12345" %}
+                                    <i
+                                        class="fas fa-star {% if forloop.counter <= average_rating %}filled{% else %}empty{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <span class="reviews-total" id="reviewsTotalText">({{ reviews_count }} {% trans "تقييم"
+                                    %})</span>
+                            </div>
+                        </div>
+
+                        <!-- Add Review Form -->
+                        {% if can_review %}
+                        <div class="add-review-section mb-4">
+                            <h5 class="mb-3">
+                                <i class="fas fa-edit"></i>
+                                {% trans "أضف تقييمك" %}
+                            </h5>
+                            <form id="reviewForm" action="{% url 'products:add_review' object.slug %}"
+                                class="review-form">
+                                {% csrf_token %}
+                                <div class="star-rating-input mb-3">
+                                    <label class="form-label">{% trans "التقييم:" %}</label>
+                                    <div class="star-input">
+                                        {% for i in "54321" %}
+                                        <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}">
+                                        <label for="star{{ i }}"><i class="fas fa-star"></i></label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="reviewComment" class="form-label">{% trans "تعليقك (اختياري):"
+                                        %}</label>
+                                    <textarea class="form-control" id="reviewComment" name="comment" rows="3"
+                                        placeholder="{% trans 'شاركنا رأيك في المنتج...' %}"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="submitReviewBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                    {% trans "إرسال التقييم" %}
+                                </button>
+                            </form>
+                        </div>
+                        {% elif has_reviewed %}
+                        <div class="alert alert-info mb-4">
+                            <i class="fas fa-check-circle"></i>
+                            {% trans "لقد قمت بتقييم هذا المنتج بالفعل" %}
+                        </div>
+                        {% elif user.is_authenticated %}
+                        <div class="alert alert-warning mb-4">
+                            <i class="fas fa-shopping-cart"></i>
+                            {% trans "يجب شراء المنتج وتسليمه لتتمكن من التقييم" %}
+                        </div>
+                        {% else %}
+                        <div class="alert alert-secondary mb-4">
+                            <i class="fas fa-user"></i>
+                            {% trans "سجل دخولك لتتمكن من التقييم" %}
+                            <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="alert-link">{% trans
+                                "تسجيل الدخول" %}</a>
+                        </div>
+                        {% endif %}
+
+                        <!-- Reviews List -->
+                        <div class="reviews-list" id="reviewsList">
+                            {% if reviews %}
+                            {% for review in reviews %}
+                            <div class="review-item" data-review-id="{{ review.id }}">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">
+                                            {{ review.user.first_name|default:review.user.email|slice:":1"|upper }}
+                                        </div>
+                                        <div>
+                                            <span class="reviewer-name">{{
+                                                review.user.first_name|default:review.user.email }}</span>
+                                            <span class="review-date">{{ review.created_at|date:"Y-m-d" }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="review-rating">
+                                        {% for i in "12345" %}
+                                        <i
+                                            class="fas fa-star {% if forloop.counter <= review.rating %}filled{% else %}empty{% endif %}"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% if review.comment %}
+                                <div class="review-content">
+                                    {{ review.comment }}
+                                </div>
+                                {% endif %}
+                                {% if request.user == review.user %}
+                                <button class="btn btn-sm btn-outline-danger delete-review-btn"
+                                    data-review-id="{{ review.id }}">
+                                    <i class="fas fa-trash"></i>
+                                    {% trans "حذف" %}
+                                </button>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="no-reviews text-center py-5" id="noReviewsMessage">
+                                <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">{% trans "لا توجد تقييمات بعد. كن أول من يقيم هذا المنتج!" %}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
                 <div class="tab-pane fade" id="shipping">
                     <div class="p-4">
                         <h4 class="mb-4">
@@ -494,9 +827,12 @@
                             {% trans "سياسة الشحن" %}
                         </h4>
                         <ul class="product-features">
-                            <li><i class="fas fa-shipping-fast"></i>{% trans "شحن مجاني للطلبات فوق 500 جنيه داخل القاهرة" %}</li>
-                            <li><i class="fas fa-clock"></i>{% trans "التوصيل خلال 2-4 أيام عمل داخل القاهرة والجيزة" %}</li>
-                            <li><i class="fas fa-map-marked-alt"></i>{% trans "التوصيل خلال 5-7 أيام عمل للمحافظات الأخرى" %}</li>
+                            <li><i class="fas fa-shipping-fast"></i>{% trans "شحن مجاني للطلبات فوق 500 جنيه داخل
+                                القاهرة" %}</li>
+                            <li><i class="fas fa-clock"></i>{% trans "التوصيل خلال 2-4 أيام عمل داخل القاهرة والجيزة" %}
+                            </li>
+                            <li><i class="fas fa-map-marked-alt"></i>{% trans "التوصيل خلال 5-7 أيام عمل للمحافظات
+                                الأخرى" %}</li>
                             <li><i class="fas fa-box"></i>{% trans "تغليف آمن ومحترف لحماية المنتج أثناء الشحن" %}</li>
                         </ul>
                         <h4 class="mb-4 mt-5">
@@ -504,15 +840,21 @@
                             {% trans "سياسة الإرجاع والاستبدال" %}
                         </h4>
                         <ul class="product-features">
-                            <li><i class="fas fa-calendar-check"></i>{% trans "إمكانية الإرجاع خلال 14 يوم من تاريخ الاستلام" %}</li>
-                            <li><i class="fas fa-shield-alt"></i>{% trans "ضمان استرجاع المال كاملاً في حالة وجود عيب في المنتج" %}</li>
-                            <li><i class="fas fa-exchange-alt"></i>{% trans "استبدال مجاني في حالة وجود عيب صناعي" %}</li>
-                            <li><i class="fas fa-check-circle"></i>{% trans "يجب أن يكون المنتج في حالته الأصلية مع التغليف" %}</li>
-                            <li><i class="fas fa-headset"></i>{% trans "فريق خدمة العملاء متاح للمساعدة على مدار الساعة" %}</li>
+                            <li><i class="fas fa-calendar-check"></i>{% trans "إمكانية الإرجاع خلال 14 يوم من تاريخ
+                                الاستلام" %}</li>
+                            <li><i class="fas fa-shield-alt"></i>{% trans "ضمان استرجاع المال كاملاً في حالة وجود عيب في
+                                المنتج" %}</li>
+                            <li><i class="fas fa-exchange-alt"></i>{% trans "استبدال مجاني في حالة وجود عيب صناعي" %}
+                            </li>
+                            <li><i class="fas fa-check-circle"></i>{% trans "يجب أن يكون المنتج في حالته الأصلية مع
+                                التغليف" %}</li>
+                            <li><i class="fas fa-headset"></i>{% trans "فريق خدمة العملاء متاح للمساعدة على مدار الساعة"
+                                %}</li>
                         </ul>
                         <div class="alert alert-info mt-4">
                             <strong><i class="fas fa-info-circle"></i>{% trans "ملاحظة:" %}</strong>
-                            {% trans "للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو عبر البريد الإلكتروني info@elwsam.com" %}
+                            {% trans "للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو
+                            عبر البريد الإلكتروني info@elwsam.com" %}
                         </div>
                     </div>
                 </div>
@@ -535,11 +877,12 @@
                 <div class="related-product-card">
                     <a href="{% url 'products:product_detail' product.slug %}">
                         <div class="related-product-image">
-                            <img alt="{{ product.name }}" src="{{ product.main_image.url }}"/>
+                            <img alt="{{ product.name }}" src="{{ product.main_image.url }}" />
                         </div>
                         <div class="related-product-body">
                             <h5 class="related-product-title">{{ product.name }}</h5>
-                            <div class="related-product-price">{{ product.get_min_price|default:"-" }} {% trans "جنيه" %}</div>
+                            <div class="related-product-price">{{ product.get_min_price|default:"-" }} {% trans "جنيه"
+                                %}</div>
                         </div>
                     </a>
                 </div>
@@ -553,7 +896,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-<!-- بيانات الأنماط والألوان -->
+    <!-- بيانات الأنماط والألوان -->
     const variantsData = JSON.parse('{{ variants_json|escapejs }}');
 
 
@@ -568,7 +911,7 @@
      ----------------------------------------------------*/
     function selectVariant(element, variantId) {
         console.log('Selecting variant:', variantId);
-        
+
         // إلغاء active من جميع الأنماط
         document.querySelectorAll('.variant-option').forEach(el => {
             el.classList.remove('active');
@@ -576,17 +919,17 @@
         element.classList.add('active');
 
         selectedVariantId = variantId;
-        
+
         // البحث عن النمط بـ id
         const variant = variantsData.find(v => v.id === variantId);
-        
+
         if (!variant) {
             console.error('Variant not found:', variantId);
             return;
         }
-        
+
         console.log('Variant found:', variant);
-        
+
         // تحديث اسم النمط
         document.getElementById('selectedVariantName').textContent = variant.name;
         document.getElementById('productCode').textContent = variant.code || '-';
@@ -596,19 +939,19 @@
             const prices = variant.colors.map(c => c.price);
             const minPrice = Math.min(...prices);
             const maxPrice = Math.max(...prices);
-            
+
             console.log('Price range:', minPrice, '-', maxPrice);
-            
+
             // عرض نطاق السعر
             if (minPrice === maxPrice) {
-                document.getElementById('productPrice').innerHTML = 
+                document.getElementById('productPrice').innerHTML =
                     `${minPrice} <span class="currency">{% trans "جنيه" %}</span>`;
             } else {
-                document.getElementById('productPrice').innerHTML = 
+                document.getElementById('productPrice').innerHTML =
                     `${minPrice} - ${maxPrice} <span class="currency">{% trans "جنيه" %}</span>`;
             }
         } else {
-            document.getElementById('productPrice').innerHTML = 
+            document.getElementById('productPrice').innerHTML =
                 '- <span class="currency">{% trans "جنيه" %}</span>';
         }
 
@@ -631,11 +974,11 @@
     }
 
     /*----------------------------------------------------
-     |  عرض خيارات الألوان
-     ----------------------------------------------------*/
+    | عرض خيارات الألوان
+    ----------------------------------------------------*/
     function showColorOptions(variant) {
         const container = document.getElementById('colorOptionsContainer');
-        
+
         if (!variant.colors || variant.colors.length === 0) {
             container.innerHTML = '<div class="alert alert-warning mt-3">{% trans "لا توجد ألوان متاحة لهذا النمط" %}</div>';
             // تحديث حالة المخزون
@@ -644,58 +987,54 @@
         }
 
         let html = `
-            <div class="selection-label mt-3">
-                <i class="fas fa-palette"></i>
-                {% trans "اختر اللون:" %}
-                <span class="selected-option-name" id="selectedColorName">{% trans "اختر اللون" %}</span>
-            </div>
-            <div class="color-options show" id="colorOptions">
-        `;
+<div class="selection-label mt-3">
+    <i class="fas fa-palette"></i>
+    {% trans "اختر اللون:" %}
+    <span class="selected-option-name" id="selectedColorName">{% trans "اختر اللون" %}</span>
+</div>
+<div class="color-options show" id="colorOptions">
+    `;
 
         variant.colors.forEach(color => {
             const isAvailable = color.quantity > 0;
             const stockClass = color.quantity > 10 ? 'in-stock' : (color.quantity > 0 ? 'low-stock' : 'out-of-stock');
-            const stockText = color.quantity > 10 ? 
-                '<i class="fas fa-check"></i> متوفر' : 
-                (color.quantity > 0 ? 
-                    `<i class="fas fa-exclamation"></i> ${color.quantity} فقط` : 
+            const stockText = color.quantity > 10 ?
+                '<i class="fas fa-check"></i> متوفر' :
+                (color.quantity > 0 ?
+                    `<i class="fas fa-exclamation"></i> ${color.quantity} فقط` :
                     '<i class="fas fa-times"></i> نفذ');
 
             html += `
-                <div class="color-option ${isAvailable ? '' : 'disabled'}"
-                    data-variant-color-id="${color.variant_color_id}"
-                    data-color-id="${color.color_id}"
-                    data-color-name="${color.name}"
-                    data-color-hex="${color.hex}"
-                    data-color-price="${color.price}"
-                    data-color-quantity="${color.quantity}"
-                    data-color-sku="${color.sku}"
-                    ${isAvailable ? `onclick="selectColor(this)"` : ''}>
-                    
-                    <div class="color-circle" style="background-color: ${color.hex};"></div>
-                    
-                    <div class="color-info">
-                        <div class="color-name">${color.name}</div>
-                        <div class="color-details">
-                            <span class="color-price">${color.price} ج</span>
-                            <span class="color-stock ${stockClass}">${stockText}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
+    <div class="color-option ${isAvailable ? '' : 'disabled'}" data-variant-color-id="${color.variant_color_id}"
+        data-color-id="${color.color_id}" data-color-name="${color.name}" data-color-hex="${color.hex}"
+        data-color-price="${color.price}" data-color-quantity="${color.quantity}" data-color-sku="${color.sku}"
+        ${isAvailable ? `onclick="selectColor(this)" ` : ''}>
+
+        <div class="color-circle" style="background-color: ${color.hex};"></div>
+
+        <div class="color-info">
+            <div class="color-name">${color.name}</div>
+            <div class="color-details">
+                <span class="color-price">${color.price} ج</span>
+                <span class="color-stock ${stockClass}">${stockText}</span>
+            </div>
+        </div>
+    </div>
+    `;
         });
 
-        html += '</div>';
+        html += '
+</div > ';
         container.innerHTML = html;
-        
+
         // حساب إجمالي الكمية المتاحة
         const totalQuantity = variant.colors.reduce((sum, color) => sum + color.quantity, 0);
         updateProductAvailability(totalQuantity);
     }
 
     /*----------------------------------------------------
-     |  اختيار اللون
-     ----------------------------------------------------*/
+    | اختيار اللون
+    ----------------------------------------------------*/
     function selectColor(element) {
         // إلغاء active من جميع الألوان
         document.querySelectorAll('.color-option').forEach(el => {
@@ -714,9 +1053,9 @@
 
         // تحديث الواجهة
         document.getElementById('selectedColorName').textContent = colorName;
-        document.getElementById('productPrice').innerHTML = 
+        document.getElementById('productPrice').innerHTML =
             `${selectedPrice} <span class="currency">{% trans "جنيه" %}</span>`;
-        
+
         if (sku) {
             document.getElementById('productCode').textContent = sku;
         }
@@ -748,8 +1087,8 @@
     }
 
     /*----------------------------------------------------
-     |  تحديث حالة المخزون
-     ----------------------------------------------------*/
+    | تحديث حالة المخزون
+    ----------------------------------------------------*/
     function updateStockStatus() {
         const stockIcon = document.getElementById('stockIcon');
         const stockText = document.getElementById('stockText');
@@ -769,11 +1108,11 @@
     }
 
     /*----------------------------------------------------
-     |  تحديث توفر المنتج (للاستخدام من showColorOptions)
-     ----------------------------------------------------*/
+    | تحديث توفر المنتج (للاستخدام من showColorOptions)
+    ----------------------------------------------------*/
     function updateProductAvailability(quantity) {
         console.log('updateProductAvailability called with quantity:', quantity);
-        
+
         const stockIcon = document.getElementById('stockIcon');
         const stockText = document.getElementById('stockText');
         const productBadge = document.getElementById('productBadge');
@@ -785,7 +1124,7 @@
             productBadge.textContent = '{% trans "متوفر" %}';
             productBadge.classList.remove('out-of-stock-badge');
             productBadge.classList.add('in-stock-badge');
-            
+
             // تحديث max للكمية
             if (qtyInput) {
                 qtyInput.max = quantity;
@@ -800,7 +1139,7 @@
             productBadge.textContent = '{% trans "غير متوفر" %}';
             productBadge.classList.remove('in-stock-badge');
             productBadge.classList.add('out-of-stock-badge');
-            
+
             if (qtyInput) {
                 qtyInput.max = 0;
                 qtyInput.value = 0;
@@ -809,20 +1148,20 @@
     }
 
     /*----------------------------------------------------
-     |  تحديث صور النمط
-     ----------------------------------------------------*/
+    | تحديث صور النمط
+    ----------------------------------------------------*/
     function updateVariantImages(variant) {
         if (!variant.images || variant.images.length === 0) return;
 
         const generalImages = variant.images.filter(img => !img.color_id);
-        const colorImages   = variant.images.filter(img => img.color_id);
+        const colorImages = variant.images.filter(img => img.color_id);
 
         let imagesToShow = [];
 
         if (generalImages.length > 0) {
             imagesToShow = generalImages;
         } else if (colorImages.length > 0) {
-            imagesToShow = colorImages;   // ✅ التصحيح هنا
+            imagesToShow = colorImages; // ✅ التصحيح هنا
         } else {
             imagesToShow = variant.images;
         }
@@ -832,15 +1171,15 @@
     }
 
     /*----------------------------------------------------
-     |  تحديث صور اللون
-     ----------------------------------------------------*/
+    | تحديث صور اللون
+    ----------------------------------------------------*/
     function updateColorImages(colorId) {
         const variant = variantsData.find(v => v.id === selectedVariantId);
         if (!variant || !variant.images) return;
 
         // الصور الخاصة باللون المحدد
         const colorImages = variant.images.filter(img => img.color_id === colorId);
-        
+
         if (colorImages.length > 0) {
             document.getElementById('mainImage').src = colorImages[0].url;
             updateThumbnails(colorImages);
@@ -848,66 +1187,60 @@
     }
 
     /*----------------------------------------------------
-     |  تحديث معرض الصور المصغرة
-     ----------------------------------------------------*/
+    | تحديث معرض الصور المصغرة
+    ----------------------------------------------------*/
     function updateThumbnails(images) {
         const gallery = document.getElementById('thumbnailGallery');
         let html = '';
 
         images.forEach((img, index) => {
             html += `
-                <div class="thumbnail ${index === 0 ?
+<div class="thumbnail ${index === 0 ?
 
-'active' : ''}" onclick="changeImage('${img.url}', this)">
-                    <img alt="Product Image" src="${img.url}"/>
-                </div>
-            `;
+                    'active' : ''}" onclick="changeImage('${img.url}', this)">
+    <img alt="Product Image" src="${img.url}" />
+</div>
+`;
         });
 
         gallery.innerHTML = html;
     }
 
     /*----------------------------------------------------
-     |  تغيير الصورة الرئيسية
-     ----------------------------------------------------*/
+    | تغيير الصورة الرئيسية
+    ----------------------------------------------------*/
     function changeImage(imageUrl, element) {
         document.getElementById('mainImage').src = imageUrl;
-        
+
         // إزالة active من جميع الصور المصغرة
         document.querySelectorAll('.thumbnail').forEach(thumb => {
             thumb.classList.remove('active');
         });
-        
+
         // إضافة active للصورة المختارة
         element.classList.add('active');
     }
 
     /*----------------------------------------------------
-     |  التحكم في الكمية
-     ----------------------------------------------------*/
+    | التحكم في الكمية
+    ----------------------------------------------------*/
     function increaseQuantity() {
         const input = document.getElementById('productQuantity');
         const max = parseInt(input.max);
         const current = parseInt(input.value);
-        
-        if (current < max) {
-            input.value = current + 1;
-        }
-    }
 
-    function decreaseQuantity() {
-        const input = document.getElementById('productQuantity');
-        const min = parseInt(input.min);
-        const current = parseInt(input.value);
-        
-        if (current > min) {
-            input.value = current - 1;
-        }
+        if (current < max) { input.value = current + 1; }
+    } function decreaseQuantity() {
+        const
+        input = document.getElementById('productQuantity'); const min = parseInt(input.min); const
+            current = parseInt(input.value); if (current > min) {
+                input.value = current - 1;
+            }
     }
 
     /*----------------------------------------------------
-     |  إضافة المنتج للسلة
-     ----------------------------------------------------*/
+    | إضافة المنتج للسلة
+    ----------------------------------------------------*/
     function addToCart() {
         // التحقق من اختيار النمط واللون
         if (!selectedVariantId) {
@@ -937,10 +1270,10 @@
                 'quantity': quantity,
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     showToast('success', 'تمت إضافة المنتج إلى السلة بنجاح');
-                    
+
                     // تحديث عداد السلة إن وجد
                     if (response.cart_count) {
                         const cartCounter = document.querySelector('.cart-count');
@@ -952,21 +1285,21 @@
                     showToast('error', response.message || 'حدث خطأ أثناء إضافة المنتج');
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 let errorMsg = 'حدث خطأ أثناء إضافة المنتج للسلة';
-                
+
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     errorMsg = xhr.responseJSON.message;
                 }
-                
+
                 showToast('error', errorMsg);
             }
         });
     }
 
     /*----------------------------------------------------
-     |  عرض رسائل Toast
-     ----------------------------------------------------*/
+    | عرض رسائل Toast
+    ----------------------------------------------------*/
     function showToast(type, message) {
         // إزالة أي toast موجود
         const existingToasts = document.querySelectorAll('[class*="cart-"][class*="-toast"]');
@@ -976,9 +1309,9 @@
         const toast = document.createElement('div');
         toast.className = `cart-${type}-toast`;
         toast.textContent = message;
-        
+
         document.body.appendChild(toast);
-        
+
         // عرض الـ toast
         setTimeout(() => {
             toast.style.display = 'block';
@@ -994,8 +1327,8 @@
     }
 
     /*----------------------------------------------------
-     |  تحديث معلومات الأنماط (الأسعار والألوان)
-     ----------------------------------------------------*/
+    | تحديث معلومات الأنماط (الأسعار والألوان)
+    ----------------------------------------------------*/
     function updateVariantsMeta() {
         variantsData.forEach(variant => {
             // تحديث عدد الألوان
@@ -1021,80 +1354,14 @@
     }
 
     /*----------------------------------------------------
-     |  إضافة المنتج للسلة
-     ----------------------------------------------------*/
-    function addToCart() {
-        // التحقق من اختيار نمط ولون
-        const variantColorId = document.getElementById('selectedVariantColorId').value;
-        
-        if (!variantColorId) {
-            showToast('error', '{% trans "يرجى اختيار نمط ولون أولاً" %}');
-            return;
-        }
+    | إضافة المنتج للسلة
+    ----------------------------------------------------*/
 
-        // الحصول على الكمية
-        const quantity = parseInt(document.getElementById('productQuantity').value) || 1;
-        
-        // الحصول على CSRF token
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        // إرسال الطلب
-        const formData = new FormData();
-        formData.append('product_id', '{{ object.id }}');
-        formData.append('variant_color_id', variantColorId);
-        formData.append('quantity', quantity);
-        formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
-
-        // تعطيل الزر مؤقتاً
-        const addBtn = document.getElementById('addToCartBtn');
-        addBtn.disabled = true;
-        addBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ الإضافة...';
-
-        fetch('{% url "orders:add-to-cart" %}', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast('success', data.message);
-                // تحديث عداد السلة إذا كان موجوداً
-                const cartCountEl = document.querySelector('.cart-count');
-                if (cartCountEl && data.cart_count) {
-                    cartCountEl.textContent = data.cart_count;
-                }
-            } else {
-                showToast('error', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('error', '{% trans "حدث خطأ، يرجى المحاولة مرة أخرى" %}');
-        })
-        .finally(() => {
-            // إعادة تفعيل الزر
-            addBtn.disabled = false;
-            addBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> {% trans "أضف إلى السلة" %}';
-        });
-    }
 
     /*----------------------------------------------------
-     |  تهيئة الصفحة عند التحميل
-     ----------------------------------------------------*/
-    document.addEventListener('DOMContentLoaded', function() {
+    | تهيئة الصفحة عند التحميل
+    ----------------------------------------------------*/
+    document.addEventListener('DOMContentLoaded', function () {
         // تحديث معلومات الأنماط
         updateVariantsMeta();
 
@@ -1108,18 +1375,173 @@
 
         // منع إدخال قيم غير صحيحة في حقل الكمية
         const qtyInput = document.getElementById('productQuantity');
-        qtyInput.addEventListener('input', function() {
+        qtyInput.addEventListener('input', function () {
             const value = parseInt(this.value);
             const min = parseInt(this.min);
             const max = parseInt(this.max);
 
-            if (value < min) {
-                this.value = min;
-            } else if (value > max) {
+            if (value < min) { this.value = min; } else if (value > max) {
                 this.value = max;
             }
         });
     });
+
+    /*----------------------------------------------------
+    | Reviews - إضافة وحذف التقييمات
+    ----------------------------------------------------*/
+
+    // إرسال التقييم
+    const reviewForm = document.getElementById('reviewForm');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const rating = document.querySelector('input[name="rating"]:checked');
+            const comment = document.getElementById('reviewComment').value;
+            const submitBtn = document.getElementById('submitReviewBtn');
+
+            if (!rating) {
+                showToast('warning', '{% trans "يرجى اختيار عدد النجوم" %}');
+                return;
+            }
+
+            // تعطيل الزر
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "جارٍ الإرسال..." %}';
+
+            const formData = new FormData();
+            formData.append('rating', rating.value);
+            formData.append('comment', comment);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('{% url "products:add_review" object.slug %}', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('success', data.message);
+
+                        // تحديث متوسط التقييم والعدد
+                        document.getElementById('averageRating').textContent = data.new_average;
+                        document.getElementById('reviewsCountBadge').textContent = data.new_count;
+                        document.getElementById('reviewsTotalText').textContent = '(' + data.new_count + ' {% trans "تقييم" %})';
+
+                        // إخفاء النموذج
+                        document.querySelector('.add-review-section').innerHTML =
+                            '<div class="alert alert-info"><i class="fas fa-check-circle"></i> {% trans "لقد قمت بتقييم هذا المنتج
+            بالفعل" %}</div>';
+
+                        // إضافة التقييم الجديد للقائمة
+                        const reviewsList = document.getElementById('reviewsList');
+                        const noReviewsMsg = document.getElementById('noReviewsMessage');
+                        if (noReviewsMsg) noReviewsMsg.remove();
+
+                        const starsHtml = generateStarsHtml(data.review.rating);
+                        const newReviewHtml = `
+        <div class="review-item" data-review-id="${data.review.id}">
+            <div class="review-header">
+                <div class="reviewer-info">
+                    <div class="reviewer-avatar">${data.review.user_name.charAt(0).toUpperCase()}</div>
+                    <div>
+                        <span class="reviewer-name">${data.review.user_name}</span>
+                        <span class="review-date">${data.review.created_at}</span>
+                    </div>
+                </div>
+                <div class="review-rating">${starsHtml}</div>
+            </div>
+            ${data.review.comment ? '<div class="review-content">' + data.review.comment + '</div>' : ''}
+            <button class="btn btn-sm btn-outline-danger delete-review-btn" data-review-id="${data.review.id}">
+                <i class="fas fa-trash"></i> {% trans "حذف" %}
+            </button>
+        </div>
+        `;
+                        reviewsList.insertAdjacentHTML('afterbegin', newReviewHtml);
+
+                    } else {
+                        showToast('error', data.message);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> {% trans "إرسال التقييم" %}';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('error', '{% trans "حدث خطأ، يرجى المحاولة مرة أخرى" %}');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> {% trans "إرسال التقييم" %}';
+                });
+        });
+    }
+
+    // توليد نجوم التقييم
+    function generateStarsHtml(rating) {
+        let html = '';
+        for (let i = 1; i <= 5; i++) {
+            html += `<i class="fas fa-star ${i <= rating ? 'filled' : 'empty'}"></i>`;
+        }
+        return html;
+    }
+
+    // حذف التقييم
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.delete-review-btn')) {
+            const btn = e.target.closest('.delete-review-btn');
+            const reviewId = btn.dataset.reviewId;
+
+            if (!confirm('{% trans "هل أنت متأكد من حذف هذا التقييم؟" %}')) return;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('{% url "products:delete_review" 0 %}'.replace('0', reviewId), {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('success', data.message);
+
+                        // حذف عنصر التقييم
+                        const reviewItem = document.querySelector(`.review-item[data-review-id="${reviewId}"]`);
+                        if (reviewItem) reviewItem.remove();
+
+                        // تحديث الأرقام
+                        document.getElementById('averageRating').textContent = data.new_average;
+                        document.getElementById('reviewsCountBadge').textContent = data.new_count;
+                        document.getElementById('reviewsTotalText').textContent = '(' + data.new_count + ' {% trans "تقييم"
+                            %})';
+
+            // إذا لم تبق تقييمات
+            if (data.new_count === 0) {
+                document.getElementById('reviewsList').innerHTML =
+                    '<div class="no-reviews text-center py-5" id="noReviewsMessage"><i
+                class="fas fa-comments fa-3x text-muted mb-3" ></i >
+                    <p class="text-muted">{% trans "لا توجد تقييمات بعد. كن أول من يقيم هذا المنتج!" %}</p>
+            </div > ';
+            }
+
+            // إعادة عرض النموذج
+            location.reload();
+        } else {
+            showToast('error', data.message);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-trash"></i> {% trans "حذف" %}';
+        }
+    })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', '{% trans "حدث خطأ، يرجى المحاولة مرة أخرى" %}');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-trash"></i> {% trans "حذف" %}';
+        });
+            }
+            });
+
 </script>
 
 {% endblock content %}

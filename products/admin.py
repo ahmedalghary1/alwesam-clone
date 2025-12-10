@@ -7,7 +7,7 @@ from .models import (
     ProductVariant,
     VariantColor, 
     ProductVariantImage, 
-    Review
+    ProductReview
 )
 
 
@@ -359,23 +359,29 @@ class ProductVariantImageAdmin(admin.ModelAdmin):
 
 
 # ====================================
-# REVIEW ADMIN
+# PRODUCT REVIEW ADMIN
 # ====================================
 
-@admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['user', 'product', 'rate_display', 'created_at']
-    list_filter = ['rate', 'created_at']
-    search_fields = ['user__username', 'product__name', 'review']
-    readonly_fields = ['created_at']
+@admin.register(ProductReview)
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'rating_display', 'comment_preview', 'created_at']
+    list_filter = ['rating', 'created_at']
+    search_fields = ['user__email', 'product__name', 'comment']
+    readonly_fields = ['created_at', 'updated_at']
     
-    def rate_display(self, obj):
-        stars = '⭐' * obj.rate
+    def rating_display(self, obj):
+        stars = '⭐' * obj.rating
         return format_html(
             '<span style="font-size: 18px;">{}</span>',
             stars
         )
-    rate_display.short_description = 'التقييم'
+    rating_display.short_description = 'التقييم'
+    
+    def comment_preview(self, obj):
+        if obj.comment:
+            return obj.comment[:50] + '...' if len(obj.comment) > 50 else obj.comment
+        return '-'
+    comment_preview.short_description = 'التعليق'
 
 
 # ====================================

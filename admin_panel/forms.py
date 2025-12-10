@@ -17,8 +17,8 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = [
             'name_en','name_ar',
-            'subtitle','subtitle_ar','subtitle_en',
-            'description', 'description_ar','description_en',
+            'subtitle_ar','subtitle_en',
+            'description_ar','description_en',
             'main_image',
             'category', 'brand',
             'is_featured', 'is_active'

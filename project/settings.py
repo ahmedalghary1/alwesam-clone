@@ -22,19 +22,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-hcde(hu+oq^tno9-ls$%y!gn0j+q!vrf)1^7e41h%j=g&)og$-')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-production-use-strong-random-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get('DEBUG', 'False') == 'False'
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-DEBUG = True
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 TAGGIT_CASE_INSENSITIVE = True
 
 # Application definition
+# ⚠️ modeltranslation must come BEFORE apps that use translated models
 
 INSTALLED_APPS = [
+    'modeltranslation',  # Must be before translated model apps
+    
     'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,16 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "sorl.thumbnail",   # مكتبة الصور المصغرة
 
-
     'taggit',
-
-    'modeltranslation',
 
     'products',
     'home',
     'orders',
     'admin_panel',  # Custom admin panel
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -196,11 +196,30 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'ahmedalgohary1170@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'ypid mhkj dsxv xoaj')
-DEFAULT_FROM_EMAIL = 'متجر الوسام للأدوات الكهربائية <ahmedalgohary1170@gmail.com>'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')  # ⚠️ Set via environment variable!
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'متجر الوسام للأدوات الكهربائية <noreply@example.com>')
 
 # For development, you can use console backend to print emails to console
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
+# =============================================================================
+# SECURITY SETTINGS (Enable these in production)
+# =============================================================================
+
+if not DEBUG:
+    # HTTPS/SSL Settings
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Cookie Security
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    
+    # Other Security
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'

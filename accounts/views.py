@@ -1,22 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-
-
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
 from .models import CustomUser, PasswordResetCode
 from .email_utils import send_verification_code_email, send_welcome_email
-
-
-
-
-from django.contrib.auth.decorators import login_required
 
 
 
@@ -108,9 +97,6 @@ def login_view(request):
     return render(request, 'accounts/login_page.html')
 
 
-
-from django.contrib.auth import logout
-
 def logout_view(request):
     """
     Handle user logout.
@@ -156,6 +142,11 @@ def profile_view(request):
 
 @login_required
 def delete_user(request, user_id):
+    # التحقق من صلاحية المسؤول
+    if not request.user.is_superuser:
+        messages.error(request, "❌ لا تملك صلاحية لحذف المستخدمين.")
+        return redirect('home')
+    
     user = get_object_or_404(CustomUser, id=user_id)
     user.delete()
     messages.success(request, "✅ تم حذف المستخدم بنجاح.")

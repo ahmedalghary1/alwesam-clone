@@ -92,7 +92,7 @@ def checkout(request, item_id=None):
         if request.user.is_authenticated and item_id:
             try:
                 item = CartDetail.objects.select_related("variant_color").get(id=int(item_id), cart=cart)
-            except:
+            except (CartDetail.DoesNotExist, ValueError, TypeError):
                 return JsonResponse({"success": False})
 
             if action == "increase":

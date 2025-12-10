@@ -101,6 +101,18 @@ class Product(models.Model):
                 total += vc.quantity
         return total
 
+    def get_average_rating(self):
+        """الحصول على متوسط التقييمات"""
+        reviews = self.reviews.all()
+        if not reviews:
+            return 0
+        return round(sum(r.rating for r in reviews) / reviews.count(), 1)
+
+    def get_reviews_count(self):
+        """الحصول على عدد التقييمات"""
+        return self.reviews.count()
+
+
     def save(self, *args, **kwargs):
         is_new_image = False
 
@@ -241,32 +253,36 @@ class ProductVariantImage(models.Model):
         verbose_name_plural = 'صور الأنماط'
 
 
-class Review(models.Model):
+class ProductReview(models.Model):
     """
-    نموذج تقييمات المنتجات
+    نموذج تقييمات المنتجات - يسمح فقط للمشترين بالتقييم
     """
-    user = models.ForeignKey(
-        CustomUser,
-        related_name='review_user',
-        on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='المستخدم'
-    )
     product = models.ForeignKey(
         Product,
-        related_name='Review_product',
+        related_name='reviews',
         on_delete=models.CASCADE,
         verbose_name='المنتج'
     )
-    review = models.TextField('التقييم', max_length=500)
-    rate = models.IntegerField('التقدير', choices=[(i, i) for i in range(1, 6)])
-    created_at = models.DateTimeField('تاريخ الإنشاء', default=timezone.now)
+    user = models.ForeignKey(
+        CustomUser,
+        related_name='product_reviews',
+        on_delete=models.CASCADE,
+        verbose_name='المستخدم'
+    )
+    rating = models.PositiveIntegerField(
+        'التقييم',
+        choices=[(i, f'{i} نجوم') for i in range(1, 6)],
+        help_text='من 1 إلى 5 نجوم'
+    )
+    comment = models.TextField('التعليق', max_length=1000, blank=True)
+    created_at = models.DateTimeField('تاريخ الإنشاء', auto_now_add=True)
+    updated_at = models.DateTimeField('تاريخ التحديث', auto_now=True)
 
     def __str__(self):
-        return f'{self.user} - {self.product} - {self.rate}★'
+        return f'{self.user.email} - {self.product.name} - {self.rating}★'
 
     class Meta:
         verbose_name = 'تقييم'
         verbose_name_plural = 'التقييمات'
         ordering = ['-created_at']
-
+        unique_together = ('product', 'user')  # تعليق واحد لكل مستخدم على كل منتج

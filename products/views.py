@@ -1,7 +1,17 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q, Min, Max
-from .models import Product, ProductVariant, Category , ProductVariantImage
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.utils.translation import gettext as _
+from django.contrib import messages
+
+from .models import Product, ProductVariant, Category, ProductVariantImage, ProductReview
+from orders.models import OrderDetail
 import json
+
+
 # ==========================================================
 #              PRODUCT LIST VIEW (مع الفلاتر الجديدة)
 # ==========================================================
@@ -71,6 +81,7 @@ class ProductDetail(DetailView):
         context = super().get_context_data(**kwargs)
 
         product = self.object
+        user = self.request.user
 
         # ---- جلب الأنماط مع الألوان والصور ----
         variants = ProductVariant.objects.filter(product=product).prefetch_related(
@@ -117,9 +128,129 @@ class ProductDetail(DetailView):
         context["variants_json"] = json.dumps(variants_data)
         context["images"] = ProductVariantImage.objects.filter(variant__product=product)
 
-        # context["variants_json"] = variants_data
         context["products"] = Product.objects.filter(
             category=product.category
         ).exclude(id=product.id)[:4]
 
+        # ---- التقييمات ----
+        reviews = ProductReview.objects.filter(product=product).select_related('user')
+        context["reviews"] = reviews
+        context["reviews_count"] = reviews.count()
+        context["average_rating"] = product.get_average_rating()
+        
+        # ---- التحقق من إمكانية التقييم ----
+        can_review = False
+        has_reviewed = False
+        user_review = None
+        
+        if user.is_authenticated:
+            # التحقق من أن المستخدم اشترى المنتج وتم التسليم
+            has_purchased = OrderDetail.objects.filter(
+                order__user=user,
+                product=product,
+                order__status='Delivered'
+            ).exists()
+            
+            # التحقق من أن المستخدم لم يقم بالتقييم من قبل
+            user_review = ProductReview.objects.filter(product=product, user=user).first()
+            has_reviewed = user_review is not None
+            
+            can_review = has_purchased and not has_reviewed
+        
+        context["can_review"] = can_review
+        context["has_reviewed"] = has_reviewed
+        context["user_review"] = user_review
+
         return context
+
+
+# ==========================================================
+#              REVIEW VIEWS (التقييمات)
+# ==========================================================
+
+@login_required
+@require_POST
+def add_review(request, slug):
+    """
+    إضافة تقييم جديد للمنتج (AJAX)
+    """
+    product = get_object_or_404(Product, slug=slug)
+    user = request.user
+    
+    # التحقق من أن المستخدم اشترى المنتج وتم التسليم
+    has_purchased = OrderDetail.objects.filter(
+        order__user=user,
+        product=product,
+        order__status='Delivered'
+    ).exists()
+    
+    if not has_purchased:
+        return JsonResponse({
+            'success': False,
+            'message': _('❌ يجب شراء المنتج أولاً لتتمكن من التقييم.')
+        }, status=403)
+    
+    # التحقق من عدم وجود تقييم سابق
+    if ProductReview.objects.filter(product=product, user=user).exists():
+        return JsonResponse({
+            'success': False,
+            'message': _('❌ لقد قمت بتقييم هذا المنتج من قبل.')
+        }, status=400)
+    
+    # الحصول على البيانات
+    rating = request.POST.get('rating')
+    comment = request.POST.get('comment', '').strip()
+    
+    # التحقق من التقييم
+    if not rating or not rating.isdigit():
+        return JsonResponse({
+            'success': False,
+            'message': _('❌ يرجى اختيار عدد النجوم.')
+        }, status=400)
+    
+    rating = int(rating)
+    if rating < 1 or rating > 5:
+        return JsonResponse({
+            'success': False,
+            'message': _('❌ التقييم يجب أن يكون من 1 إلى 5 نجوم.')
+        }, status=400)
+    
+    # إنشاء التقييم
+    review = ProductReview.objects.create(
+        product=product,
+        user=user,
+        rating=rating,
+        comment=comment
+    )
+    
+    return JsonResponse({
+        'success': True,
+        'message': _('✅ شكراً لك! تم إضافة تقييمك بنجاح.'),
+        'review': {
+            'id': review.id,
+            'rating': review.rating,
+            'comment': review.comment,
+            'user_name': user.first_name or user.email.split('@')[0],
+            'created_at': review.created_at.strftime('%Y-%m-%d'),
+        },
+        'new_average': product.get_average_rating(),
+        'new_count': product.get_reviews_count()
+    })
+
+
+@login_required
+@require_POST
+def delete_review(request, review_id):
+    """
+    حذف تقييم المستخدم
+    """
+    review = get_object_or_404(ProductReview, id=review_id, user=request.user)
+    product = review.product
+    review.delete()
+    
+    return JsonResponse({
+        'success': True,
+        'message': _('✅ تم حذف التقييم بنجاح.'),
+        'new_average': product.get_average_rating(),
+        'new_count': product.get_reviews_count()
+    })
