@@ -554,7 +554,8 @@
 
 <script>
 <!-- بيانات الأنماط والألوان -->
-    const variantsData = {{ variants_json|safe }};
+    const variantsData = JSON.parse('{{ variants_json|escapejs }}');
+
 
     let selectedVariantId = null;
     let selectedColorId = null;
@@ -811,48 +812,23 @@
      |  تحديث صور النمط
      ----------------------------------------------------*/
     function updateVariantImages(variant) {
-        console.log('Updating variant images for:', variant.name);
-        console.log('Total images:', variant.images ? variant.images.length : 0);
-        
-        if (!variant.images || variant.images.length === 0) {
-            console.warn('No images available for this variant');
-            return;
-        }
+        if (!variant.images || variant.images.length === 0) return;
 
-        // جلب جميع الصور
-        const generalImages = variant.images.filter(img => img.color_id === null);
-        const colorImages = variant.images.filter(img => img.color_id !== null);
-        
-        console.log('General images:', generalImages.length);
-        console.log('Color images:', colorImages.length);
-        
-        // اختيار الصور للعرض
+        const generalImages = variant.images.filter(img => !img.color_id);
+        const colorImages   = variant.images.filter(img => img.color_id);
+
         let imagesToShow = [];
-        
+
         if (generalImages.length > 0) {
             imagesToShow = generalImages;
-            console.log('Showing general images');
         } else if (colorImages.length > 0) {
-            // عرض أول صورة من الصور الملونة
-            imagesToShow = [colorImages[0]];
-            console.log('Showing first color image');
+            imagesToShow = colorImages;   // ✅ التصحيح هنا
         } else {
             imagesToShow = variant.images;
-            console.log('Showing all images');
         }
-        
-        if (imagesToShow.length > 0) {
-            console.log('Setting main image to:', imagesToShow[0].url);
-            
-            // تحديث الصورة الرئيسية
-            const mainImg = document.getElementById('mainImage');
-            if (mainImg) {
-                mainImg.src = imagesToShow[0].url;
-            }
-            
-            // تحديث معرض الصور المصغرة
-            updateThumbnails(imagesToShow);
-        }
+
+        document.getElementById('mainImage').src = imagesToShow[0].url;
+        updateThumbnails(imagesToShow);
     }
 
     /*----------------------------------------------------

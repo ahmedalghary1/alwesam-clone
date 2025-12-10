@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q, Min, Max
-from .models import Product, ProductVariant, Category
-
+from .models import Product, ProductVariant, Category , ProductVariantImage
+import json
 # ==========================================================
 #              PRODUCT LIST VIEW (مع الفلاتر الجديدة)
 # ==========================================================
@@ -114,7 +114,10 @@ class ProductDetail(DetailView):
 
         # ---- إضافة البيانات للكونتكس ----
         context["variants"] = variants
-        context["variants_json"] = variants_data
+        context["variants_json"] = json.dumps(variants_data)
+        context["images"] = ProductVariantImage.objects.filter(variant__product=product)
+
+        # context["variants_json"] = variants_data
         context["products"] = Product.objects.filter(
             category=product.category
         ).exclude(id=product.id)[:4]

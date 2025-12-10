@@ -13,6 +13,12 @@ urlpatterns = [
     path('products/edit/<int:product_id>/', views.admin_product_edit, name='product-edit'),
     path('products/<int:product_id>/delete/', views.admin_product_delete, name='product-delete'),
     
+    # Variants Management
+    path('products/<int:product_id>/variants/', views.admin_product_variants, name='product-variants'),
+    path('products/<int:product_id>/variants/add/', views.admin_variant_add, name='variant-add'),
+    path('variants/<int:variant_id>/edit/', views.admin_variant_edit, name='variant-edit'),
+    path('variants/<int:variant_id>/delete/', views.admin_variant_delete, name='variant-delete'),
+    
     # Orders Management
     path('orders/', views.admin_orders_list, name='orders-list'),
     path('orders/<str:order_code>/', views.admin_order_detail, name='order-detail'),
@@ -26,3 +32,4 @@ urlpatterns = [
     path('categories/edit/<int:pk>/', views.admin_category_edit, name='category-edit'),
     path('categories/delete/<int:pk>/', views.admin_category_delete, name='category-delete'),
 ]
+

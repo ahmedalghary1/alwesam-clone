@@ -1,0 +1,403 @@
+{% extends 'admin_panel/base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="page-header mb-4">
+    <a href="{% url 'admin_panel:product-variants' product.id %}" class="text-muted text-decoration-none">
+        <i class="fas fa-arrow-right"></i> العودة لقائمة الأنماط
+    </a>
+    <h1 class="mt-2">
+        <i class="fas fa-layer-group"></i>
+        {% if variant %}تعديل النمط: {{ variant.name }}{% else %}إضافة نمط جديد{% endif %}
+    </h1>
+    <p class="text-muted">المنتج: {{ product.name }}</p>
+</div>
+
+<div class="content-card">
+
+    <form method="POST" enctype="multipart/form-data" id="variant-form">
+        {% csrf_token %}
+
+        <!-- بيانات النمط الأساسية -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> بيانات النمط</h5>
+            </div>
+            <div class="card-body">
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">اسم النمط *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div class="text-danger small">{{ form.name.errors|join:", " }}</div>
+                        {% endif %}
+                        <div class="form-text">مثال: 3 منافذ USB + 3 منافذ كهرباء</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">كود النمط</label>
+                        {{ form.code }}
+                        {% if form.code.errors %}
+                        <div class="text-danger small">{{ form.code.errors|join:", " }}</div>
+                        {% endif %}
+                        <div class="form-text">كود تعريفي اختياري</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ألوان النمط -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-palette"></i> ألوان النمط</h5>
+                <button type="button" class="btn btn-light btn-sm" id="add-color">
+                    <i class="fas fa-plus"></i> إضافة لون
+                </button>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small mb-3">أضف الألوان المتاحة لهذا النمط مع السعر والكمية لكل لون.</p>
+
+                {{ color_formset.management_form }}
+
+                <div id="color-forms">
+                    {% for color_form in color_formset %}
+                    <div class="color-form-row border rounded p-3 mb-3 bg-light"
+                        data-form-index="{{ forloop.counter0 }}">
+                        <div class="row align-items-end">
+                            <div class="col-md-3 mb-2">
+                                <label class="form-label small">اللون</label>
+                                {{ color_form.color }}
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label class="form-label small">السعر</label>
+                                {{ color_form.price }}
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label class="form-label small">الكمية</label>
+                                {{ color_form.quantity }}
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label class="form-label small">SKU</label>
+                                {{ color_form.sku }}
+                            </div>
+                            <div class="col-md-2 mb-2 text-end">
+                                {{ color_form.id }}
+                                <!-- Hidden DELETE checkbox -->
+                                <div style="display: none;">{{ color_form.DELETE }}</div>
+                                <!-- Visible delete button -->
+                                <button type="button" class="btn btn-outline-danger btn-sm delete-color-btn"
+                                    title="حذف">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% if color_form.errors %}
+                        <div class="text-danger small mt-2">
+                            {% for field, errors in color_form.errors.items %}
+                            {{ errors|join:", " }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- صور النمط -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-images"></i> صور النمط</h5>
+                <button type="button" class="btn btn-light btn-sm" id="add-image">
+                    <i class="fas fa-plus"></i> إضافة صورة
+                </button>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small mb-3">أضف صور هذا النمط. يمكنك ربط الصورة بلون معين أو تركها عامة للنمط.</p>
+
+                {{ image_formset.management_form }}
+
+                <div id="image-forms">
+                    {% for image_form in image_formset %}
+                    <div class="image-form-row border rounded p-3 mb-3 bg-light"
+                        data-form-index="{{ forloop.counter0 }}">
+                        <div class="row align-items-end">
+                            <div class="col-md-4 mb-2">
+                                <label class="form-label small">الصورة</label>
+                                {{ image_form.image }}
+                                {% if image_form.instance.image %}
+                                <div class="mt-2">
+                                    <img src="{{ image_form.instance.image.url }}" class="img-thumbnail"
+                                        style="max-width: 80px;">
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label class="form-label small">اللون (اختياري)</label>
+                                {{ image_form.color }}
+                                <div class="form-text">اتركه فارغاً للصور العامة</div>
+                            </div>
+                            <div class="col-md-4 mb-2 text-end">
+                                {{ image_form.id }}
+                                <!-- Hidden DELETE checkbox -->
+                                <div style="display: none;">{{ image_form.DELETE }}</div>
+                                <!-- Visible delete button -->
+                                <button type="button" class="btn btn-outline-danger btn-sm delete-image-btn"
+                                    title="حذف">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% if image_form.errors %}
+                        <div class="text-danger small mt-2">
+                            {% for field, errors in image_form.errors.items %}
+                            {{ errors|join:", " }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- أزرار الإجراءات -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-save"></i> حفظ النمط
+            </button>
+            <a href="{% url 'admin_panel:product-variants' product.id %}" class="btn btn-secondary px-4">
+                إلغاء
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+<!-- Templates for dynamic formsets -->
+<template id="color-form-template">
+    <div class="color-form-row border rounded p-3 mb-3 bg-light new-form">
+        <div class="row align-items-end">
+            <div class="col-md-3 mb-2">
+                <label class="form-label small">اللون</label>
+                <select name="colors-__prefix__-color" class="form-select">
+                    <option value="">---------</option>
+                    {% for color in colors %}
+                    <option value="{{ color.id }}">{{ color.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label small">السعر</label>
+                <input type="number" name="colors-__prefix__-price" class="form-control" step="0.01"
+                    placeholder="السعر">
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label small">الكمية</label>
+                <input type="number" name="colors-__prefix__-quantity" class="form-control" placeholder="الكمية"
+                    value="0">
+            </div>
+            <div class="col-md-3 mb-2">
+                <label class="form-label small">SKU</label>
+                <input type="text" name="colors-__prefix__-sku" class="form-control" placeholder="SKU (اختياري)">
+            </div>
+            <div class="col-md-2 mb-2 text-end">
+                <button type="button" class="btn btn-outline-danger btn-sm remove-new-form" title="حذف">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="image-form-template">
+    <div class="image-form-row border rounded p-3 mb-3 bg-light new-form">
+        <div class="row align-items-end">
+            <div class="col-md-4 mb-2">
+                <label class="form-label small">الصورة</label>
+                <input type="file" name="images-__prefix__-image" class="form-control">
+            </div>
+            <div class="col-md-4 mb-2">
+                <label class="form-label small">اللون (اختياري)</label>
+                <select name="images-__prefix__-color" class="form-select">
+                    <option value="">---------</option>
+                    {% for color in colors %}
+                    <option value="{{ color.id }}">{{ color.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="form-text">اتركه فارغاً للصور العامة</div>
+            </div>
+            <div class="col-md-4 mb-2 text-end">
+                <button type="button" class="btn btn-outline-danger btn-sm remove-new-form" title="حذف">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style>
+    .marked-for-deletion {
+        opacity: 0.5;
+        background-color: #ffcccc !important;
+        text-decoration: line-through;
+    }
+
+    .marked-for-deletion .delete-color-btn,
+    .marked-for-deletion .delete-image-btn {
+        display: none;
+    }
+
+    .undo-delete-btn {
+        display: inline-block !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ===== إضافة لون جديد =====
+        const addColorBtn = document.getElementById('add-color');
+        const colorForms = document.getElementById('color-forms');
+        const colorTemplate = document.getElementById('color-form-template');
+        const colorTotalForms = document.querySelector('input[name="colors-TOTAL_FORMS"]');
+
+        addColorBtn.addEventListener('click', function () {
+            const formIndex = parseInt(colorTotalForms.value);
+            const newForm = colorTemplate.content.cloneNode(true);
+
+            // Replace __prefix__ with the current form index
+            const formHtml = newForm.querySelector('.color-form-row');
+            formHtml.innerHTML = formHtml.innerHTML.replace(/__prefix__/g, formIndex);
+
+            colorForms.appendChild(newForm);
+            colorTotalForms.value = formIndex + 1;
+        });
+
+        // ===== إضافة صورة جديدة =====
+        const addImageBtn = document.getElementById('add-image');
+        const imageForms = document.getElementById('image-forms');
+        const imageTemplate = document.getElementById('image-form-template');
+        const imageTotalForms = document.querySelector('input[name="images-TOTAL_FORMS"]');
+
+        addImageBtn.addEventListener('click', function () {
+            const formIndex = parseInt(imageTotalForms.value);
+            const newForm = imageTemplate.content.cloneNode(true);
+
+            // Replace __prefix__ with the current form index
+            const formHtml = newForm.querySelector('.image-form-row');
+            formHtml.innerHTML = formHtml.innerHTML.replace(/__prefix__/g, formIndex);
+
+            imageForms.appendChild(newForm);
+            imageTotalForms.value = formIndex + 1;
+        });
+
+        // ===== حذف صف جديد (لم يحفظ بعد) =====
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-new-form') || e.target.closest('.remove-new-form')) {
+                const row = e.target.closest('.color-form-row, .image-form-row');
+                if (row && row.classList.contains('new-form')) {
+                    row.remove();
+                }
+            }
+        });
+
+        // ===== حذف لون موجود (تعليم للحذف) =====
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('delete-color-btn') || e.target.closest('.delete-color-btn')) {
+                const btn = e.target.classList.contains('delete-color-btn') ? e.target : e.target.closest('.delete-color-btn');
+                const row = btn.closest('.color-form-row');
+
+                if (row) {
+                    // Find the DELETE checkbox and check it
+                    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+                    if (deleteCheckbox) {
+                        deleteCheckbox.checked = true;
+                        row.classList.add('marked-for-deletion');
+
+                        // Change button to undo button
+                        btn.classList.remove('btn-outline-danger', 'delete-color-btn');
+                        btn.classList.add('btn-outline-warning', 'undo-color-btn');
+                        btn.innerHTML = '<i class="fas fa-undo"></i>';
+                        btn.title = 'استرجاع';
+                    }
+                }
+            }
+        });
+
+        // ===== استرجاع لون (إلغاء الحذف) =====
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('undo-color-btn') || e.target.closest('.undo-color-btn')) {
+                const btn = e.target.classList.contains('undo-color-btn') ? e.target : e.target.closest('.undo-color-btn');
+                const row = btn.closest('.color-form-row');
+
+                if (row) {
+                    // Find the DELETE checkbox and uncheck it
+                    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+                    if (deleteCheckbox) {
+                        deleteCheckbox.checked = false;
+                        row.classList.remove('marked-for-deletion');
+
+                        // Change button back to delete button
+                        btn.classList.remove('btn-outline-warning', 'undo-color-btn');
+                        btn.classList.add('btn-outline-danger', 'delete-color-btn');
+                        btn.innerHTML = '<i class="fas fa-trash"></i>';
+                        btn.title = 'حذف';
+                    }
+                }
+            }
+        });
+
+        // ===== حذف صورة موجودة (تعليم للحذف) =====
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('delete-image-btn') || e.target.closest('.delete-image-btn')) {
+                const btn = e.target.classList.contains('delete-image-btn') ? e.target : e.target.closest('.delete-image-btn');
+                const row = btn.closest('.image-form-row');
+
+                if (row) {
+                    // Find the DELETE checkbox and check it
+                    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+                    if (deleteCheckbox) {
+                        deleteCheckbox.checked = true;
+                        row.classList.add('marked-for-deletion');
+
+                        // Change button to undo button
+                        btn.classList.remove('btn-outline-danger', 'delete-image-btn');
+                        btn.classList.add('btn-outline-warning', 'undo-image-btn');
+                        btn.innerHTML = '<i class="fas fa-undo"></i>';
+                        btn.title = 'استرجاع';
+                    }
+                }
+            }
+        });
+
+        // ===== استرجاع صورة (إلغاء الحذف) =====
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('undo-image-btn') || e.target.closest('.undo-image-btn')) {
+                const btn = e.target.classList.contains('undo-image-btn') ? e.target : e.target.closest('.undo-image-btn');
+                const row = btn.closest('.image-form-row');
+
+                if (row) {
+                    // Find the DELETE checkbox and uncheck it
+                    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+                    if (deleteCheckbox) {
+                        deleteCheckbox.checked = false;
+                        row.classList.remove('marked-for-deletion');
+
+                        // Change button back to delete button
+                        btn.classList.remove('btn-outline-warning', 'undo-image-btn');
+                        btn.classList.add('btn-outline-danger', 'delete-image-btn');
+                        btn.innerHTML = '<i class="fas fa-trash"></i>';
+                        btn.title = 'حذف';
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}

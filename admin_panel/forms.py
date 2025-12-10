@@ -16,9 +16,9 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
-            'name',
-            'subtitle',
-            'description',
+            'name_en','name_ar',
+            'subtitle','subtitle_ar','subtitle_en',
+            'description', 'description_ar','description_en',
             'main_image',
             'category', 'brand',
             'is_featured', 'is_active'
@@ -76,9 +76,14 @@ ProductVariantFormSet = inlineformset_factory(
 class VariantImageForm(forms.ModelForm):
     class Meta:
         model = ProductVariantImage
-        fields = ['image']
+        fields = ['image', 'color']
         widgets = {
             'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'color': forms.Select(attrs={'class': 'form-select'}),
+        }
+        labels = {
+            'image': 'الصورة',
+            'color': 'اللون (اختياري)',
         }
 
 
@@ -121,7 +126,7 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = [
-            'name',
+            'name_ar','name_en', 
             'description',
             'icon'
         ]

@@ -5,10 +5,11 @@ from django.utils import timezone
 
 from .decorators import admin_required
 from .forms import (
-    ProductForm, CategoryForm, OrderStatusForm
+    ProductForm, CategoryForm, OrderStatusForm,
+    VariantForm, VariantColorFormSet, VariantImageFormSet
 )
 
-from products.models import Product, Category, ProductVariant, ProductVariantImage
+from products.models import Product, Category, ProductVariant, ProductVariantImage, Color, VariantColor
 from orders.models import Order, OrderDetail
 from accounts.models import CustomUser
 
@@ -362,3 +363,140 @@ def admin_category_delete(request, pk):
 
     messages.success(request, "تم حذف الفئة بنجاح.")
     return redirect('admin_panel:categories-list')
+
+
+# ============================================================
+# 🔵 Product Variants List
+# ============================================================
+
+@admin_required
+def admin_product_variants(request, product_id):
+    """عرض قائمة أنماط المنتج"""
+    product = get_object_or_404(Product, id=product_id)
+    variants = product.variants.all().prefetch_related('colors', 'images')
+    
+    return render(request, 'admin_panel/product_variants.html', {
+        'product': product,
+        'variants': variants,
+    })
+
+
+# ============================================================
+# 🔵 Add Variant
+# ============================================================
+
+@admin_required
+def admin_variant_add(request, product_id):
+    """إضافة نمط جديد للمنتج"""
+    product = get_object_or_404(Product, id=product_id)
+    colors = Color.objects.all()
+    
+    if request.method == 'POST':
+        form = VariantForm(request.POST)
+        
+        if form.is_valid():
+            variant = form.save(commit=False)
+            variant.product = product
+            variant.save()
+            
+            # معالجة الألوان
+            color_formset = VariantColorFormSet(request.POST, instance=variant, prefix='colors')
+            image_formset = VariantImageFormSet(request.POST, request.FILES, instance=variant, prefix='images')
+            
+            if color_formset.is_valid():
+                color_formset.save()
+            
+            if image_formset.is_valid():
+                image_formset.save()
+            
+            messages.success(request, "تم إضافة النمط بنجاح.")
+            return redirect('admin_panel:product-variants', product_id=product.id)
+        else:
+            messages.error(request, "يرجى تصحيح الأخطاء في النموذج.")
+            color_formset = VariantColorFormSet(request.POST, prefix='colors')
+            image_formset = VariantImageFormSet(request.POST, request.FILES, prefix='images')
+    else:
+        form = VariantForm()
+        color_formset = VariantColorFormSet(prefix='colors')
+        image_formset = VariantImageFormSet(prefix='images')
+    
+    return render(request, 'admin_panel/variant_form.html', {
+        'product': product,
+        'form': form,
+        'color_formset': color_formset,
+        'image_formset': image_formset,
+        'colors': colors,
+        'action': 'add',
+    })
+
+
+# ============================================================
+# 🔵 Edit Variant
+# ============================================================
+
+@admin_required
+def admin_variant_edit(request, variant_id):
+    """تعديل نمط موجود"""
+    variant = get_object_or_404(ProductVariant, id=variant_id)
+    product = variant.product
+    colors = Color.objects.all()
+    
+    if request.method == 'POST':
+        form = VariantForm(request.POST, instance=variant)
+        color_formset = VariantColorFormSet(request.POST, instance=variant, prefix='colors')
+        image_formset = VariantImageFormSet(request.POST, request.FILES, instance=variant, prefix='images')
+        
+        if form.is_valid():
+            form.save()
+            
+            if color_formset.is_valid():
+                color_formset.save()
+            
+            if image_formset.is_valid():
+                image_formset.save()
+            
+            messages.success(request, "تم تحديث النمط بنجاح.")
+            return redirect('admin_panel:product-variants', product_id=product.id)
+        else:
+            messages.error(request, "يرجى تصحيح الأخطاء في النموذج.")
+    else:
+        form = VariantForm(instance=variant)
+        color_formset = VariantColorFormSet(instance=variant, prefix='colors')
+        image_formset = VariantImageFormSet(instance=variant, prefix='images')
+    
+    return render(request, 'admin_panel/variant_form.html', {
+        'product': product,
+        'variant': variant,
+        'form': form,
+        'color_formset': color_formset,
+        'image_formset': image_formset,
+        'colors': colors,
+        'action': 'edit',
+    })
+
+
+# ============================================================
+# 🔵 Delete Variant
+# ============================================================
+
+@admin_required
+def admin_variant_delete(request, variant_id):
+    """حذف نمط"""
+    variant = get_object_or_404(ProductVariant, id=variant_id)
+    product_id = variant.product.id
+    variant_name = variant.name
+    
+    # حذف صور النمط
+    for img in variant.images.all():
+        if img.image:
+            img.image.delete()
+        img.delete()
+    
+    # حذف ألوان النمط
+    variant.colors.all().delete()
+    
+    # حذف النمط
+    variant.delete()
+    
+    messages.success(request, f"تم حذف النمط '{variant_name}' بنجاح.")
+    return redirect('admin_panel:product-variants', product_id=product_id)
