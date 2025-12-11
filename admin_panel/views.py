@@ -395,26 +395,29 @@ def admin_variant_add(request, product_id):
         form = VariantForm(request.POST)
         
         if form.is_valid():
+            # حفظ النمط أولًا
             variant = form.save(commit=False)
             variant.product = product
             variant.save()
-            
-            # معالجة الألوان
+
+            # ربط ألوان النمط
             color_formset = VariantColorFormSet(request.POST, instance=variant, prefix='colors')
-            image_formset = VariantImageFormSet(request.POST, request.FILES, instance=variant, prefix='images')
-            
             if color_formset.is_valid():
                 color_formset.save()
-            
+
+            # ربط صور النمط
+            image_formset = VariantImageFormSet(request.POST, request.FILES, instance=variant, prefix='images')
             if image_formset.is_valid():
                 image_formset.save()
-            
+
             messages.success(request, "تم إضافة النمط بنجاح.")
             return redirect('admin_panel:product-variants', product_id=product.id)
+        
         else:
             messages.error(request, "يرجى تصحيح الأخطاء في النموذج.")
             color_formset = VariantColorFormSet(request.POST, prefix='colors')
             image_formset = VariantImageFormSet(request.POST, request.FILES, prefix='images')
+    
     else:
         form = VariantForm()
         color_formset = VariantColorFormSet(prefix='colors')
@@ -447,11 +450,13 @@ def admin_variant_edit(request, variant_id):
         image_formset = VariantImageFormSet(request.POST, request.FILES, instance=variant, prefix='images')
         
         if form.is_valid():
-            form.save()
-            
+            form.save()  # حفظ بيانات النمط الأساسية
+
+            # حفظ ألوان النمط
             if color_formset.is_valid():
                 color_formset.save()
-            
+
+            # حفظ صور النمط
             if image_formset.is_valid():
                 image_formset.save()
             
@@ -459,6 +464,7 @@ def admin_variant_edit(request, variant_id):
             return redirect('admin_panel:product-variants', product_id=product.id)
         else:
             messages.error(request, "يرجى تصحيح الأخطاء في النموذج.")
+    
     else:
         form = VariantForm(instance=variant)
         color_formset = VariantColorFormSet(instance=variant, prefix='colors')
@@ -473,7 +479,6 @@ def admin_variant_edit(request, variant_id):
         'colors': colors,
         'action': 'edit',
     })
-
 
 # ============================================================
 # 🔵 Delete Variant

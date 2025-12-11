@@ -126,7 +126,7 @@ class ProductDetail(DetailView):
         # ---- إضافة البيانات للكونتكس ----
         context["variants"] = variants
         context["variants_json"] = json.dumps(variants_data)
-        context["images"] = ProductVariantImage.objects.filter(variant__product=product)
+        context["images"] = variant.images.all() 
 
         context["products"] = Product.objects.filter(
             category=product.category
