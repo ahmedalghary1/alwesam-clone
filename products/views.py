@@ -169,77 +169,77 @@ class ProductDetail(DetailView):
 # ==========================================================
 
 @login_required
-@require_POST
 def add_review(request, slug):
     """
     إضافة تقييم جديد للمنتج (AJAX)
     """
-    product = get_object_or_404(Product, slug=slug)
-    user = request.user
-    
-    # التحقق من أن المستخدم اشترى المنتج وتم التسليم
-    has_purchased = OrderDetail.objects.filter(
-        order__user=user,
-        product=product,
-        order__status='Delivered'
-    ).exists()
-    
-    if not has_purchased:
+
+    if request.method == 'POST':
+        product = get_object_or_404(Product, slug=slug)
+        user = request.user
+        
+        # التحقق من أن المستخدم اشترى المنتج وتم التسليم
+        has_purchased = OrderDetail.objects.filter(
+            order__user=user,
+            product=product,
+            order__status='Delivered'
+        ).exists()
+        
+        if not has_purchased:
+            return JsonResponse({
+                'success': False,
+                'message': _('❌ يجب شراء المنتج أولاً لتتمكن من التقييم.')
+            }, status=403)
+        
+        # التحقق من عدم وجود تقييم سابق
+        if ProductReview.objects.filter(product=product, user=user).exists():
+            return JsonResponse({
+                'success': False,
+                'message': _('❌ لقد قمت بتقييم هذا المنتج من قبل.')
+            }, status=400)
+        
+        # الحصول على البيانات
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment', '').strip()
+        
+        # التحقق من التقييم
+        if not rating or not rating.isdigit():
+            return JsonResponse({
+                'success': False,
+                'message': _('❌ يرجى اختيار عدد النجوم.')
+            }, status=400)
+        
+        rating = int(rating)
+        if rating < 1 or rating > 5:
+            return JsonResponse({
+                'success': False,
+                'message': _('❌ التقييم يجب أن يكون من 1 إلى 5 نجوم.')
+            }, status=400)
+        
+        # إنشاء التقييم
+        review = ProductReview.objects.create(
+            product=product,
+            user=user,
+            rating=rating,
+            comment=comment
+        )
+        
         return JsonResponse({
-            'success': False,
-            'message': _('❌ يجب شراء المنتج أولاً لتتمكن من التقييم.')
-        }, status=403)
-    
-    # التحقق من عدم وجود تقييم سابق
-    if ProductReview.objects.filter(product=product, user=user).exists():
-        return JsonResponse({
-            'success': False,
-            'message': _('❌ لقد قمت بتقييم هذا المنتج من قبل.')
-        }, status=400)
-    
-    # الحصول على البيانات
-    rating = request.POST.get('rating')
-    comment = request.POST.get('comment', '').strip()
-    
-    # التحقق من التقييم
-    if not rating or not rating.isdigit():
-        return JsonResponse({
-            'success': False,
-            'message': _('❌ يرجى اختيار عدد النجوم.')
-        }, status=400)
-    
-    rating = int(rating)
-    if rating < 1 or rating > 5:
-        return JsonResponse({
-            'success': False,
-            'message': _('❌ التقييم يجب أن يكون من 1 إلى 5 نجوم.')
-        }, status=400)
-    
-    # إنشاء التقييم
-    review = ProductReview.objects.create(
-        product=product,
-        user=user,
-        rating=rating,
-        comment=comment
-    )
-    
-    return JsonResponse({
-        'success': True,
-        'message': _('✅ شكراً لك! تم إضافة تقييمك بنجاح.'),
-        'review': {
-            'id': review.id,
-            'rating': review.rating,
-            'comment': review.comment,
-            'user_name': user.first_name or user.email.split('@')[0],
-            'created_at': review.created_at.strftime('%Y-%m-%d'),
-        },
-        'new_average': product.get_average_rating(),
-        'new_count': product.get_reviews_count()
-    })
+            'success': True,
+            'message': _('✅ شكراً لك! تم إضافة تقييمك بنجاح.'),
+            'review': {
+                'id': review.id,
+                'rating': review.rating,
+                'comment': review.comment,
+                'user_name': user.first_name or user.email.split('@')[0],
+                'created_at': review.created_at.strftime('%Y-%m-%d'),
+            },
+            'new_average': product.get_average_rating(),
+            'new_count': product.get_reviews_count()
+        })
 
 
 @login_required
-@require_POST
 def delete_review(request, review_id):
     """
     حذف تقييم المستخدم

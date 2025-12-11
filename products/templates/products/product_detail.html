@@ -493,7 +493,7 @@
 {% block content %}
 <!-- Breadcrumb -->
 <div class="container">
-    <nav aria-label="{% trans " breadcrumb" %}">
+    <nav aria-label="{% trans 'breadcrumb' %}">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="{% url 'home' %}">
@@ -592,8 +592,7 @@
                             <div class="selection-label">
                                 <i class="fas fa-boxes"></i>
                                 {% trans "اختر النمط:" %}
-                                <span class="selected-option-name" id="selectedVariantName">{% trans "اختر النمط"
-                                    %}</span>
+                                <span class="selected-option-name" id="selectedVariantName">{% trans "اختر النمط" %}</span>
                             </div>
 
                             <div class="variant-options" id="variantOptions">
@@ -718,8 +717,7 @@
                                         class="fas fa-star {% if forloop.counter <= average_rating %}filled{% else %}empty{% endif %}"></i>
                                     {% endfor %}
                                 </div>
-                                <span class="reviews-total" id="reviewsTotalText">({{ reviews_count }} {% trans "تقييم"
-                                    %})</span>
+                                <span class="reviews-total" id="reviewsTotalText">({{ reviews_count }} {% trans "تقييم" %})</span>
                             </div>
                         </div>
 
@@ -730,7 +728,7 @@
                                 <i class="fas fa-edit"></i>
                                 {% trans "أضف تقييمك" %}
                             </h5>
-                            <form id="reviewForm" action="{% url 'products:add_review' object.slug %}"
+                            <form id="reviewForm" method="post" action="{% url 'products:add_review' object.slug %}"
                                 class="review-form">
                                 {% csrf_token %}
                                 <div class="star-rating-input mb-3">
@@ -743,8 +741,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="reviewComment" class="form-label">{% trans "تعليقك (اختياري):"
-                                        %}</label>
+                                    <label for="reviewComment" class="form-label">{% trans "تعليقك (اختياري):" %}</label>
                                     <textarea class="form-control" id="reviewComment" name="comment" rows="3"
                                         placeholder="{% trans 'شاركنا رأيك في المنتج...' %}"></textarea>
                                 </div>
@@ -768,8 +765,7 @@
                         <div class="alert alert-secondary mb-4">
                             <i class="fas fa-user"></i>
                             {% trans "سجل دخولك لتتمكن من التقييم" %}
-                            <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="alert-link">{% trans
-                                "تسجيل الدخول" %}</a>
+                            <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="alert-link">{% trans "تسجيل الدخول" %}</a>
                         </div>
                         {% endif %}
 
@@ -784,8 +780,7 @@
                                             {{ review.user.first_name|default:review.user.email|slice:":1"|upper }}
                                         </div>
                                         <div>
-                                            <span class="reviewer-name">{{
-                                                review.user.first_name|default:review.user.email }}</span>
+                                            <span class="reviewer-name">{{ review.user.first_name|default:review.user.email }}</span>
                                             <span class="review-date">{{ review.created_at|date:"Y-m-d" }}</span>
                                         </div>
                                     </div>
@@ -827,12 +822,9 @@
                             {% trans "سياسة الشحن" %}
                         </h4>
                         <ul class="product-features">
-                            <li><i class="fas fa-shipping-fast"></i>{% trans "شحن مجاني للطلبات فوق 500 جنيه داخل
-                                القاهرة" %}</li>
-                            <li><i class="fas fa-clock"></i>{% trans "التوصيل خلال 2-4 أيام عمل داخل القاهرة والجيزة" %}
-                            </li>
-                            <li><i class="fas fa-map-marked-alt"></i>{% trans "التوصيل خلال 5-7 أيام عمل للمحافظات
-                                الأخرى" %}</li>
+                            <li><i class="fas fa-shipping-fast"></i>{% trans "شحن مجاني للطلبات فوق 500 جنيه داخل القاهرة" %}</li>
+                            <li><i class="fas fa-clock"></i>{% trans "التوصيل خلال 2-4 أيام عمل داخل القاهرة والجيزة" %}</li>
+                            <li><i class="fas fa-map-marked-alt"></i>{% trans "التوصيل خلال 5-7 أيام عمل للمحافظات الأخرى" %}</li>
                             <li><i class="fas fa-box"></i>{% trans "تغليف آمن ومحترف لحماية المنتج أثناء الشحن" %}</li>
                         </ul>
                         <h4 class="mb-4 mt-5">
@@ -840,21 +832,15 @@
                             {% trans "سياسة الإرجاع والاستبدال" %}
                         </h4>
                         <ul class="product-features">
-                            <li><i class="fas fa-calendar-check"></i>{% trans "إمكانية الإرجاع خلال 14 يوم من تاريخ
-                                الاستلام" %}</li>
-                            <li><i class="fas fa-shield-alt"></i>{% trans "ضمان استرجاع المال كاملاً في حالة وجود عيب في
-                                المنتج" %}</li>
-                            <li><i class="fas fa-exchange-alt"></i>{% trans "استبدال مجاني في حالة وجود عيب صناعي" %}
-                            </li>
-                            <li><i class="fas fa-check-circle"></i>{% trans "يجب أن يكون المنتج في حالته الأصلية مع
-                                التغليف" %}</li>
-                            <li><i class="fas fa-headset"></i>{% trans "فريق خدمة العملاء متاح للمساعدة على مدار الساعة"
-                                %}</li>
+                            <li><i class="fas fa-calendar-check"></i>{% trans "إمكانية الإرجاع خلال 14 يوم من تاريخ الاستلام" %}</li>
+                            <li><i class="fas fa-shield-alt"></i>{% trans "ضمان استرجاع المال كاملاً في حالة وجود عيب في المنتج" %}</li>
+                            <li><i class="fas fa-exchange-alt"></i>{% trans "استبدال مجاني في حالة وجود عيب صناعي" %}</li>
+                            <li><i class="fas fa-check-circle"></i>{% trans "يجب أن يكون المنتج في حالته الأصلية مع التغليف" %}</li>
+                            <li><i class="fas fa-headset"></i>{% trans "فريق خدمة العملاء متاح للمساعدة على مدار الساعة" %}</li>
                         </ul>
                         <div class="alert alert-info mt-4">
                             <strong><i class="fas fa-info-circle"></i>{% trans "ملاحظة:" %}</strong>
-                            {% trans "للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو
-                            عبر البريد الإلكتروني info@elwsam.com" %}
+                            {% trans "للإرجاع أو الاستبدال، يرجى التواصل مع خدمة العملاء على الرقم +20 106 269 2455 أو عبر البريد الإلكتروني info@elwsam.com" %}
                         </div>
                     </div>
                 </div>
@@ -881,8 +867,7 @@
                         </div>
                         <div class="related-product-body">
                             <h5 class="related-product-title">{{ product.name }}</h5>
-                            <div class="related-product-price">{{ product.get_min_price|default:"-" }} {% trans "جنيه"
-                                %}</div>
+                            <div class="related-product-price">{{ product.get_min_price|default:"-" }} {% trans "جنيه" %}</div>
                         </div>
                     </a>
                 </div>
@@ -896,9 +881,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    <!-- بيانات الأنماط والألوان -->
-    const variantsData = JSON.parse('{{ variants_json|escapejs }}');
 
+
+
+    // بيانات الأنماط والألوان
+    const variantsData = JSON.parse('{{ variants_json|escapejs }}');
+    
+    console.log('Variants data loaded:', variantsData);
 
     let selectedVariantId = null;
     let selectedColorId = null;
@@ -912,6 +901,9 @@
     function selectVariant(element, variantId) {
         console.log('Selecting variant:', variantId);
 
+        // تحويل variantId إلى number
+        variantId = parseInt(variantId);
+        
         // إلغاء active من جميع الأنماط
         document.querySelectorAll('.variant-option').forEach(el => {
             el.classList.remove('active');
@@ -920,8 +912,8 @@
 
         selectedVariantId = variantId;
 
-        // البحث عن النمط بـ id
-        const variant = variantsData.find(v => v.id === variantId);
+        // البحث عن النمط
+        const variant = variantsData.find(v => parseInt(v.id) === variantId);
 
         if (!variant) {
             console.error('Variant not found:', variantId);
@@ -936,22 +928,29 @@
 
         // حساب نطاق السعر للنمط
         if (variant.colors && variant.colors.length > 0) {
-            const prices = variant.colors.map(c => c.price);
-            const minPrice = Math.min(...prices);
-            const maxPrice = Math.max(...prices);
+            const prices = variant.colors.map(c => parseFloat(c.price) || 0);
+            const validPrices = prices.filter(p => !isNaN(p) && p > 0);
+            
+            if (validPrices.length > 0) {
+                const minPrice = Math.min(...validPrices);
+                const maxPrice = Math.max(...validPrices);
 
-            console.log('Price range:', minPrice, '-', maxPrice);
+                console.log('Price range:', minPrice, '-', maxPrice);
 
-            // عرض نطاق السعر
-            if (minPrice === maxPrice) {
-                document.getElementById('productPrice').innerHTML =
-                    `${minPrice} <span class="currency">{% trans "جنيه" %}</span>`;
+                // عرض نطاق السعر
+                if (minPrice === maxPrice) {
+                    document.getElementById('productPrice').innerHTML = 
+                        `${minPrice} <span class="currency">{% trans "جنيه" %}</span>`;
+                } else {
+                    document.getElementById('productPrice').innerHTML = 
+                        `${minPrice} - ${maxPrice} <span class="currency">{% trans "جنيه" %}</span>`;
+                }
             } else {
-                document.getElementById('productPrice').innerHTML =
-                    `${minPrice} - ${maxPrice} <span class="currency">{% trans "جنيه" %}</span>`;
+                document.getElementById('productPrice').innerHTML = 
+                    '- <span class="currency">{% trans "جنيه" %}</span>';
             }
         } else {
-            document.getElementById('productPrice').innerHTML =
+            document.getElementById('productPrice').innerHTML = 
                 '- <span class="currency">{% trans "جنيه" %}</span>';
         }
 
@@ -987,13 +986,13 @@
         }
 
         let html = `
-<div class="selection-label mt-3">
-    <i class="fas fa-palette"></i>
-    {% trans "اختر اللون:" %}
-    <span class="selected-option-name" id="selectedColorName">{% trans "اختر اللون" %}</span>
-</div>
-<div class="color-options show" id="colorOptions">
-    `;
+            <div class="selection-label mt-3">
+                <i class="fas fa-palette"></i>
+                {% trans "اختر اللون:" %}
+                <span class="selected-option-name" id="selectedColorName">{% trans "اختر اللون" %}</span>
+            </div>
+            <div class="color-options show" id="colorOptions">
+        `;
 
         variant.colors.forEach(color => {
             const isAvailable = color.quantity > 0;
@@ -1005,30 +1004,34 @@
                     '<i class="fas fa-times"></i> نفذ');
 
             html += `
-    <div class="color-option ${isAvailable ? '' : 'disabled'}" data-variant-color-id="${color.variant_color_id}"
-        data-color-id="${color.color_id}" data-color-name="${color.name}" data-color-hex="${color.hex}"
-        data-color-price="${color.price}" data-color-quantity="${color.quantity}" data-color-sku="${color.sku}"
-        ${isAvailable ? `onclick="selectColor(this)" ` : ''}>
+                <div class="color-option ${isAvailable ? '' : 'disabled'}" 
+                    data-variant-color-id="${color.variant_color_id}"
+                    data-color-id="${color.color_id}" 
+                    data-color-name="${color.name}" 
+                    data-color-hex="${color.hex}"
+                    data-color-price="${color.price}" 
+                    data-color-quantity="${color.quantity}" 
+                    data-color-sku="${color.sku}"
+                    ${isAvailable ? 'onclick="selectColor(this)"' : ''}>
 
-        <div class="color-circle" style="background-color: ${color.hex};"></div>
+                    <div class="color-circle" style="background-color: ${color.hex || '#ccc'};"></div>
 
-        <div class="color-info">
-            <div class="color-name">${color.name}</div>
-            <div class="color-details">
-                <span class="color-price">${color.price} ج</span>
-                <span class="color-stock ${stockClass}">${stockText}</span>
-            </div>
-        </div>
-    </div>
-    `;
+                    <div class="color-info">
+                        <div class="color-name">${color.name}</div>
+                        <div class="color-details">
+                            <span class="color-price">${color.price} ج</span>
+                            <span class="color-stock ${stockClass}">${stockText}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         });
 
-        html += '
-</div > ';
+        html += '</div>';
         container.innerHTML = html;
 
         // حساب إجمالي الكمية المتاحة
-        const totalQuantity = variant.colors.reduce((sum, color) => sum + color.quantity, 0);
+        const totalQuantity = variant.colors.reduce((sum, color) => sum + (parseInt(color.quantity) || 0), 0);
         updateProductAvailability(totalQuantity);
     }
 
@@ -1045,8 +1048,8 @@
         // جمع البيانات
         selectedVariantColorId = element.dataset.variantColorId;
         selectedColorId = element.dataset.colorId;
-        selectedPrice = parseFloat(element.dataset.colorPrice);
-        selectedQuantity = parseInt(element.dataset.colorQuantity);
+        selectedPrice = parseFloat(element.dataset.colorPrice) || 0;
+        selectedQuantity = parseInt(element.dataset.colorQuantity) || 0;
 
         const colorName = element.dataset.colorName;
         const sku = element.dataset.colorSku;
@@ -1075,6 +1078,9 @@
         if (selectedQuantity > 0) {
             addToCartBtn.disabled = false;
             addToCartBtn.style.opacity = 1;
+        } else {
+            addToCartBtn.disabled = true;
+            addToCartBtn.style.opacity = 0.5;
         }
 
         // تحديث الصور حسب اللون (إن وجدت)
@@ -1151,34 +1157,42 @@
     | تحديث صور النمط
     ----------------------------------------------------*/
     function updateVariantImages(variant) {
-        if (!variant.images || variant.images.length === 0) return;
+        if (!variant || !variant.images || variant.images.length === 0) return;
 
-        const generalImages = variant.images.filter(img => !img.color_id);
-        const colorImages = variant.images.filter(img => img.color_id);
-
+        // تحويل color_id إلى number للمقارنة الصحيحة
+        const generalImages = variant.images.filter(img => !img.color_id || img.color_id === null);
+        const colorImages = variant.images.filter(img => img.color_id && img.color_id !== null);
+        
         let imagesToShow = [];
-
+        
         if (generalImages.length > 0) {
             imagesToShow = generalImages;
         } else if (colorImages.length > 0) {
-            imagesToShow = colorImages; // ✅ التصحيح هنا
+            imagesToShow = colorImages;
         } else {
             imagesToShow = variant.images;
         }
-
-        document.getElementById('mainImage').src = imagesToShow[0].url;
-        updateThumbnails(imagesToShow);
+        
+        if (imagesToShow.length > 0) {
+            document.getElementById('mainImage').src = imagesToShow[0].url;
+            updateThumbnails(imagesToShow);
+        }
     }
 
     /*----------------------------------------------------
     | تحديث صور اللون
     ----------------------------------------------------*/
     function updateColorImages(colorId) {
-        const variant = variantsData.find(v => v.id === selectedVariantId);
+        const variant = variantsData.find(v => parseInt(v.id) === parseInt(selectedVariantId));
         if (!variant || !variant.images) return;
 
+        // تحويل colorId إلى number للمقارنة
+        colorId = parseInt(colorId);
+        
         // الصور الخاصة باللون المحدد
-        const colorImages = variant.images.filter(img => img.color_id === colorId);
+        const colorImages = variant.images.filter(img => 
+            img.color_id && parseInt(img.color_id) === colorId
+        );
 
         if (colorImages.length > 0) {
             document.getElementById('mainImage').src = colorImages[0].url;
@@ -1189,21 +1203,44 @@
     /*----------------------------------------------------
     | تحديث معرض الصور المصغرة
     ----------------------------------------------------*/
+/*----------------------------------------------------
+| تحديث معرض الصور المصغرة (نسخة محسنة تحافظ على الأحداث)
+----------------------------------------------------*/
     function updateThumbnails(images) {
         const gallery = document.getElementById('thumbnailGallery');
-        let html = '';
+        if (!gallery) {
+            console.error('لم يتم العثور على معرض الصور المصغرة');
+            return;
+        }
 
-        images.forEach((img, index) => {
-            html += `
-<div class="thumbnail ${index === 0 ?
-
-                    'active' : ''}" onclick="changeImage('${img.url}', this)">
-    <img alt="Product Image" src="${img.url}" />
-</div>
-`;
+        // حذف الصور المصغرة الموجودة فقط (باستثناء الصورة الرئيسية الأصلية)
+        const originalThumbnails = Array.from(gallery.querySelectorAll('.thumbnail'));
+        originalThumbnails.forEach(thumb => {
+            if (!thumb.dataset.isOriginal) {
+                thumb.remove();
+            }
         });
 
-        gallery.innerHTML = html;
+        // إضافة الصور الجديدة
+        images.forEach((img, index) => {
+            // تخطي الصور المكررة
+            const existingThumb = Array.from(gallery.querySelectorAll('.thumbnail')).find(
+                t => t.querySelector('img')?.src === img.url
+            );
+            
+            if (existingThumb) return;
+
+            const thumbnailDiv = document.createElement('div');
+            thumbnailDiv.className = `thumbnail ${index === 0 ? 'active' : ''}`;
+            thumbnailDiv.innerHTML = `<img alt="Product Image" src="${img.url}" />`;
+            
+            // إضافة حدث النقر
+            thumbnailDiv.addEventListener('click', function() {
+                changeImage(img.url, this);
+            });
+            
+            gallery.appendChild(thumbnailDiv);
+        });
     }
 
     /*----------------------------------------------------
@@ -1229,13 +1266,19 @@
         const max = parseInt(input.max);
         const current = parseInt(input.value);
 
-        if (current < max) { input.value = current + 1; }
-    } function decreaseQuantity() {
-        const
-        input = document.getElementById('productQuantity'); const min = parseInt(input.min); const
-            current = parseInt(input.value); if (current > min) {
-                input.value = current - 1;
-            }
+        if (current < max) { 
+            input.value = current + 1; 
+        }
+    }
+    
+    function decreaseQuantity() {
+        const input = document.getElementById('productQuantity');
+        const min = parseInt(input.min);
+        const current = parseInt(input.value);
+        
+        if (current > min) {
+            input.value = current - 1;
+        }
     }
 
     /*----------------------------------------------------
@@ -1261,16 +1304,28 @@
             return;
         }
 
+        console.log('إرسال بيانات السلة:', {
+            variant_color_id: selectedVariantColorId,
+            quantity: quantity,
+            variant_id: selectedVariantId,
+            color_id: selectedColorId
+        });
+
         // إرسال البيانات للسيرفر
         $.ajax({
             url: '{% url "orders:add-to-cart" %}',
             method: 'POST',
+            dataType: 'json',
             data: {
                 'variant_color_id': selectedVariantColorId,
                 'quantity': quantity,
+                'variant_id': selectedVariantId,
+                'color_id': selectedColorId,
+                'product_id': {{ object.id }},
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
             success: function (response) {
+                console.log('استجابة السلة:', response);
                 if (response.success) {
                     showToast('success', 'تمت إضافة المنتج إلى السلة بنجاح');
 
@@ -1281,15 +1336,27 @@
                             cartCounter.textContent = response.cart_count;
                         }
                     }
+                    
+                    // تحديث عداد السلة في القائمة إن وجد
+                        const navbarCartCount = document.querySelector('#navbarCartCount');
+                    if (navbarCartCount) {
+                            navbarCartCount.textContent = response.cart_count;
+                        navbarCartCount.style.display = 'block';
+                    }
                 } else {
                     showToast('error', response.message || 'حدث خطأ أثناء إضافة المنتج');
                 }
             },
-            error: function (xhr) {
+            error: function (xhr, status, error) {
+                console.error('خطأ في السلة:', xhr.responseJSON);
                 let errorMsg = 'حدث خطأ أثناء إضافة المنتج للسلة';
 
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     errorMsg = xhr.responseJSON.message;
+                } else if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMsg = xhr.responseJSON.error;
+                } else if (xhr.status === 400) {
+                    errorMsg = 'طلب غير صحيح. يرجى التحقق من البيانات.';
                 }
 
                 showToast('error', errorMsg);
@@ -1340,23 +1407,28 @@
             // تحديث نطاق السعر
             const priceRangeEl = document.getElementById(`variant-price-${variant.id}`);
             if (priceRangeEl && variant.colors && variant.colors.length > 0) {
-                const prices = variant.colors.map(c => c.price);
-                const minPrice = Math.min(...prices);
-                const maxPrice = Math.max(...prices);
+                const prices = variant.colors.map(c => parseFloat(c.price) || 0);
+                const validPrices = prices.filter(p => !isNaN(p) && p > 0);
+                
+                if (validPrices.length > 0) {
+                    const minPrice = Math.min(...validPrices);
+                    const maxPrice = Math.max(...validPrices);
 
-                if (minPrice === maxPrice) {
-                    priceRangeEl.textContent = `${minPrice} جنيه`;
+                    if (minPrice === maxPrice) {
+                        priceRangeEl.textContent = `${minPrice} جنيه`;
+                    } else {
+                        priceRangeEl.textContent = `${minPrice} - ${maxPrice} جنيه`;
+                    }
                 } else {
-                    priceRangeEl.textContent = `${minPrice} - ${maxPrice} جنيه`;
+                    priceRangeEl.textContent = '- جنيه';
+                }
+            } else {
+                if (priceRangeEl) {
+                    priceRangeEl.textContent = '- جنيه';
                 }
             }
         });
     }
-
-    /*----------------------------------------------------
-    | إضافة المنتج للسلة
-    ----------------------------------------------------*/
-
 
     /*----------------------------------------------------
     | تهيئة الصفحة عند التحميل
@@ -1380,7 +1452,9 @@
             const min = parseInt(this.min);
             const max = parseInt(this.max);
 
-            if (value < min) { this.value = min; } else if (value > max) {
+            if (isNaN(value) || value < min) { 
+                this.value = min; 
+            } else if (value > max) {
                 this.value = max;
             }
         });
@@ -1389,6 +1463,15 @@
     /*----------------------------------------------------
     | Reviews - إضافة وحذف التقييمات
     ----------------------------------------------------*/
+
+    // توليد نجوم التقييم
+    function generateStarsHtml(rating) {
+        let html = '';
+        for (let i = 1; i <= 5; i++) {
+            html += `<i class="fas fa-star ${i <= rating ? 'filled' : 'empty'}"></i>`;
+        }
+        return html;
+    }
 
     // إرسال التقييم
     const reviewForm = document.getElementById('reviewForm');
@@ -1401,86 +1484,90 @@
             const submitBtn = document.getElementById('submitReviewBtn');
 
             if (!rating) {
-                showToast('warning', '{% trans "يرجى اختيار عدد النجوم" %}');
+                showToast('warning', 'يرجى اختيار عدد النجوم');
                 return;
             }
 
             // تعطيل الزر
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "جارٍ الإرسال..." %}';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ الإرسال...';
 
             const formData = new FormData();
             formData.append('rating', rating.value);
             formData.append('comment', comment);
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
-            fetch('{% url "products:add_review" object.slug %}', {
+            // استخدام الرابط من سمة action في النموذج
+            const reviewUrl = reviewForm.getAttribute('action');
+            console.log('إرسال التقييم إلى:', reviewUrl);
+
+            fetch(reviewUrl, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast('success', data.message);
+            .then(response => {
+                console.log('استجابة الخادم:', response.status, response.statusText);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('بيانات الاستجابة:', data);
+                if (data.success) {
+                    showToast('success', data.message);
 
-                        // تحديث متوسط التقييم والعدد
-                        document.getElementById('averageRating').textContent = data.new_average;
-                        document.getElementById('reviewsCountBadge').textContent = data.new_count;
-                        document.getElementById('reviewsTotalText').textContent = '(' + data.new_count + ' {% trans "تقييم" %})';
+                    // تحديث متوسط التقييم والعدد
+                    document.getElementById('averageRating').textContent = data.new_average;
+                    document.getElementById('reviewsCountBadge').textContent = data.new_count;
+                    document.getElementById('reviewsTotalText').textContent = '(' + data.new_count + ' تقييم)';
 
-                        // إخفاء النموذج
-                        document.querySelector('.add-review-section').innerHTML =
-                            '<div class="alert alert-info"><i class="fas fa-check-circle"></i> {% trans "لقد قمت بتقييم هذا المنتج
-            بالفعل" %}</div>';
+                    // إخفاء النموذج
+                    document.querySelector('.add-review-section').innerHTML =
+                        '<div class="alert alert-info"><i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج بالفعل</div>';
 
-                        // إضافة التقييم الجديد للقائمة
-                        const reviewsList = document.getElementById('reviewsList');
-                        const noReviewsMsg = document.getElementById('noReviewsMessage');
-                        if (noReviewsMsg) noReviewsMsg.remove();
+                    // إضافة التقييم الجديد للقائمة
+                    const reviewsList = document.getElementById('reviewsList');
+                    const noReviewsMsg = document.getElementById('noReviewsMessage');
+                    if (noReviewsMsg) noReviewsMsg.remove();
 
-                        const starsHtml = generateStarsHtml(data.review.rating);
-                        const newReviewHtml = `
-        <div class="review-item" data-review-id="${data.review.id}">
-            <div class="review-header">
-                <div class="reviewer-info">
-                    <div class="reviewer-avatar">${data.review.user_name.charAt(0).toUpperCase()}</div>
-                    <div>
-                        <span class="reviewer-name">${data.review.user_name}</span>
-                        <span class="review-date">${data.review.created_at}</span>
-                    </div>
-                </div>
-                <div class="review-rating">${starsHtml}</div>
-            </div>
-            ${data.review.comment ? '<div class="review-content">' + data.review.comment + '</div>' : ''}
-            <button class="btn btn-sm btn-outline-danger delete-review-btn" data-review-id="${data.review.id}">
-                <i class="fas fa-trash"></i> {% trans "حذف" %}
-            </button>
-        </div>
-        `;
-                        reviewsList.insertAdjacentHTML('afterbegin', newReviewHtml);
+                    const starsHtml = generateStarsHtml(data.review.rating);
+                    const newReviewHtml = `
+                        <div class="review-item" data-review-id="${data.review.id}">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <div class="reviewer-avatar">${data.review.user_name.charAt(0).toUpperCase()}</div>
+                                    <div>
+                                        <span class="reviewer-name">${data.review.user_name}</span>
+                                        <span class="review-date">${data.review.created_at}</span>
+                                    </div>
+                                </div>
+                                <div class="review-rating">${starsHtml}</div>
+                            </div>
+                            ${data.review.comment ? '<div class="review-content">' + data.review.comment + '</div>' : ''}
+                            <button class="btn btn-sm btn-outline-danger delete-review-btn" data-review-id="${data.review.id}">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </div>
+                    `;
+                    reviewsList.insertAdjacentHTML('afterbegin', newReviewHtml);
 
-                    } else {
-                        showToast('error', data.message);
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> {% trans "إرسال التقييم" %}';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showToast('error', '{% trans "حدث خطأ، يرجى المحاولة مرة أخرى" %}');
+                } else {
+                    showToast('error', data.message);
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> {% trans "إرسال التقييم" %}';
-                });
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال التقييم';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('error', 'حدث خطأ، يرجى المحاولة مرة أخرى');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال التقييم';
+            });
         });
-    }
-
-    // توليد نجوم التقييم
-    function generateStarsHtml(rating) {
-        let html = '';
-        for (let i = 1; i <= 5; i++) {
-            html += `<i class="fas fa-star ${i <= rating ? 'filled' : 'empty'}"></i>`;
-        }
-        return html;
     }
 
     // حذف التقييم
@@ -1489,7 +1576,7 @@
             const btn = e.target.closest('.delete-review-btn');
             const reviewId = btn.dataset.reviewId;
 
-            if (!confirm('{% trans "هل أنت متأكد من حذف هذا التقييم؟" %}')) return;
+            if (!confirm('هل أنت متأكد من حذف هذا التقييم؟')) return;
 
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -1497,51 +1584,58 @@
             const formData = new FormData();
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
-            fetch('{% url "products:delete_review" 0 %}'.replace('0', reviewId), {
+            // استخدام الرابط الصحيح لحذف التقييم
+            const deleteUrl = '{% url "products:delete_review" 0 %}'.replace('0', reviewId);
+            console.log('حذف التقييم من:', deleteUrl);
+
+            fetch(deleteUrl, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast('success', data.message);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message);
 
-                        // حذف عنصر التقييم
-                        const reviewItem = document.querySelector(`.review-item[data-review-id="${reviewId}"]`);
-                        if (reviewItem) reviewItem.remove();
+                    // حذف عنصر التقييم
+                    const reviewItem = document.querySelector(`.review-item[data-review-id="${reviewId}"]`);
+                    if (reviewItem) reviewItem.remove();
 
-                        // تحديث الأرقام
-                        document.getElementById('averageRating').textContent = data.new_average;
-                        document.getElementById('reviewsCountBadge').textContent = data.new_count;
-                        document.getElementById('reviewsTotalText').textContent = '(' + data.new_count + ' {% trans "تقييم"
-                            %})';
+                    // تحديث الأرقام
+                    document.getElementById('averageRating').textContent = data.new_average;
+                    document.getElementById('reviewsCountBadge').textContent = data.new_count;
+                    document.getElementById('reviewsTotalText').textContent = '(' + data.new_count + ' تقييم)';
 
-            // إذا لم تبق تقييمات
-            if (data.new_count === 0) {
-                document.getElementById('reviewsList').innerHTML =
-                    '<div class="no-reviews text-center py-5" id="noReviewsMessage"><i
-                class="fas fa-comments fa-3x text-muted mb-3" ></i >
-                    <p class="text-muted">{% trans "لا توجد تقييمات بعد. كن أول من يقيم هذا المنتج!" %}</p>
-            </div > ';
-            }
-
-            // إعادة عرض النموذج
-            location.reload();
-        } else {
-            showToast('error', data.message);
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-trash"></i> {% trans "حذف" %}';
-        }
-    })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('error', '{% trans "حدث خطأ، يرجى المحاولة مرة أخرى" %}');
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-trash"></i> {% trans "حذف" %}';
-        });
-            }
+                    // إذا لم تبق تقييمات
+                    if (data.new_count === 0) {
+                        document.getElementById('reviewsList').innerHTML = `
+                            <div class="no-reviews text-center py-5" id="noReviewsMessage">
+                                <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">لا توجد تقييمات بعد. كن أول من يقيم هذا المنتج!</p>
+                            </div>`;
+                    }
+                } else {
+                    showToast('error', data.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-trash"></i> حذف';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('error', 'حدث خطأ، يرجى المحاولة مرة أخرى');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-trash"></i> حذف';
             });
-
+        }
+    });
 </script>
 
 {% endblock content %}

@@ -25,11 +25,14 @@ class ProductForm(forms.ModelForm):
         ]
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'name_ar': forms.TextInput(attrs={'class': 'form-control'}),
+            'name_en': forms.TextInput(attrs={'class': 'form-control'}),
             
-            'subtitle': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'subtitle_ar': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'subtitle_en': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
 
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'description_ar': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'description_en': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
 
             'main_image': forms.FileInput(attrs={'class': 'form-control'}),
 
@@ -132,7 +135,8 @@ class CategoryForm(forms.ModelForm):
         ]
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'name_ar': forms.TextInput(attrs={'class': 'form-control'}),
+            'name_en': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'icon': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'fa-star مثلاً'}),
         }
