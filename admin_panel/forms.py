@@ -51,10 +51,11 @@ class ProductForm(forms.ModelForm):
 class VariantForm(forms.ModelForm):
     class Meta:
         model = ProductVariant
-        fields = ['name', 'code']
+        fields = ['name_ar','name_en', 'code']
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'name_ar': forms.TextInput(attrs={'class': 'form-control'}),
+            'name_en': forms.TextInput(attrs={'class': 'form-control'}),
             'code': forms.TextInput(attrs={'class': 'form-control'}),
         }
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 15:28+0200\n"
+"POT-Creation-Date: 2025-12-13 13:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -692,7 +692,11 @@ msgstr "Total"
 #: products/templates/products/product_detail.html:951
 #: products/templates/products/product_detail.html:955
 #: products/templates/products/product_detail.html:1061
-#: products/templates/products/product_list.html:216
+#: products/templates/products/product_detail.html:1419
+#: products/templates/products/product_detail.html:1421
+#: products/templates/products/product_detail.html:1424
+#: products/templates/products/product_detail.html:1428
+#: products/templates/products/product_list.html:219
 msgid "جنيه"
 msgstr "EGP"
 
@@ -876,7 +880,7 @@ msgid "بحث..."
 msgstr "Search..."
 
 #: admin_panel/templates/admin_panel/products_list.html:27
-#: products/templates/products/product_list.html:60
+#: products/templates/products/product_list.html:62
 msgid "جميع الفئات"
 msgstr "All Categories"
 
@@ -900,13 +904,13 @@ msgid "الاسم"
 msgstr "Name"
 
 #: admin_panel/templates/admin_panel/products_list.html:55
-#: products/templates/products/product_list.html:56
-#: products/templates/products/product_list.html:150
+#: products/templates/products/product_list.html:58
+#: products/templates/products/product_list.html:152
 msgid "الفئة"
 msgstr "Category"
 
 #: admin_panel/templates/admin_panel/products_list.html:124
-#: products/templates/products/product_list.html:231
+#: products/templates/products/product_list.html:234
 msgid "لا توجد منتجات"
 msgstr "No Products Found"
 
@@ -1281,7 +1285,7 @@ msgid "تاريخ الطلب"
 msgstr "Order Date"
 
 #: orders/templates/orders/my_orders.html:295
-#: products/templates/products/product_list.html:220
+#: products/templates/products/product_list.html:223
 msgid "عرض التفاصيل"
 msgstr "Show Details"
 
@@ -1607,6 +1611,21 @@ msgstr "Choose Color:"
 msgid "اختر اللون"
 msgstr "Choose Color"
 
+#: products/templates/products/product_detail.html:1002
+#: products/templates/products/product_detail.html:1107
+#: products/templates/products/product_detail.html:1131
+msgid "متوفر"
+msgstr "In Stock"
+
+#: products/templates/products/product_detail.html:1004
+msgid "فقط"
+msgstr "Only"
+
+#: products/templates/products/product_detail.html:1005
+msgid "نفذ"
+msgstr "Execute"
+
+
 #: products/templates/products/product_detail.html:1106
 #: products/templates/products/product_detail.html:1130
 msgid "متوفر في المخزون"
@@ -1616,12 +1635,6 @@ msgstr "In stock"
 #: products/templates/products/product_detail.html:1130
 msgid "قطعة"
 msgstr "Item"
-
-#: products/templates/products/product_detail.html:1107
-#: products/templates/products/product_detail.html:1131
-
-msgid "متوفر"
-msgstr "In Stock"
 
 #: products/templates/products/product_detail.html:1111
 #: products/templates/products/product_detail.html:1145
@@ -1651,114 +1664,114 @@ msgstr "Search for a product..."
 msgid "الفلاتر"
 msgstr "Filters"
 
-#: products/templates/products/product_list.html:74
-#: products/templates/products/product_list.html:159
+#: products/templates/products/product_list.html:76
+#: products/templates/products/product_list.html:161
 msgid "نطاق السعر"
 msgstr "Price Range"
 
-#: products/templates/products/product_list.html:78
+#: products/templates/products/product_list.html:80
 msgid "جميع الأسعار"
 msgstr "All Prices"
 
-#: products/templates/products/product_list.html:81
+#: products/templates/products/product_list.html:83
 msgid "أقل من 1000 جنيه"
 msgstr "Less than 1000 EGP"
 
-#: products/templates/products/product_list.html:84
+#: products/templates/products/product_list.html:86
 msgid "1000 - 5000 جنيه"
 msgstr "1000 - 5000 EGP"
 
-#: products/templates/products/product_list.html:87
+#: products/templates/products/product_list.html:89
 msgid "5000 - 10000 جنيه"
 msgstr "5000 - 10000 EGP"
 
-#: products/templates/products/product_list.html:90
+#: products/templates/products/product_list.html:92
 msgid "أكثر من 10000 جنيه"
 msgstr "More than 10,000 EGP"
 
-#: products/templates/products/product_list.html:99
-#: products/templates/products/product_list.html:168
+#: products/templates/products/product_list.html:101
+#: products/templates/products/product_list.html:171
 msgid "الترتيب"
 msgstr "Sort By"
 
-#: products/templates/products/product_list.html:103
+#: products/templates/products/product_list.html:105
 msgid "الافتراضي"
 msgstr "Default"
 
-#: products/templates/products/product_list.html:106
+#: products/templates/products/product_list.html:108
 msgid "السعر: من الأقل للأعلى"
 msgstr "Price: Low to High"
 
-#: products/templates/products/product_list.html:109
+#: products/templates/products/product_list.html:111
 msgid "السعر: من الأعلى للأقل"
 msgstr "Price: High to Low"
 
-#: products/templates/products/product_list.html:112
+#: products/templates/products/product_list.html:114
 msgid "الاسم: أ-ي"
 msgstr "Name: A-Z"
 
-#: products/templates/products/product_list.html:115
+#: products/templates/products/product_list.html:117
 msgid "الاسم: ي-أ"
 msgstr "Name: Z-A"
 
-#: products/templates/products/product_list.html:122
+#: products/templates/products/product_list.html:124
 msgid "تصفية"
 msgstr "Filter"
 
-#: products/templates/products/product_list.html:127
-#: products/templates/products/product_list.html:239
+#: products/templates/products/product_list.html:129
+#: products/templates/products/product_list.html:242
 msgid "مسح الفلاتر"
 msgstr "Clear Filters"
 
-#: products/templates/products/product_list.html:137
+#: products/templates/products/product_list.html:139
 #, fuzzy
 #| msgid "اختر المحافظة"
 msgid "الفلاتر النشطة:"
 msgstr "Select Governorate"
 
-#: products/templates/products/product_list.html:141
+#: products/templates/products/product_list.html:143
 #, fuzzy
 #| msgid "البحيرة"
 msgid "البحث:"
 msgstr "Beheira"
 
-#: products/templates/products/product_list.html:193
+#: products/templates/products/product_list.html:196
 msgid "منتهي الكمية"
 msgstr "Out of Stock"
 
-#: products/templates/products/product_list.html:197
+#: products/templates/products/product_list.html:200
 msgid "الكمية محدودة"
 msgstr "Limited Stock"
 
-#: products/templates/products/product_list.html:234
+#: products/templates/products/product_list.html:237
 msgid "لم يتم العثور على منتجات تطابق معايير البحث"
 msgstr "No products match the search criteria"
 
-#: products/views.py:191
+#: products/views.py:213
 #, fuzzy
 #| msgid "يجب تسجيل الدخول أولاً لتأكيد الطلب"
 msgid "❌ يجب شراء المنتج أولاً لتتمكن من التقييم."
 msgstr "You must login first to confirm the order"
 
-#: products/views.py:198
+#: products/views.py:220
 msgid "❌ لقد قمت بتقييم هذا المنتج من قبل."
 msgstr ""
 
-#: products/views.py:209
+#: products/views.py:231
 msgid "❌ يرجى اختيار عدد النجوم."
 msgstr ""
 
-#: products/views.py:216
+#: products/views.py:238
 msgid "❌ التقييم يجب أن يكون من 1 إلى 5 نجوم."
 msgstr ""
 
-#: products/views.py:229
+#: products/views.py:251
 #, fuzzy
 #| msgid "تسجيل الخروج"
 msgid "✅ شكراً لك! تم إضافة تقييمك بنجاح."
 msgstr "Logout"
 
-#: products/views.py:253
+#: products/views.py:275
 #, fuzzy
 #| msgid "✅ تم تأكيد طلبك بنجاح!"
 msgid "✅ تم حذف التقييم بنجاح."

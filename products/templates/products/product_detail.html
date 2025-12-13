@@ -999,10 +999,10 @@
             const isAvailable = color.quantity > 0;
             const stockClass = color.quantity > 10 ? 'in-stock' : (color.quantity > 0 ? 'low-stock' : 'out-of-stock');
             const stockText = color.quantity > 10 ?
-                '<i class="fas fa-check"></i> متوفر' :
+                '<i class="fas fa-check"></i> {% trans 'متوفر' %}' :
                 (color.quantity > 0 ?
-                    `<i class="fas fa-exclamation"></i> ${color.quantity} فقط` :
-                    '<i class="fas fa-times"></i> نفذ');
+                    `<i class="fas fa-exclamation"></i> ${color.quantity} {% trans 'فقط' %}` :
+                    '<i class="fas fa-times"></i> {% trans 'نفذ' %}');
 
             html += `
                 <div class="color-option ${isAvailable ? '' : 'disabled'}" 
@@ -1528,7 +1528,7 @@
 
                     // إخفاء النموذج
                     document.querySelector('.add-review-section').innerHTML =
-                        '<div class="alert alert-info"><i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج بالفعل</div>';
+                        '<div class="alert alert-info"><i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا {% trans "جنيه" %} بالفعل</div>';
 
                     // إضافة التقييم الجديد للقائمة
                     const reviewsList = document.getElementById('reviewsList');
