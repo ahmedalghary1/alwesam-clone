@@ -144,14 +144,14 @@ class CategoryForm(forms.ModelForm):
     # 🔍 التحقق من تكرار اسم الفئة
     def clean(self):
         cleaned = super().clean()
-        name = cleaned.get("name")
+        name_ar = cleaned.get("name_ar")
 
         qs = Category.objects.all()
         if self.instance.pk:
             qs = qs.exclude(pk=self.instance.pk)
 
-        if name and qs.filter(name__iexact=name).exists():
-            self.add_error("name", "⚠️ هذه الفئة موجودة بالفعل.")
+        if name_ar and qs.filter(name_ar__iexact=name_ar).exists():
+            self.add_error("name_ar", "⚠️ هذه الفئة موجودة بالفعل.")
 
         return cleaned
 
@@ -184,3 +184,4 @@ VariantColorFormSet = inlineformset_factory(
     extra=1,
     can_delete=True
 )
+# ======================================================

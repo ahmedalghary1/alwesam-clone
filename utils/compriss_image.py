@@ -1,8 +1,9 @@
 import os
+import uuid
 from PIL import Image
 
 def convert_to_webp_and_delete_original(image_field, quality=85, max_size=(1200, 1200)):
-    """يحفظ نسخة WebP مضغوطة ثم يحذف الأصلية"""
+    """يحفظ نسخة WebP مضغوطة باسم فريد ثم يحذف الأصلية"""
 
     if not image_field:
         return
@@ -14,25 +15,26 @@ def convert_to_webp_and_delete_original(image_field, quality=85, max_size=(1200,
     if ext.lower() == ".webp":
         return
 
-    new_path = dir_path + ".webp"
+    # إنشاء معرف فريد لتجنب استبدال الصور
+    unique_id = uuid.uuid4().hex
+    new_path = f"{dir_path}_{unique_id}.webp"
 
+    # فتح الصورة وتصغيرها
     img = Image.open(old_path)
-
-    # تصغير
     img.thumbnail(max_size, Image.LANCZOS)
 
-    # تحويل RGB
+    # تحويل الصورة إلى RGB أو RGBA
     if img.mode in ("RGBA", "P"):
         img = img.convert("RGBA")
     else:
         img = img.convert("RGB")
 
-    # حفظ الجديدة
+    # حفظ الصورة الجديدة بصيغة WebP
     img.save(new_path, "WEBP", quality=quality, optimize=True)
 
-    # حذف القديمة
+    # حذف الصورة الأصلية
     if os.path.exists(old_path):
         os.remove(old_path)
 
-    # تعديل الحقل للإشارة للصورة الجديدة
-    image_field.name = image_field.name.rsplit('.', 1)[0] + ".webp"
+    # تحديث الحقل للإشارة للصورة الجديدة
+    image_field.name = image_field.name.rsplit('.', 1)[0] + f"_{unique_id}.webp"

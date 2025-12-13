@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView
-from django.db.models import Q, Min, Max
+from django.db.models import Q, Min
 from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -15,7 +15,12 @@ import json
 # ==========================================================
 #              PRODUCT LIST VIEW (مع الفلاتر الجديدة)
 # ==========================================================
-
+# ==========================================================
+#              PRODUCT LIST VIEW (مع الفلاتر الجديدة)
+# ==========================================================
+# ==========================================================
+#              PRODUCT LIST VIEW (مع الفلاتر الجديدة)
+# ==========================================================
 class ProductListView(ListView):
     model = Product
     template_name = 'product_list.html'
@@ -23,9 +28,13 @@ class ProductListView(ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        queryset = Product.objects.filter(is_active=True) \
-            .prefetch_related('variants')  \
-            .distinct()
+        # جلب المنتجات النشطة التي لديها أسعار
+        queryset = Product.objects.filter(
+            is_active=True,
+            variants__colors__price__isnull=False
+        ).annotate(
+            min_price=Min('variants__colors__price')
+        ).distinct()
 
         # --- Search ---------------------------
         search_query = self.request.GET.get('search', '')
@@ -41,37 +50,50 @@ class ProductListView(ListView):
         if category_id:
             queryset = queryset.filter(category_id=category_id)
 
-        # --- Brand Filter ---------------------
-        brand = self.request.GET.get('brand', '')
-        if brand:
-            queryset = queryset.filter(brand__iexact=brand)
+        # --- Price Range Filter من القالب ---------------------
+        price_range = self.request.GET.get('price_range', '')
+        
+        if price_range:
+            if price_range == '0-1000':
+                queryset = queryset.filter(min_price__lt=1000)
+            elif price_range == '1000-5000':
+                queryset = queryset.filter(min_price__gte=1000, min_price__lte=5000)
+            elif price_range == '5000-10000':
+                queryset = queryset.filter(min_price__gte=5000, min_price__lte=10000)
+            elif price_range == '10000-plus':
+                queryset = queryset.filter(min_price__gte=10000)
 
         # --- Sorting ---------------------------
         sort_by = self.request.GET.get('sort', '')
-
         if sort_by == 'name_asc':
             queryset = queryset.order_by('name')
-
         elif sort_by == 'name_desc':
             queryset = queryset.order_by('-name')
-
         elif sort_by == 'newest':
             queryset = queryset.order_by('-id')
+        elif sort_by == 'price_asc':
+            queryset = queryset.order_by('min_price')
+        elif sort_by == 'price_desc':
+            queryset = queryset.order_by('-min_price')
+        else:
+            queryset = queryset.order_by('id')
 
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context['categories'] = Category.objects.all()
-        context['brands'] = Product.objects.filter(is_active=True) \
-            .values_list('brand', flat=True).distinct().exclude(brand='')
-
+        
+        # تمرير قيم الفلترة للقالب لتحديد الخيارات المحددة
         context['search_query'] = self.request.GET.get('search', '')
-
+        context['selected_category'] = self.request.GET.get('category', '')
+        context['selected_price_range'] = self.request.GET.get('price_range', '')
+        context['selected_sort'] = self.request.GET.get('sort', '')
+        
+        # تمرير categories للقالب (يجب أن تكون موجودة بالفعل)
+        
         return context
-
-
+# ==========================================================
 class ProductDetail(DetailView):
     model = Product
     template_name = "products/product_detail.html"

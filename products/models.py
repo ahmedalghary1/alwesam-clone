@@ -4,7 +4,7 @@ from taggit.managers import TaggableManager
 from accounts.models import CustomUser 
 from django.utils import timezone
 from django.utils.text import slugify
-
+import os
 from utils.compriss_image import convert_to_webp_and_delete_original
 
 class Category(models.Model):
@@ -205,6 +205,14 @@ class VariantColor(models.Model):
         ordering = ['variant', 'color']
 
 
+
+def variant_image_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    # إضافة UUID لتجنب استبدال الصور بنفس الاسم
+    filename = f"{uuid.uuid4()}.{ext}"
+    return os.path.join('variant_images', str(instance.variant.id), filename)
+
+
 class ProductVariantImage(models.Model):
     """
     صور النمط - يمكن ربطها بلون معين أو تكون عامة للنمط
@@ -215,7 +223,7 @@ class ProductVariantImage(models.Model):
         on_delete=models.CASCADE,
         verbose_name='النمط'
     )
-    image = models.ImageField('الصورة', upload_to='variant_images')
+    image = models.ImageField('الصورة', upload_to=variant_image_upload_path)
     color = models.ForeignKey(
         Color,
         related_name='variant_images',
@@ -225,6 +233,7 @@ class ProductVariantImage(models.Model):
         verbose_name='اللون',
         help_text='اختياري - إذا كانت الصورة خاصة بلون معين'
     )
+
 
     def __str__(self):
         if self.color:
