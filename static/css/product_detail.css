@@ -834,3 +834,20 @@
         flex-direction: column;
     }
 }
+
+.related-product-image {
+    width: 100%;
+    height: 200px; /* يمكنك تعديل الارتفاع حسب تصميمك */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.related-product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* يحافظ على نسبة الصورة ويمنع القص */
+    display: block;
+
+}

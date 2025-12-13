@@ -704,13 +704,6 @@
     animation: slideDown 0.3s ease;
 }
 
-/* السلايدر
-.slider-wrapper {
-    height: 220px; /* ثابت — يمنع التكبير/التصغير */
-    background: #000;
-    overflow: hidden;
-    position: relative;
-}
 
 /* تصغير الصورة داخل السلايدر */
 .slider-img {
