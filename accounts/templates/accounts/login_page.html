@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load socialaccount %}
+
 <html dir="rtl" lang="ar">
  <head>
   <meta charset="utf-8"/>
@@ -433,18 +435,18 @@
      </button>
     </form>
     <!-- Divider -->
-    <!-- <div class="divider">
+    <div class="divider">
                 <span>أو سجل دخولك باستخدام</span>
-            </div> -->
+            </div> 
     <!-- Social Login -->
-    <!-- <div class="social-login">
-                <button class="social-btn" onclick="loginWithGoogle()">
-                    <i class="fab fa-google" style="color: #DB4437;"></i> Google
-                </button>
-                <button class="social-btn" onclick="loginWithFacebook()">
-                    <i class="fab fa-facebook-f" style="color: #4267B2;"></i> Facebook
-                </button>
-            </div> -->
+    {% comment %} <div class="social-login">
+        <a class="social-btn" href="{% provider_login_url 'google' %}">
+            <i class="fab fa-google" style="color: #DB4437;"></i> Google
+        </a>
+        <button class="social-btn" onclick="loginWithFacebook()">
+            <i class="fab fa-facebook-f" style="color: #4267B2;"></i> Facebook
+        </button>
+    </div> {% endcomment %}
     <!-- Signup Link -->
     <div class="signup-link">
      {% trans "ليس لديك حساب؟" %}

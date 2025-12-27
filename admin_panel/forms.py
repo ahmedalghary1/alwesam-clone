@@ -132,7 +132,8 @@ class CategoryForm(forms.ModelForm):
         fields = [
             'name_ar','name_en', 
             'description',
-            'icon'
+            'icon',
+            'image'
         ]
 
         widgets = {
@@ -140,6 +141,7 @@ class CategoryForm(forms.ModelForm):
             'name_en': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'icon': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'fa-star مثلاً'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
         }
 
     # 🔍 التحقق من تكرار اسم الفئة

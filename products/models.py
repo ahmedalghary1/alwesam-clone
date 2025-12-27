@@ -15,6 +15,7 @@ class Category(models.Model):
     slug = models.SlugField(blank=True, null=True, unique=True, db_index=True)
     description = models.TextField('الوصف', max_length=500, blank=True)
     icon = models.CharField('أيقونة', max_length=50, blank=True, help_text='Font Awesome icon class')
+    image = models.ImageField('صورة القسم', upload_to='categories/', blank=True, null=True, help_text='صورة القسم (اختياري)')
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
     
     def save(self, *args, **kwargs):

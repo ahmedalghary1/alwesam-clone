@@ -303,7 +303,7 @@ def admin_categories_list(request):
 def admin_category_add(request):
 
     if request.method == 'POST':
-        form = CategoryForm(request.POST)
+        form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
             category = form.save()
             messages.success(request, "تم إنشاء الفئة بنجاح.")
@@ -328,7 +328,7 @@ def admin_category_edit(request, pk):
     category = get_object_or_404(Category, pk=pk)
 
     if request.method == 'POST':
-        form = CategoryForm(request.POST, instance=category)
+        form = CategoryForm(request.POST, request.FILES, instance=category)
         if form.is_valid():
             form.save()
             messages.success(request, "تم تحديث الفئة بنجاح.")

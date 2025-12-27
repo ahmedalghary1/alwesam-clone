@@ -80,6 +80,32 @@
                 {% endif %}
             </div>
 
+            <!-- الصورة -->
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.image.id_for_label }}" class="form-label">
+                    <i class="fas fa-image"></i>
+                    {% trans "صورة القسم" %}
+                </label>
+                {{ form.image }}
+                <small class="text-muted d-block mt-1">
+                    {% trans "اختر صورة للقسم (اختياري)" %}
+                </small>
+                {% if form.image.errors %}
+                    <div class="text-danger mt-1">
+                        {{ form.image.errors }}
+                    </div>
+                {% endif %}
+                
+                <!-- معاينة الصورة الحالية عند التعديل -->
+                {% if action == 'edit' and category.image %}
+                    <div class="mt-2">
+                        <small class="text-muted d-block">الصورة الحالية:</small>
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}" 
+                             class="img-thumbnail mt-1" style="max-width: 200px; max-height: 150px; object-fit: cover;">
+                    </div>
+                {% endif %}
+            </div>
+
             <!-- الوصف -->
             <div class="col-12 mb-3">
                 <label for="{{ form.description.id_for_label }}" class="form-label">

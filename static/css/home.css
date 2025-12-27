@@ -9,12 +9,15 @@
 } */
 
 .hero-section {
-    background-image: url('/static/images/cart-bg.jpg'); /* نفس الخلفية */
+    background-image: url('/static/images/cart-bg.jpg');
+    /* نفس الخلفية */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    padding: 40px 0;     /* تحكم في الارتفاع */
-    color: #fff;         /* اجعل النص ظاهر على الخلفية */
+    padding: 40px 0;
+    /* تحكم في الارتفاع */
+    color: #fff;
+    /* اجعل النص ظاهر على الخلفية */
 }
 
 
@@ -58,16 +61,20 @@
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
 }
+
 .hero-image {
-    max-width: 100%;   /* الحجم الطبيعي لجميع الشاشات */
+    max-width: 100%;
+    /* الحجم الطبيعي لجميع الشاشات */
     width: 100%;
 }
 
 /* الشاشات الكبيرة (أكبر من 1200px مثلاً) */
 @media (min-width: 1200px) {
     .hero-image {
-        width: 120%;       /* تكبير الصورة فقط على الشاشات الكبيرة */
-        max-width: none;   /* إزالة التقييد حتى يمكن تكبيرها */
+        width: 120%;
+        /* تكبير الصورة فقط على الشاشات الكبيرة */
+        max-width: none;
+        /* إزالة التقييد حتى يمكن تكبيرها */
     }
 }
 
@@ -180,12 +187,14 @@
 
 /* تقليل المسافة بين العنوان والشرح */
 .hero-subtitle {
-    margin-bottom: 15px !important; /* بدل 30px */
+    margin-bottom: 15px !important;
+    /* بدل 30px */
 }
 
 /* تقليل حجم البادينغ داخل زر تصفح المنتجات */
 .btn-primary-custom {
-    padding: 10px 25px !important; /* بدل 15px 40px */
+    padding: 10px 25px !important;
+    /* بدل 15px 40px */
     font-size: 16px !important;
 }
 
@@ -219,5 +228,104 @@
     .btn-primary-custom {
         padding: 8px 20px !important;
         font-size: 15px !important;
+    }
+}
+
+/* Categories Section */
+.categories-section {
+    padding: 80px 0;
+    background-color: var(--secondary-white);
+}
+
+.section-subtitle {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.category-card {
+    display: block;
+    background: #fff;
+    border: 2px solid var(--light-gray);
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    height: 100%;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    border-color: var(--primary-yellow);
+    background-color: #fffef8;
+}
+
+/* Category Image Container */
+.category-image-container {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #ffffff !important;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border: 3px solid #d0d0d0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.category-card:hover .category-image-container {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+    border-color: var(--primary-yellow) !important;
+}
+
+.category-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    background-color: #ffffff;
+}
+
+.category-card:hover .category-image {
+    transform: scale(1.05);
+}
+
+.category-name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--primary-black);
+}
+
+.category-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Responsive for Categories */
+@media (max-width: 768px) {
+    .categories-section {
+        padding: 40px 0;
+    }
+
+    .category-card {
+        padding: 25px 15px;
+    }
+
+    .category-image-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .category-name {
+        font-size: 18px;
     }
 }

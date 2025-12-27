@@ -85,7 +85,7 @@ def login_view(request):
         if user is not None:
             # Login successful
             login(request, user)
-            messages.success(request, f'✅ مرحباً بك {user.first_name or ""}!')
+            messages.success(request, f'✅ مرحباً بك {user.username or ""}!')
             
             # Redirect to 'next' parameter or home page
             next_url = request.GET.get('next', reverse('home'))

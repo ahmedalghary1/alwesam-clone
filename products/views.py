@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from django.utils.translation import gettext as _
 from django.contrib import messages
 
-from .models import Product, ProductVariant, Category, ProductVariantImage, ProductReview
+from .models import Product, ProductVariant, Category, ProductVariantImage, ProductReview, VariantColor
 from orders.models import OrderDetail
 import json
 
@@ -276,3 +276,48 @@ def delete_review(request, review_id):
         'new_average': product.get_average_rating(),
         'new_count': product.get_reviews_count()
     })
+
+
+# ==========================================================
+#              CATEGORY VIEWS (عرض الأقسام)
+# ==========================================================
+
+class CategoryListView(ListView):
+    """
+    عرض جميع الأقسام المتاحة
+    """
+    model = Category
+    template_name = 'products/categories.html'
+    context_object_name = 'categories'
+    paginate_by = 20  # عرض 20 قسم في الصفحة
+    
+    def get_queryset(self):
+        return Category.objects.all().order_by('name')
+
+
+class CategoryProductsView(ListView):
+    """
+    عرض جميع منتجات قسم معين
+    """
+    model = Product
+    template_name = 'products/category_products.html'
+    context_object_name = 'products'
+    paginate_by = 12
+    
+    def get_queryset(self):
+        category_slug = self.kwargs.get('slug')
+        self.category = get_object_or_404(Category, slug=category_slug)
+        
+        return Product.objects.filter(
+            category=self.category,
+            is_active=True,
+            variants__colors__price__isnull=False
+        ).annotate(
+            min_price=Min('variants__colors__price')
+        ).distinct()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        return context
+
